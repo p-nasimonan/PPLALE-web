@@ -31,19 +31,13 @@ const config: NextConfig = {
   },
   experimental: {
     optimizeCss: true,
-    serverComponentsExternalPackages: ['@vercel/og'],
   },
-  // フォント最適化の設定
-  optimizeFonts: true,
+  serverExternalPackages: ['@vercel/og'],
   // 本番環境用の設定
   assetPrefix: '',
   basePath: '',
   // 動的ルーティングの設定
   trailingSlash: true,
-
-  publicRuntimeConfig: {
-    basePath: '',
-  },
   webpack: (config) => {
     // SVG 以外の画像ファイルを file-loader で処理する
     config.module.rules.push({
