@@ -27,8 +27,9 @@ const explanationCards = [
   },
   { 
     title: 'ぷぷりえとは', 
-    description: 'VRChatのイベントです',
-    img: '/images/fruits/いちご.png' 
+    description: 'ロリっ子喫茶ぷぷりえはロリっ子とロリ好きのための交流がメインの店舗型イベント。可愛い声で接客してくれるよ！VRChatで開催されているイベントです。そしてそして！店員さんを使ってたたかえるカードゲームがぷぷりえーるなの！',
+    img: 'https://pple.vr2.info/_assets/GI2XJgG18B_DTXqu.webp',
+    link: 'https://pple.vr2.info/'
   }
 ];
 
@@ -234,7 +235,7 @@ export default function Home() {
                 {explanationCards.map((card) => (
                   <motion.div
                     key={card.title}
-                    className="bg-yellow-200 bg-opacity-90 backdrop-blur-md rounded-2xl p-6 shadow-xl border border-white border-opacity-20"
+                    className="bg-yellow-200 bg-opacity-90 backdrop-blur-md rounded-2xl p-6 shadow-xl border border-white border-opacity-20 hover:shadow-2xl transition-all duration-300 hover:scale-105"
                     variants={explanationVariants}
                     initial="hidden"
                     whileInView="visible"
@@ -251,7 +252,7 @@ export default function Home() {
                         </p>
                       </div>
                       
-                      <div className="relative h-64 rounded-xl overflow-hidden">
+                      <div className="relative h-64 rounded-xl overflow-hidden group cursor-pointer" onClick={() => card.link && window.open(card.link, '_blank')}>
                         <Image
                           src={card.img}
                           alt={card.title}
@@ -259,6 +260,13 @@ export default function Home() {
                           sizes="(max-width: 768px) 100vw, 50vw"
                           style={{ objectFit: 'cover' }}
                         />
+                        {card.link && (
+                          <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-60 transition-all duration-300 flex items-center justify-center rounded-xl">
+                            <span className="text-white font-bold text-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                              公式ホームページへ →
+                            </span>
+                          </div>
+                        )}
                       </div>
                     </div>
                   </motion.div>
