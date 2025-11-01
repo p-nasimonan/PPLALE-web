@@ -13,8 +13,9 @@ const darumadrop = Darumadrop_One({
 });
 
 const cardButtons = [
-  { title: 'デッキをつくる', href: '/build', img: '/images/back-card.webp' },
   { title: 'ようかん杯', href: '/deck/2pick?twoCardLimit=false&fruits=いちご', img: '/images/back-card.webp' },
+  { title: 'デッキをつくる', href: '/build', img: '/images/back-card.webp' },
+  { title: 'デッキのがぞうをつくる', href: '/deck-view', img: '/images/back-card.webp' },
 ];
 
 // 解説カード情報
