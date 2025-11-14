@@ -78,11 +78,18 @@ const ImportPopup: React.FC<ImportPopupProps> = ({ onImport, onClose }) => {
         .filter((card): card is CardInfo => card !== undefined);
 
       // お菓子デッキのカードIDを取得
+      // Note: card IDs in data are like "s_0", "s_1", ..., "s_10", so do NOT pad with leading zeros.
       const sweetIds = sweetCardIds
         .split(',')
         .map(id => id.trim())
         .filter(id => id !== '')
-        .map(id => `s_${id.padStart(2, '0')}`);
+        .map(id => {
+          // 正しく数値部分を抽出して先頭の0を除去（例: "06" -> "6"、"s_06" -> "6"）
+          const digits = id.replace(/\D/g, '');
+          if (digits === '') return id; // 数字が取れない場合はそのまま（後で見つからなければ除外される）
+          const num = parseInt(digits, 10).toString();
+          return `s_${num}`;
+        });
 
       // お菓子デッキのカードを取得
       const newSweetDeck = sweetIds
