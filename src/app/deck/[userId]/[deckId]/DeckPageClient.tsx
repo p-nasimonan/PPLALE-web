@@ -6,6 +6,7 @@ import { CardInfo } from '@/types/card';
 import { allYojoCards, allSweetCards, allPlayableCards } from '@/data/cards';
 import { doc, setDoc } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
+import { validateDeckData } from '@/lib/schema';
 import CardList from '@/components/CardList';
 import { useAuth } from '@/lib/auth';
 import ExportPopup from '@/components/ExportPopup';
@@ -197,13 +198,23 @@ export default function DeckPageClient({
           }
         }
 
-        await setDoc(deckRef, {
+        // build doc data and validate before saving
+        const docData = {
           name: deckName,
           yojoDeckIds: yojoDeck.map(card => card.id),
           sweetDeckIds: sweetDeck.map(card => card.id),
           playableCardId: selectedPlayableCard?.id || null,
           updatedAt: new Date()
-        }, { merge: true });
+        };
+        try {
+          validateDeckData(docData);
+        } catch (e) {
+          console.error('Deck validation failed, aborting save:', e);
+          alert('デッキの保存に失敗しました: データが不正です');
+          return;
+        }
+
+        await setDoc(deckRef, docData, { merge: true });
       } catch (error) {
         console.error('デッキの更新に失敗しました:', error);
         if (error instanceof Error) {
@@ -230,14 +241,23 @@ export default function DeckPageClient({
       const deckRef = doc(db, 'users', user.uid, 'decks', deckId);
       
       try {
-        await setDoc(deckRef, {
+        const docData = {
           name: deckName,
           yojoDeckIds: yojoDeck.map(card => card.id),
           sweetDeckIds: sweetDeck.map(card => card.id),
           playableCardId: selectedPlayableCard?.id || null,
           updatedAt: new Date()
-        });
-        
+        };
+        try {
+          validateDeckData(docData);
+        } catch (e) {
+          console.error('Deck validation failed, aborting save:', e);
+          alert('デッキの保存に失敗しました: データが不正です');
+          return;
+        }
+
+        await setDoc(deckRef, docData);
+
         console.log('ログイン済みユーザーがデッキを更新しました:', deckId);
         router.push(`/deck/${user.uid}/${deckId}`);
       } catch (error) {
@@ -254,13 +274,22 @@ export default function DeckPageClient({
       if (result.user) {
         const deckRef = doc(db, 'users', result.user.uid, 'decks', deckId);
         
-        await setDoc(deckRef, {
+        const docData = {
           name: deckName,
           yojoDeckIds: yojoDeck.map(card => card.id),
           sweetDeckIds: sweetDeck.map(card => card.id),
           playableCardId: selectedPlayableCard?.id || null,
           updatedAt: new Date()
-        });
+        };
+        try {
+          validateDeckData(docData);
+        } catch (e) {
+          console.error('Deck validation failed, aborting save:', e);
+          alert('デッキの保存に失敗しました: データが不正です');
+          return;
+        }
+
+        await setDoc(deckRef, docData);
         
         console.log('ログイン後にデッキを更新しました:', deckId);
         router.push(`/deck/${result.user.uid}/${deckId}`);
