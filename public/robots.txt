@@ -1,6 +1,6 @@
-# https://pplale-web-front.vercel.app
+# https://pplale.vercel.app
 User-agent: *
 Allow: /
 
 # Sitemaps
-Sitemap: https://pplale-web-front.vercel.app/sitemap.xml
+Sitemap: https://pplale.vercel.app/sitemap.xml

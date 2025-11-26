@@ -20,7 +20,7 @@ const geistMono = Geist_Mono({
 const isVercel = process.env.VERCEL === '1';
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://pplale-web-front.vercel.app'),
+  metadataBase: new URL('https://pplale.vercel.app'),
   title: "ぷぷりえーる デッキ構築",
   description: "VRChatにあるカードゲーム「ぷぷりえーる」のデッキ構築などができるwebアプリ。通常構築や2pick構築が可能で、カードの組み合わせを自由に試せます。",
   keywords: "ぷぷりえーる, VRChat, カードゲーム, デッキ構築, 2pick, カード組み合わせ",
@@ -43,7 +43,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "ぷぷりえーる デッキ構築",
     description: "VRChatにあるカードゲーム「ぷぷりえーる」のデッキ構築などができるwebアプリ",
-    url: "https://pplale-web-front.vercel.app",
+    url: "https://pplale.vercel.app",
     siteName: "ぷぷりえーる デッキ構築",
     images: [
       {
@@ -83,7 +83,7 @@ export default function RootLayout({
   return (
     <html lang="ja">
       <head>
-        <link rel="canonical" href="https://pplale-web-front.vercel.app" />
+        <link rel="canonical" href="https://pplale.vercel.app" />
         <meta name="theme-color" content="#d889cbff" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         
@@ -101,7 +101,7 @@ export default function RootLayout({
               "@type": "WebApplication",
               "name": "ぷぷりえーる デッキ構築",
               "description": "VRChatにあるカードゲーム「ぷぷりえーる」のデッキ構築などができるwebアプリ",
-              "url": "https://pplale-web-front.vercel.app",
+              "url": "https://pplale.vercel.app",
               "applicationCategory": "Game",
               "operatingSystem": "Web",
               "offers": {
