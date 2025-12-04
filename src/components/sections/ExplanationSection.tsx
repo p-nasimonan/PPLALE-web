@@ -115,6 +115,7 @@ export default function ExplanationSection({ explanationOpacity, explanationY }:
                       src={card.img}
                       alt={card.title}
                       fill
+                      loading="lazy"
                       sizes="(max-width: 768px) 100vw, 50vw"
                       style={{ objectFit: 'cover' }}
                     />

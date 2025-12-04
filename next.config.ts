@@ -25,14 +25,17 @@ const config: NextConfig = {
         pathname: '/**',
       }
     ],
-    unoptimized: true,
+    unoptimized: false,
     deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048],
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
-    formats: ['image/webp'],
-    minimumCacheTTL: 60
+    formats: ['image/webp', 'image/avif'],
+    minimumCacheTTL: 60 * 60 * 24 * 365, // 1年
+    dangerouslyAllowSVG: true,
+    contentSecurityPolicy: "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline';",
   },
   experimental: {
     optimizeCss: true,
+    optimizePackageImports: ['framer-motion'],
   },
   serverExternalPackages: ['@vercel/og'],
   // 本番環境用の設定
@@ -40,6 +43,8 @@ const config: NextConfig = {
   basePath: '',
   // 動的ルーティングの設定
   trailingSlash: true,
+  compress: true,
+  poweredByHeader: false,
   turbopack: {
     resolveAlias: {
       '@': './src',

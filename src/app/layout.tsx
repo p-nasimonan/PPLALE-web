@@ -87,6 +87,11 @@ export default function RootLayout({
         <meta name="theme-color" content="#d889cbff" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         
+        {/* パフォーマンス最適化 */}
+        <link rel="preconnect" href="https://pple.vr2.info" />
+        <link rel="preconnect" href="https://lh3.googleusercontent.com" />
+        <link rel="preload" as="image" href="/pupu_game.webp" />
+        
         {/* Favicon設定 */}
         <link rel="icon" href="/favicon.ico" sizes="any" />
         <link rel="icon" type="image/png" sizes="180x180" href="/apple-touch-icon.png" />
