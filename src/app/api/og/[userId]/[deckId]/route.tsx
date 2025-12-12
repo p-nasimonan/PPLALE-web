@@ -61,8 +61,11 @@ const getCardData = async (cardId: string, cardType: 'yojo' | 'sweet' | 'playabl
     try {
       const response = await fetch(cardData.imageUrl, { method: 'HEAD' });
       if (!response.ok) {
+        // 画像が見つからない場合もキャッシュ
       }
-    } catch {
+    } catch (error) {
+      // ネットワークエラーなどをスキップ
+      console.debug('Image fetch failed:', error);
     }
 
     cardCache.set(cacheKey, cardData);

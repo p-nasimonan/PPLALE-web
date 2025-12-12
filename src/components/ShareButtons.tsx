@@ -59,7 +59,7 @@ const ShareButtons: React.FC<ShareButtonsProps> = ({
     }
 
     return `${baseUrl}/deck/local/local?${params.toString()}`;
-  };　
+  };
 
   const shareUrl = isLocal ? getLocalShareUrl() : share_url;
   const encoded_url = encodeURIComponent(shareUrl);

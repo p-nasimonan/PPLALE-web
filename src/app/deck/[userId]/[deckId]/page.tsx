@@ -131,7 +131,7 @@ export async function generateMetadata(
         ogImage = new URL(`/api/og/${userId}/${deckId}`, process.env.NEXT_PUBLIC_BASE_URL);
       }
     } catch (e) {
-      console.error("Error fetching deck data for metadata: ", e);
+      console.error("Error fetching deck data for metadata:", e);
     }
   }
 

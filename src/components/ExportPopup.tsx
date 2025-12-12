@@ -54,7 +54,7 @@ const ExportPopup: React.FC<ExportPopupProps> = ({ yojoDeck, sweetDeck, playable
    * IDから数字のみを抽出する関数
    */
   const extractNumber = (id: string) => {
-    return id.replace(/[^0-9]/g, '');
+    return id.replace(/\D/g, '');
   };
 
   /**

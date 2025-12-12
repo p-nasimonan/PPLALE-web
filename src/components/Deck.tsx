@@ -114,6 +114,7 @@ const Deck: React.FC<DeckProps> = ({
         : cards,
       sortCriteria
     );
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setUniqueSortedCards(sortedCards);
   }, [cards, sortCriteria, showDuplicates]);
 

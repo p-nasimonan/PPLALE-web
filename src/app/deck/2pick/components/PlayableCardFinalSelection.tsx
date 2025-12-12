@@ -62,6 +62,7 @@ const PlayableCardFinalSelection: React.FC<PlayableCardFinalSelectionProps> = ({
   // 読み込んだ時にカードを表向きにする(0.5秒後に表向きにする)
   useEffect(() => {
       // 初期表示時はすべて裏向き
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setCardsFaceUp(new Array(playableChoices.length).fill(false));
 
       // 少し遅れてすべて表向きにする
