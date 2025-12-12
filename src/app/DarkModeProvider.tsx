@@ -16,7 +16,6 @@ export default function DarkModeProvider({ children }: { children: React.ReactNo
   useEffect(() => {
     // ローカルストレージからダークモードの設定を読み込む
     const savedMode = localStorage.getItem('darkMode');
-    // eslint-disable-next-line react-hooks/set-state-in-effect
     setIsDarkMode(savedMode === 'true');
   }, []);
 

@@ -21,7 +21,6 @@ export default function Home() {
 
   // クライアント側でのみマウント状態を設定
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
     setIsMounted(true);
   }, []);
 

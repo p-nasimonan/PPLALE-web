@@ -86,7 +86,6 @@ const CardList: React.FC<CardListProps> = ({
 
   
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
     setFruitFilter('all');
     setSweetTypeFilter('all');
     setVersionFilter('all');

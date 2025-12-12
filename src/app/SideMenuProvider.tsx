@@ -18,7 +18,6 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     const savedTwoCardLimit = localStorage.getItem('isTwoCardLimit');
     if (savedTwoCardLimit) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
       setIsTwoCardLimit(JSON.parse(savedTwoCardLimit));
     }
   }, []);

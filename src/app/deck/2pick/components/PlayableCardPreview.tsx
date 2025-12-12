@@ -46,7 +46,6 @@ const PlayableCardPreview: React.FC<PlayableCardPreviewProps> = ({
 
   useEffect(() => {
     // 初期表示時はすべて裏向き
-    // eslint-disable-next-line react-hooks/set-state-in-effect
     setCardsFaceUp(new Array(playableChoices.length).fill(false));
 
     // 少し遅れてすべて表向きにする
