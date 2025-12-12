@@ -27,7 +27,7 @@ jobs:
         run: npm ci
 
       - name: Run linter
-        run: npm run lint --if-present
+        run: npx next lint
 
       - name: Build application
         run: npm run build
