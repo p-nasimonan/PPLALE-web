@@ -1,44 +1,23 @@
 version: 2
 updates:
-  # npm依存関係の更新
+  # npm (package.json) の設定
   - package-ecosystem: "npm"
     directory: "/"
     schedule:
-      interval: "daily"
-      time: "03:00"
-    open-pull-requests-limit: 10
-    allow:
-      - dependency-type: "all"
-    commit-message:
-      prefix: "chore(deps):"
-      prefix-development: "chore(deps-dev):"
-      include: "scope"
-    pull-request-branch-name:
-      separator: "/"
-    rebase-strategy: "auto"
-    # バージョン更新の分類
+      interval: "weekly"     # dailyだと多いのでweekly（週1）にする
+      day: "saturday"        # 土曜日にまとめて確認
+    # ここが重要！PRをまとめる設定
     groups:
-      security-updates:
+      dependencies:
         patterns:
-          - "*"
-        update-types:
-          - "patch"
-      dev-dependencies:
-        patterns:
-          - "*"
-        dependency-type: "development"
-      production-dependencies:
-        patterns:
-          - "*"
-        dependency-type: "production"
+          - "*"              # すべての依存関係を1つのPRにまとめる
 
-  # GitHubアクションの更新
+  # GitHub Actions の設定
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
-      interval: "weekly"
-      day: "monday"
-      time: "03:00"
-    commit-message:
-      prefix: "ci(deps):"
-      include: "scope"
+      interval: "monthly"    # Actionsは頻繁に変えなくていいので月1でもOK
+    groups:
+      actions:
+        patterns:
+          - "*"
