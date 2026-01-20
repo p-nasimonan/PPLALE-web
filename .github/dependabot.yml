@@ -1,22 +1,21 @@
 version: 2
 updates:
-  # npm (package.json) の設定
   - package-ecosystem: "npm"
     directory: "/"
     schedule:
-      interval: "weekly"     # dailyだと多いのでweekly（週1）にする
-      day: "saturday"        # 土曜日にまとめて確認
-    # ここが重要！PRをまとめる設定
+      interval: "weekly"
+      day: "saturday"
+    # 役割で2つに分ける
     groups:
-      dependencies:
-        patterns:
-          - "*"              # すべての依存関係を1つのPRにまとめる
-
-  # GitHub Actions の設定
+      production-dependencies:
+        dependency-type: "production" # package.jsonの dependencies
+      development-dependencies:
+        dependency-type: "development" # package.jsonの devDependencies
+        
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
-      interval: "monthly"    # Actionsは頻繁に変えなくていいので月1でもOK
+      interval: "monthly"
     groups:
       actions:
         patterns:
