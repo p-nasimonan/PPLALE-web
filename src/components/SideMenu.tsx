@@ -12,7 +12,7 @@ export default function SettingsButton() {
     isTwoCardLimit,
     setIsTwoCardLimit
   } = useSettings();
-  const { isDarkMode, toggleDarkMode } = useDarkMode();
+  const { themeMode, setThemeMode } = useDarkMode();
   const pathname = usePathname();
   const isMainPage = pathname === '/';
   const is2PickPage = pathname === '/deck/2pick';
@@ -46,14 +46,32 @@ export default function SettingsButton() {
       {showSettings && (
         <div className="absolute right-0 z-50 mt-2 w-56 rounded-lg border border-gray-200 bg-white p-4 text-gray-900 shadow-lg dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100">
           <div className="space-y-4">
-            {/* ダークモード設定 */}
-            <div className="flex items-center justify-between">
-              <button
-                onClick={toggleDarkMode}
-                className="rounded-lg border border-gray-300 px-3 py-1 text-lg transition-colors hover:bg-gray-100 dark:border-gray-600 dark:hover:bg-gray-700"
-              >
-                {isDarkMode ? "☀️" : "🌙"}
-              </button>
+            {/* テーマ設定 */}
+            <div className="space-y-2">
+              <p className="text-sm font-medium">テーマ</p>
+              <div className="grid grid-cols-3 gap-1 rounded-lg border border-gray-200 bg-gray-50 p-1 dark:border-gray-700 dark:bg-gray-900">
+                {[
+                  { key: 'system', label: 'System' },
+                  { key: 'light', label: 'Light' },
+                  { key: 'dark', label: 'Dark' },
+                ].map((mode) => {
+                  const isActive = themeMode === mode.key;
+                  return (
+                    <button
+                      key={mode.key}
+                      onClick={() => setThemeMode(mode.key as 'system' | 'light' | 'dark')}
+                      className={`rounded-md px-2 py-1 text-xs font-semibold transition-colors ${
+                        isActive
+                          ? 'bg-blue-600 text-white'
+                          : 'text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800'
+                      }`}
+                      aria-pressed={isActive}
+                    >
+                      {mode.label}
+                    </button>
+                  );
+                })}
+              </div>
             </div>
 
             {/* 2枚制限設定 */}

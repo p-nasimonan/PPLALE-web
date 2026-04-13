@@ -97,6 +97,19 @@ export default function RootLayout({
         <link rel="icon" type="image/png" sizes="180x180" href="/apple-touch-icon.png" />
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
         <link rel="manifest" href="/site.webmanifest" />
+
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(() => {
+              try {
+                const mode = localStorage.getItem('themeMode');
+                const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                const isDark = mode === 'dark' || (mode !== 'light' && prefersDark);
+                document.documentElement.classList.toggle('dark', isDark);
+              } catch {}
+            })();`,
+          }}
+        />
         
         <script
           type="application/ld+json"

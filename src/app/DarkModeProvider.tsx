@@ -2,51 +2,82 @@
 
 import React, { createContext, useContext, useEffect, useState } from 'react';
 
+type ThemeMode = 'light' | 'dark' | 'system';
+
 type DarkModeContextType = {
   isDarkMode: boolean;
+  themeMode: ThemeMode;
+  setThemeMode: (mode: ThemeMode) => void;
   toggleDarkMode: () => void;
 };
 
 const DarkModeContext = createContext<DarkModeContextType | undefined>(undefined);
 
+const THEME_MODE_KEY = 'themeMode';
+const DARK_MEDIA_QUERY = '(prefers-color-scheme: dark)';
+
+function resolveIsDarkMode(mode: ThemeMode): boolean {
+  if (mode === 'dark') return true;
+  if (mode === 'light') return false;
+  if (typeof window === 'undefined') return false;
+  return window.matchMedia(DARK_MEDIA_QUERY).matches;
+}
+
+function applyDarkClass(isDarkMode: boolean): void {
+  document.documentElement.classList.toggle('dark', isDarkMode);
+}
+
 export default function DarkModeProvider({ children }: { children: React.ReactNode }) {
-  // 初期値をnullに設定し、初期化前の状態を表現
-  const [isDarkMode, setIsDarkMode] = useState<boolean | null>(null);
+  const [themeMode, setThemeMode] = useState<ThemeMode>('system');
+  const [isDarkMode, setIsDarkMode] = useState(false);
 
   useEffect(() => {
-    // ローカルストレージからダークモードの設定を読み込む
-    const savedMode = localStorage.getItem('darkMode');
-    setIsDarkMode(savedMode === 'true');
+    const storedMode = localStorage.getItem(THEME_MODE_KEY);
+    if (storedMode === 'light' || storedMode === 'dark' || storedMode === 'system') {
+      setThemeMode(storedMode);
+      return;
+    }
+
+    // 旧実装（boolean保存）からの移行
+    const legacyDarkMode = localStorage.getItem('darkMode');
+    if (legacyDarkMode === 'true' || legacyDarkMode === 'false') {
+      setThemeMode(legacyDarkMode === 'true' ? 'dark' : 'light');
+      return;
+    }
+
+    setThemeMode('system');
   }, []);
 
   useEffect(() => {
-    // isDarkModeがnullの場合は何もしない（初期化前）
-    if (isDarkMode === null) return;
+    const mediaQuery = window.matchMedia(DARK_MEDIA_QUERY);
 
-    // ダークモードの状態が変更されたときにクラスを更新
-    if (isDarkMode) {
-      document.documentElement.classList.add('dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-    }
-    // 設定をローカルストレージに保存
-    localStorage.setItem('darkMode', isDarkMode.toString());
-  }, [isDarkMode]);
+    const sync = () => {
+      const nextIsDarkMode = resolveIsDarkMode(themeMode);
+      setIsDarkMode(nextIsDarkMode);
+      applyDarkClass(nextIsDarkMode);
+    };
+
+    sync();
+    localStorage.setItem(THEME_MODE_KEY, themeMode);
+
+    const onSystemThemeChange = () => {
+      if (themeMode === 'system') {
+        sync();
+      }
+    };
+
+    mediaQuery.addEventListener('change', onSystemThemeChange);
+    return () => {
+      mediaQuery.removeEventListener('change', onSystemThemeChange);
+    };
+  }, [themeMode]);
 
   const toggleDarkMode = () => {
-    // ダークモードの状態をトグルする
-    setIsDarkMode(prev => !prev);
-    // ローカルストレージに保存
-    localStorage.setItem('darkMode', (!isDarkMode).toString());
+    setThemeMode(prev => (resolveIsDarkMode(prev) ? 'light' : 'dark'));
   };
 
-  // 初期化前は何も表示しない
-  if (isDarkMode === null) {
-    return null;
-  }
-
   return (
-    <DarkModeContext.Provider value={{ isDarkMode, toggleDarkMode }}>
+    <DarkModeContext.Provider value={{ isDarkMode, themeMode, setThemeMode, toggleDarkMode }}>
       {children}
     </DarkModeContext.Provider>
   );
