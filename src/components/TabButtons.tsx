@@ -43,26 +43,26 @@ const TabButtons: React.FC<TabButtonsProps> = ({
 
   const getButtonColor = (tabKey: string) => {
     if (tabKey === 'yojo') {
-      return 'yojo-deck-color';
+      return 'bg-rose-200 text-rose-900 border-rose-300 dark:bg-rose-900/40 dark:text-rose-100 dark:border-rose-700';
     } else if (tabKey === 'sweet') {
-      return 'sweet-deck-color';
+      return 'bg-cyan-200 text-cyan-900 border-cyan-300 dark:bg-cyan-900/40 dark:text-cyan-100 dark:border-cyan-700';
     } else if (tabKey === 'playable') {
-      return 'playable-deck-color';
+      return 'bg-indigo-200 text-indigo-900 border-indigo-300 dark:bg-indigo-900/40 dark:text-indigo-100 dark:border-indigo-700';
     }
-    return 'deck-color';
+    return 'bg-gray-200 text-gray-900 border-gray-300 dark:bg-gray-700 dark:text-gray-100 dark:border-gray-600';
   };
 
   const getButtonClassName = (tabKey: string) => {
     const isActive = tabKey === activeTabKey;
     if (variant === 'cardList') {
-      return `px-4 py-2 rounded-t-md text-sm font-medium 
+      return `rounded-t-md border-2 px-4 py-2 text-sm font-medium transition-colors 
               ${isActive 
-                ? `yojo-deck-border-color border-b-transparent border-2 ${getButtonColor(tabKey)}` 
-                : `border-transparent text-gray-500 hover:text-gray-700`}
+                ? `border-b-transparent ${getButtonColor(tabKey)}` 
+                : `border-transparent bg-transparent text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200`}
               `;
     }
     // default variant (DeckList用)
-    return `px-4 py-2 rounded ${isActive ? 'bg-blue-500 text-white' : 'lgiht-color'}`;
+    return `rounded px-4 py-2 ${isActive ? 'bg-blue-500 text-white' : 'text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800'}`;
   };
 
 

@@ -101,7 +101,7 @@ const CardList: React.FC<CardListProps> = ({
         <div className="flex flex-col sm:flex-row gap-2">
           {displayCardType === 'yojo' && (
             <select
-              className="px-2 py-1 border rounded-md main-color text-sm"
+              className="rounded-md border border-gray-300 bg-white px-2 py-1 text-sm text-gray-900 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-100"
               value={fruitFilter}
               onChange={(e) => setFruitFilter(e.target.value as FruitType | 'all')}
             >
@@ -114,7 +114,7 @@ const CardList: React.FC<CardListProps> = ({
           )}
           {displayCardType === 'sweet' && (
             <select
-              className="px-2 py-1 border rounded-md main-color text-sm"
+              className="rounded-md border border-gray-300 bg-white px-2 py-1 text-sm text-gray-900 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-100"
               value={sweetTypeFilter}
               onChange={(e) => setSweetTypeFilter(e.target.value)}
             >
@@ -126,7 +126,7 @@ const CardList: React.FC<CardListProps> = ({
           )}
           {displayCardType === 'playable' && (
             <select
-              className="px-2 py-1 border rounded-md main-color text-sm"
+              className="rounded-md border border-gray-300 bg-white px-2 py-1 text-sm text-gray-900 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-100"
               value={versionFilter}
               onChange={(e) => setVersionFilter(e.target.value)}
             >
@@ -139,7 +139,7 @@ const CardList: React.FC<CardListProps> = ({
           <input
             type="text"
             placeholder="カード名検索..."
-            className="px-2 py-1 border rounded-md flex-grow main-color text-sm"
+            className="flex-grow rounded-md border border-gray-300 bg-white px-2 py-1 text-sm text-gray-900 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-100"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />

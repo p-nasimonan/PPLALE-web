@@ -37,20 +37,20 @@ export default function SettingsButton() {
   return (
     <div className="relative" ref={menuRef}>
       <button
-        className="btn-settings text-2xl hover:scale-110 transition-transform duration-200"
+        className="rounded-md border border-gray-300 bg-white px-3 py-1 text-2xl text-gray-800 shadow-sm transition-transform duration-200 hover:scale-110 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100"
         onClick={() => setShowSettings(!showSettings)}
         aria-label="メニュー"
       >
         {showSettings ? '✕' : '☰'}
       </button>
       {showSettings && (
-        <article className="absolute right-0 mt-2 w-48 rounded-lg shadow-lg p-4 z-50">
+        <div className="absolute right-0 z-50 mt-2 w-56 rounded-lg border border-gray-200 bg-white p-4 text-gray-900 shadow-lg dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100">
           <div className="space-y-4">
             {/* ダークモード設定 */}
             <div className="flex items-center justify-between">
               <button
                 onClick={toggleDarkMode}
-                className="reverse-color text-lg rounded-lg"
+                className="rounded-lg border border-gray-300 px-3 py-1 text-lg transition-colors hover:bg-gray-100 dark:border-gray-600 dark:hover:bg-gray-700"
               >
                 {isDarkMode ? "☀️" : "🌙"}
               </button>
@@ -69,7 +69,7 @@ export default function SettingsButton() {
                 2枚制限
               </label>
             </div>
-            <p className="text-xs light-color">
+            <p className="text-xs text-gray-600 dark:text-gray-300">
               {isTwoCardLimit ? "同じカードは最大2枚まで" : "同じカードを何枚でも追加可能"}
             </p>
 
@@ -77,7 +77,7 @@ export default function SettingsButton() {
             {!is2PickPage && !isMainPage ?(
             <div className="flex flex-col gap-2">
               <button
-                className="btn-export w-full flex items-center justify-center gap-2 hover:scale-105 transition-transform duration-200"
+                className="flex w-full items-center justify-center gap-2 rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white transition-transform duration-200 hover:scale-105 hover:bg-blue-700"
                 onClick={() => window.dispatchEvent(new CustomEvent('exportDeck'))}
               >
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
@@ -86,7 +86,7 @@ export default function SettingsButton() {
                 <span>エクスポート</span>
               </button>
               <button
-                className="btn-import w-full flex items-center justify-center gap-2 hover:scale-105 transition-transform duration-200"
+                className="flex w-full items-center justify-center gap-2 rounded-md bg-emerald-600 px-3 py-2 text-sm font-semibold text-white transition-transform duration-200 hover:scale-105 hover:bg-emerald-700"
                 onClick={() => window.dispatchEvent(new CustomEvent('importDeck'))}
               >
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
@@ -99,7 +99,7 @@ export default function SettingsButton() {
           <></>
           ) : null}
           </div>
-        </article>
+        </div>
       )}
     </div>
   );

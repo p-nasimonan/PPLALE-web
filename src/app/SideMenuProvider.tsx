@@ -1,6 +1,7 @@
 'use client';
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import { parseBooleanFromStorage } from '@/lib/schema';
 
 interface SettingsContextType {
   showSettings: boolean;
@@ -17,9 +18,7 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     const savedTwoCardLimit = localStorage.getItem('isTwoCardLimit');
-    if (savedTwoCardLimit) {
-      setIsTwoCardLimit(JSON.parse(savedTwoCardLimit));
-    }
+    setIsTwoCardLimit(parseBooleanFromStorage(savedTwoCardLimit, true));
   }, []);
 
   useEffect(() => {

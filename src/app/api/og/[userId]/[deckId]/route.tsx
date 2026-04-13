@@ -9,6 +9,7 @@ import { NextRequest } from 'next/server';
 import { initializeApp, cert, getApps } from 'firebase-admin/app';
 import { getFirestore } from 'firebase-admin/firestore';
 import { allYojoCards, allSweetCards, allPlayableCards } from '@/data/cards';
+import { isValidOgSignature } from '@/lib/ogSignature';
 
 export const runtime = 'nodejs';
 // キャッシュ制御を追加
@@ -25,6 +26,7 @@ if (!getApps().length) {
 }
 
 const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://pplale.pgw.jp';
+const ID_PATTERN = /^[\w-]{1,64}$/;
 
 // カードデータのキャッシュ
 const cardCache = new Map();
@@ -81,6 +83,17 @@ export async function GET(
   try {
     const params = await context.params;
     const { userId, deckId } = params;
+
+    if (!ID_PATTERN.test(userId) || !ID_PATTERN.test(deckId)) {
+      return new Response('Bad Request', { status: 400 });
+    }
+
+    const searchParams = request.nextUrl.searchParams;
+    const tsParam = searchParams.get('ts');
+    const sigParam = searchParams.get('sig');
+    if (!isValidOgSignature({ userId, deckId, tsParam, sigParam })) {
+      return new Response('Unauthorized', { status: 401 });
+    }
 
     const db = getFirestore();
 

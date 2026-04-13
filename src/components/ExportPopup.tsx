@@ -79,16 +79,16 @@ const ExportPopup: React.FC<ExportPopupProps> = ({ yojoDeck, sweetDeck, playable
 
   return (
     <div className="fixed inset-0 bg-opacity-40 flex items-center justify-center z-50">
-      <div className="popup p-6 rounded-lg shadow-lg max-w-md w-full">
+      <div className="w-full max-w-md rounded-lg bg-white p-6 text-gray-900 shadow-lg dark:bg-gray-800 dark:text-gray-100">
         <h3 className="text-xl font-bold mb-4">デッキをエクスポート</h3>
         <div className="mb-4">
           <div className="mb-4">
             <h4 className="font-bold mb-2">幼女デッキ</h4>
-            <div className="main-background p-3 rounded border border-gray-300 overflow-auto max-h-40">
+            <div className="max-h-40 overflow-auto rounded border border-gray-300 bg-gray-50 p-3 dark:border-gray-600 dark:bg-gray-900">
               <pre>{yojoDeck.map(card => extractNumber(card.id)).join(',')}</pre>
             </div>
             <button
-              className="btn btn-primary mt-2"
+              className="mt-2 rounded-md bg-blue-600 px-4 py-2 font-semibold text-white transition-colors hover:bg-blue-700"
               onClick={handleCopyYojoDeck}
             >
               {yojoCopied ? 'コピーしました！' : '幼女デッキをコピー'}
@@ -97,11 +97,11 @@ const ExportPopup: React.FC<ExportPopupProps> = ({ yojoDeck, sweetDeck, playable
           
           <div className="mb-4">
             <h4 className="font-bold mb-2">お菓子デッキ</h4>
-            <div className="main-background p-3 rounded border border-gray-300 overflow-auto max-h-40">
+            <div className="max-h-40 overflow-auto rounded border border-gray-300 bg-gray-50 p-3 dark:border-gray-600 dark:bg-gray-900">
               <pre>{sweetDeck.map(card => extractNumber(card.id)).join(',')}</pre>
             </div>
             <button
-              className="btn btn-primary mt-2"
+              className="mt-2 rounded-md bg-blue-600 px-4 py-2 font-semibold text-white transition-colors hover:bg-blue-700"
               onClick={handleCopySweetDeck}
             >
               {sweetCopied ? 'コピーしました！' : 'お菓子デッキをコピー'}
@@ -124,13 +124,13 @@ const ExportPopup: React.FC<ExportPopupProps> = ({ yojoDeck, sweetDeck, playable
         </div>
         <div className="flex flex-col items-end gap-2">
           <button
-            className="btn btn-primary"
+            className="rounded-md bg-blue-600 px-4 py-2 font-semibold text-white transition-colors hover:bg-blue-700"
             onClick={() => setShowImagePreview(true)}
           >
             デッキの画像を表示
           </button>
           <button
-            className="btn btn-secondary"
+            className="rounded-md border border-gray-300 px-4 py-2 text-gray-700 transition-colors hover:bg-gray-100 dark:border-gray-600 dark:text-gray-200 dark:hover:bg-gray-700"
             onClick={onClose}
           >
             閉じる

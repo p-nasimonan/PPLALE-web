@@ -165,34 +165,40 @@ const Deck: React.FC<DeckProps> = ({
     }
   };
 
-  // デッキの種類に応じた背景色を設定
-  const getDeckColor = () => {
-    return type === '幼女' ? 'yojo-deck-color' 
-    : type === 'お菓子' ? 'sweet-deck-color'
-    : type === 'プレイアブル' ? 'playable-deck-color'
-    : 'deck-color';
+  const getDeckTheme = () => {
+    if (type === '幼女') {
+      return {
+        container: 'border-red-200 bg-rose-100/80 text-red-900 dark:border-red-900 dark:bg-rose-900/40 dark:text-rose-100',
+        title: 'text-red-900 dark:text-rose-100',
+      };
+    }
+
+    if (type === 'お菓子') {
+      return {
+        container: 'border-cyan-200 bg-cyan-100/80 text-cyan-900 dark:border-cyan-900 dark:bg-cyan-900/30 dark:text-cyan-100',
+        title: 'text-cyan-900 dark:text-cyan-100',
+      };
+    }
+
+    if (type === 'プレイアブル') {
+      return {
+        container: 'border-indigo-200 bg-indigo-100/80 text-indigo-900 dark:border-indigo-900 dark:bg-indigo-900/40 dark:text-indigo-100',
+        title: 'text-indigo-900 dark:text-indigo-100',
+      };
+    }
+
+    return {
+      container: 'border-gray-200 bg-gray-100/80 text-gray-900 dark:border-gray-700 dark:bg-gray-800/60 dark:text-gray-100',
+      title: 'text-gray-900 dark:text-gray-100',
+    };
   };
 
-  // デッキの種類に応じたボーダー色を設定
-  const getBorderColor = () => {
-    return type === '幼女' ? 'yojo-deck-border-color' 
-    : type === 'お菓子' ? 'sweet-deck-border-color'
-    : type === 'プレイアブル' ? 'playable-deck-border-color'
-    : 'deck-border-color';
-  };
-
-  // デッキの種類に応じたテキスト色を設定
-  const getTextColor = () => {
-    return type === '幼女' ? 'yojo-deck-text-color' 
-    : type === 'お菓子' ? 'sweet-deck-text-color'
-    : type === 'プレイアブル' ? 'playable-deck-text-color'
-    : 'deck-text-color';
-  };
+  const deckTheme = getDeckTheme();
 
   return (
     <div 
-      className={`p-4 rounded-lg border-2 ${getDeckColor()} ${getBorderColor()} transition-all duration-200  ${
-        isDraggingOver ? 'scale-101 shadow-lg border-dashed border-4' : ''
+      className={`rounded-lg border-2 p-4 transition-all duration-200 ${deckTheme.container} ${
+        isDraggingOver ? 'scale-[1.01] border-4 border-dashed shadow-lg' : ''
       }`}
       onDragOver={(e) => {
         e.preventDefault();
@@ -209,7 +215,7 @@ const Deck: React.FC<DeckProps> = ({
       }}
     >
       <div className="flex justify-between items-center mb-4">
-        <h2 className={`text-xl font-bold ${getTextColor()}`}>
+        <h2 className={`text-xl font-bold ${deckTheme.title}`}>
           {type}デッキ ({cards.length}/{maxCards})
         </h2>
         {!readOnly && (

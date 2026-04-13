@@ -4,6 +4,7 @@ import { CardInfo } from '@/types/card';
 import { allYojoCards, allSweetCards, allPlayableCards } from '@/data/cards';
 import DeckPageClient from './DeckPageClient';
 import { Metadata } from 'next';
+import { createOgSignature, createOgSignaturePayload } from '@/lib/ogSignature';
 
 interface DeckDocData {
   yojoDeckIds?: string[];
@@ -112,9 +113,10 @@ export async function generateMetadata(
 ): Promise<Metadata> {
   const params = await paramsPromise;
   const { userId, deckId } = params;
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://pplale.pgw.jp';
   let title = 'ぷぷりえーる デッキ構築';
   let description = 'お菓子争奪カードゲーム「ぷぷりえーる」のデッキ構築ツールです。';
-  let ogImage = new URL(`${process.env.NEXT_PUBLIC_BASE_URL}/ogp.png`);
+  let ogImage = new URL('/ogp.png', baseUrl);
 
   if (userId !== 'local') {
     try {
@@ -128,7 +130,13 @@ export async function generateMetadata(
         }
         // 動的OGP画像のURLを生成
         // APIルートを使用する方式に戻す場合
-        ogImage = new URL(`/api/og/${userId}/${deckId}`, process.env.NEXT_PUBLIC_BASE_URL);
+        const ts = Math.floor(Date.now() / 1000);
+        const payload = createOgSignaturePayload(userId, deckId, ts);
+        const sig = createOgSignature(payload);
+        const signedPath = sig
+          ? `/api/og/${userId}/${deckId}?ts=${ts}&sig=${sig}`
+          : '/ogp.png';
+        ogImage = new URL(signedPath, baseUrl);
       }
     } catch (e) {
       console.error("Error fetching deck data for metadata:", e);
@@ -150,7 +158,7 @@ export async function generateMetadata(
         },
       ],
       type: 'website',
-      url: `${process.env.NEXT_PUBLIC_BASE_URL}/deck/${userId}/${deckId}`
+      url: `${baseUrl}/deck/${userId}/${deckId}`
     },
     twitter: {
       card: 'summary_large_image',

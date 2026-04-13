@@ -414,11 +414,11 @@ export default function DeckPageClient({
   };
 
   if (isLoading) {
-    return <div className="container mx-auto p-4">読み込み中...</div>;
+    return <div className="mx-auto max-w-[1700px] p-4 text-gray-800 dark:text-gray-100">読み込み中...</div>;
   }
 
   if (error) {
-    return <div className="container mx-auto p-4 text-red-500">{error}</div>;
+    return <div className="mx-auto max-w-[1700px] p-4 text-red-500">{error}</div>;
   }
 
   const deckViewTabs: TabDefinition[] = [
@@ -428,14 +428,14 @@ export default function DeckPageClient({
   ];
 
   const getCardListColor = () => {
-    return deckViewActiveTab === 'yojo' ? 'yojo-deck-color'
-    : deckViewActiveTab === 'sweet' ? 'sweet-deck-color'
-    : deckViewActiveTab === 'playable' ? 'playable-deck-color'
-    : 'deck-color';
+    return deckViewActiveTab === 'yojo' ? 'border border-rose-300 bg-rose-100/80 dark:border-rose-700 dark:bg-rose-900/40'
+    : deckViewActiveTab === 'sweet' ? 'border border-cyan-300 bg-cyan-100/80 dark:border-cyan-700 dark:bg-cyan-900/40'
+    : deckViewActiveTab === 'playable' ? 'border border-indigo-300 bg-indigo-100/80 dark:border-indigo-700 dark:bg-indigo-900/40'
+    : 'border border-gray-300 bg-gray-100/80 dark:border-gray-700 dark:bg-gray-800/60';
   };
 
   return (
-    <div className="container mx-auto p-2">
+    <div className="mx-auto max-w-[1700px] p-2 text-gray-900 dark:text-gray-100">
       <div className="flex items-center mb-5">
         {isEditing ? (
           <div className="flex items-center gap-2">
@@ -471,7 +471,7 @@ export default function DeckPageClient({
               {userId === 'local' && user &&(
                     <button
                       onClick={handleLoginAndSave}
-                      className="btn-primary text-sm px-4 py-2"
+                      className="rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-blue-700"
                     >
                       アカウントにデッキを保存
                     </button>
@@ -504,7 +504,7 @@ export default function DeckPageClient({
         />
 
         {isOwner && (
-          <div className="card">
+          <div className="rounded-lg border border-gray-200 bg-white p-2 shadow-sm dark:border-gray-700 dark:bg-gray-800">
             <TabButtons
               tabs={deckViewTabs}
               activeTabKey={deckViewActiveTab}

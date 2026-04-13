@@ -104,7 +104,7 @@ const ShareButtons: React.FC<ShareButtonsProps> = ({
       {/* シェアボタン */}
       <button
         onClick={() => set_show_options(!show_options)}
-        className="flex items-center justify-center w-8 h-8 rounded-full main-color"
+        className="flex h-8 w-8 items-center justify-center rounded-full text-gray-800 transition-colors hover:bg-gray-100 dark:text-gray-100 dark:hover:bg-gray-800"
         aria-label="シェア"
         title="シェア"
       >
@@ -123,11 +123,11 @@ const ShareButtons: React.FC<ShareButtonsProps> = ({
 
       {/* シェアの選択肢（横並びアイコン） */}
       {show_options && (
-        <div className="absolute right-0 mt-2 w-auto bg-white border rounded shadow-lg z-10 p-2 flex gap-2">
+        <div className="absolute right-0 z-10 mt-2 flex w-auto gap-2 rounded border border-gray-200 bg-white p-2 shadow-lg dark:border-gray-700 dark:bg-gray-800">
           {/* リンクコピーボタン */}
           <button
             onClick={handle_copy_link}
-            className="flex items-center justify-center w-10 h-10 rounded-full hover:bg-gray-800 text-white main-color"
+            className="flex h-10 w-10 items-center justify-center rounded-full transition-colors hover:bg-gray-100 dark:hover:bg-gray-700"
             aria-label="リンクをコピー"
             title="リンクをコピー"
           >
@@ -144,7 +144,7 @@ const ShareButtons: React.FC<ShareButtonsProps> = ({
               window.open(twitter_url, '_blank', 'noopener,noreferrer');
               set_show_options(false);
             }}
-            className="flex items-center justify-center w-10 h-10 rounded-full twitter-button"
+            className="flex h-10 w-10 items-center justify-center rounded-full bg-sky-500 transition-colors hover:bg-sky-600"
             aria-label="Twitterでシェア"
             title="Twitterでシェア"
           >
@@ -161,7 +161,7 @@ const ShareButtons: React.FC<ShareButtonsProps> = ({
               setShowImagePreview(true);
               set_show_options(false);
             }}
-            className="flex items-center justify-center w-10 h-10 rounded-full text-white main-color"
+            className="flex h-10 w-10 items-center justify-center rounded-full transition-colors hover:bg-gray-100 dark:hover:bg-gray-700"
             aria-label="デッキの画像を表示"
             title="デッキの画像を表示"
           >

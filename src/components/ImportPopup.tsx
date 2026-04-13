@@ -127,7 +127,7 @@ const ImportPopup: React.FC<ImportPopupProps> = ({ onImport, onClose }) => {
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="main-background p-6 rounded-lg w-full max-w-lg main-color">
+      <div className="w-full max-w-lg rounded-lg bg-white p-6 text-gray-900 shadow-xl dark:bg-gray-800 dark:text-gray-100">
         <h2 className="text-xl font-bold mb-4">デッキをインポート</h2>
         {error && (
           <div className="mb-4 p-2 bg-red-100 text-red-700 rounded">
@@ -138,7 +138,7 @@ const ImportPopup: React.FC<ImportPopupProps> = ({ onImport, onClose }) => {
           <div>
             <h4 className="font-bold mb-2">幼女デッキ</h4>
             <textarea
-              className="w-full p-2 border rounded-md"
+              className="w-full rounded-md border border-gray-300 bg-white p-2 text-gray-900 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-100"
               rows={3}
               value={yojoCardIds}
               onChange={(e) => setYojoCardIds(e.target.value)}
@@ -152,7 +152,7 @@ const ImportPopup: React.FC<ImportPopupProps> = ({ onImport, onClose }) => {
           <div>
             <h4 className="font-bold mb-2">お菓子デッキ</h4>
             <textarea
-              className="w-full p-2 border rounded-md"
+              className="w-full rounded-md border border-gray-300 bg-white p-2 text-gray-900 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-100"
               rows={3}
               value={sweetCardIds}
               onChange={(e) => setSweetCardIds(e.target.value)}
@@ -164,7 +164,7 @@ const ImportPopup: React.FC<ImportPopupProps> = ({ onImport, onClose }) => {
             <h4 className="font-bold mb-2">プレイアブルカード</h4>
             <input
               type="text"
-              className="w-full p-2 border rounded-md"
+              className="w-full rounded-md border border-gray-300 bg-white p-2 text-gray-900 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-100"
               value={playableCardId}
               onChange={(e) => setPlayableCardId(e.target.value)}
               placeholder="p_01 (任意)"
@@ -173,13 +173,13 @@ const ImportPopup: React.FC<ImportPopupProps> = ({ onImport, onClose }) => {
         </div>
         <div className="flex justify-end gap-4 mt-6">
           <button
-            className="btn-secondary"
+            className="rounded-md border border-gray-300 px-4 py-2 text-gray-700 transition-colors hover:bg-gray-100 dark:border-gray-600 dark:text-gray-200 dark:hover:bg-gray-700"
             onClick={handleClose}
           >
             キャンセル
           </button>
           <button
-            className="btn-primary"
+            className="rounded-md bg-blue-600 px-4 py-2 font-semibold text-white transition-colors hover:bg-blue-700"
             onClick={handleImport}
           >
             インポート

@@ -86,7 +86,7 @@ const FireBaseLogin: React.FC<FireBaseLoginProps> = () => {
     return (
       <button
         onClick={login_with_google}
-        className="main-color main-background flex items-center justify-center gap-2 px-4 py-2 rounded-md shadow-md transition-colors truncate"
+        className="flex items-center justify-center gap-2 truncate rounded-md border border-gray-300 bg-white px-4 py-2 text-gray-800 shadow-sm transition-colors hover:bg-gray-100 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100 dark:hover:bg-gray-700"
       >
         <svg width="20" height="20" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
           <path 
@@ -133,13 +133,13 @@ const FireBaseLogin: React.FC<FireBaseLoginProps> = () => {
       </button>
 
       {menu_open && (
-        <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-10">
-          <div className="px-4 py-2 text-sm text-gray-700 border-b border-gray-100">
+        <div className="absolute right-0 z-10 mt-2 w-48 rounded-md border border-gray-200 bg-white py-1 shadow-lg dark:border-gray-700 dark:bg-gray-800">
+          <div className="border-b border-gray-100 px-4 py-2 text-sm text-gray-700 dark:border-gray-700 dark:text-gray-200">
             {user.displayName || user.email}
           </div>
           <button 
             onClick={logout}
-            className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+            className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700"
           >
             ログアウト
           </button>
