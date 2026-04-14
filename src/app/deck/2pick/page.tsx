@@ -9,7 +9,7 @@
 
 'use client';
 
-import React, { useState, useEffect, useCallback} from 'react'; 
+import React, { Suspense, useState, useEffect, useCallback} from 'react'; 
 import { useForm } from 'react-hook-form';
 import { CardInfo, CardType, FruitType } from '@/types/card';
 import { allYojoCards, allSweetCards, allPlayableCards } from '@/data/cards';
@@ -34,7 +34,7 @@ import DeckViewPopup from './components/DeckViewPopup';
  * 
  * @returns {JSX.Element} 2Pickページ
  */
-export default function TwoPick() {
+function TwoPickContent() {
   const { user } = useAuth();
   const router = useRouter();
   const pathname = usePathname();
@@ -416,5 +416,21 @@ export default function TwoPick() {
           />
         )}
   </div>
+  );
+}
+
+function TwoPickFallback() {
+  return (
+    <div className="container relative py-8 text-center text-gray-700 dark:text-gray-200">
+      読み込み中...
+    </div>
+  );
+}
+
+export default function TwoPickPage() {
+  return (
+    <Suspense fallback={<TwoPickFallback />}>
+      <TwoPickContent />
+    </Suspense>
   );
 }
