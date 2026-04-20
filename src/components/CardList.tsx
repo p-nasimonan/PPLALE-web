@@ -161,19 +161,26 @@ const CardList: React.FC<CardListProps> = ({
         </div>
         <div className={`grid grid-cols-4 sm:grid-cols-5 md:grid-cols-6 lg:grid-cols-5 xl:grid-cols-6 gap-1 overflow-auto max-h-[calc(75vh-50px)]`}>
           {sortedFilteredCards
-            .map((card) => (
-              <div key={card.id} className="flex justify-center items-center">
+            .map((card) => {
+              const isAddable = canAddToDeck ? canAddToDeck(card) : true;
+              return (
+              <div 
+                key={card.id} 
+                className={`flex justify-center items-center transition-all ${
+                  !isAddable ? 'opacity-40 saturate-50 pointer-events-none' : ''
+                }`}
+              >
                 <Card
                   card={card}
                   isSelected={card.id === selectedCardId}
                   onClick={handleCardSelect}
-                  draggable={draggable}
+                  draggable={draggable && isAddable}
                   onDragStart={onDragStart}
                   canAddToDeck={canAddToDeck}
                   onAddToDeck={onAddToDeck}
                 />
               </div>
-            ))}
+            )})}
         </div>
       </div>
 

@@ -61,6 +61,12 @@ export default function DeckPageClient({
   const [showImportPopup, setShowImportPopup] = useState(false);
   const [isLoaded, setIsLoaded] = useState(isServerDataAvailable); // Firebaseへの自動保存制御用
   const [isOwner, setIsOwner] = useState(false);
+  const [mobileAddModalType, setMobileAddModalType] = useState<'yojo' | 'sweet' | 'playable' | null>(null);
+  const [currentUrl, setCurrentUrl] = useState('');
+
+  useEffect(() => {
+    setCurrentUrl(window.location.href);
+  }, []);
 
   /**
    * 現在のデッキ状態でデータ損失が発生しているかチェックする
@@ -477,7 +483,7 @@ export default function DeckPageClient({
                     </button>
               )}
             <ShareButtons 
-              share_url={window.location.pathname != '' ? window.location.href : ''}
+              share_url={currentUrl}
               share_text={`#お菓子争奪戦争ぷぷりえーる`}
               isLocal={userId === 'local'}
               yojoDeck={yojoDeck}
@@ -491,20 +497,35 @@ export default function DeckPageClient({
       </div>
 
       <div className={`grid grid-cols-1 ${isOwner ? 'lg:grid-cols-2' : ''} gap-2`}>
-        <DeckList
-          yojoDeck={yojoDeck}
-          sweetDeck={sweetDeck}
-          playableCard={selectedPlayableCard}
-          isOwner={isOwner}
-          activeTabKey={deckViewActiveTab}
-          onRemoveFromYojoDeck={handleRemoveFromYojoDeck}
-          onRemoveFromSweetDeck={handleRemoveFromSweetDeck}
-          onRemovePlayableCard={handleRemovePlayableCard}
-          onDropDeck={handleDrop}
-        />
+        {/* デッキ側のカラム（スマホ時はここにタブを表示） */}
+        <div className="flex flex-col gap-2">
+          {isOwner && (
+            <div className="lg:hidden">
+              <TabButtons
+                tabs={deckViewTabs}
+                activeTabKey={deckViewActiveTab}
+                onTabClick={(key: string) => setDeckViewActiveTab(key as 'yojo' | 'sweet' | 'playable')}
+              />
+            </div>
+          )}
+          <DeckList
+            yojoDeck={yojoDeck}
+            sweetDeck={sweetDeck}
+            playableCard={selectedPlayableCard}
+            isOwner={isOwner}
+            activeTabKey={deckViewActiveTab}
+            onRemoveFromYojoDeck={handleRemoveFromYojoDeck}
+            onRemoveFromSweetDeck={handleRemoveFromSweetDeck}
+            onRemovePlayableCard={handleRemovePlayableCard}
+            onDropDeck={handleDrop}
+            onAddClick={(type) => {
+              setMobileAddModalType(type === '幼女' ? 'yojo' : type === 'お菓子' ? 'sweet' : 'playable');
+            }}
+          />
+        </div>
 
         {isOwner && (
-          <div className="rounded-lg border border-gray-200 bg-white p-2 shadow-sm dark:border-gray-700 dark:bg-gray-800">
+          <div className="hidden lg:block rounded-lg border border-gray-200 bg-white p-2 shadow-sm dark:border-gray-700 dark:bg-gray-800">
             <TabButtons
               tabs={deckViewTabs}
               activeTabKey={deckViewActiveTab}
@@ -556,6 +577,53 @@ export default function DeckPageClient({
             setShowImportPopup(false);
           }}
         />
+      )}
+
+      {/* スマホ用カード追加ポップアップ */}
+      {mobileAddModalType && (
+        <div className="fixed inset-0 z-50 flex flex-col bg-black/70 backdrop-blur-sm lg:hidden pt-12 px-2 pb-2">
+          {/* ヘッダー */}
+          <div className="flex justify-between items-center bg-white dark:bg-gray-800 p-4 rounded-t-xl shadow-lg relative z-10">
+            <h3 className="text-xl font-bold flex items-center gap-2">
+              <span className="text-2xl">
+                {mobileAddModalType === 'yojo' ? '🎀' : mobileAddModalType === 'sweet' ? '🍬' : '✨'}
+              </span>
+              {mobileAddModalType === 'yojo' ? '幼女カードを追加' : mobileAddModalType === 'sweet' ? 'お菓子カードを追加' : 'プレイアブルカードを追加'}
+            </h3>
+            <button 
+              onClick={() => setMobileAddModalType(null)}
+              className="p-2 bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 rounded-full transition-colors"
+              aria-label="閉じる"
+            >
+              <svg className="w-6 h-6 text-gray-600 dark:text-gray-300" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24">
+                 <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+          {/* リスト領域 */}
+          <div 
+            className={`flex-1 overflow-y-auto rounded-b-xl shadow-xl p-3 
+              ${mobileAddModalType === 'yojo' ? 'bg-rose-100 dark:bg-rose-900/40' : 
+                mobileAddModalType === 'sweet' ? 'bg-cyan-100 dark:bg-cyan-900/40' : 
+                'bg-indigo-100 dark:bg-indigo-900/40'}`}
+          >
+            <CardList
+              allYojoCards={allYojoCards}
+              allSweetCards={allSweetCards}
+              allPlayableCards={allPlayableCards}
+              displayCardType={mobileAddModalType}
+              onAddToDeck={(card) => {
+                handleAddCard(card);
+                // プレイアブルカードは1枚制限なので、追加したら閉じる
+                if (mobileAddModalType === 'playable') {
+                  setMobileAddModalType(null);
+                }
+              }}
+              canAddToDeck={canAddToDeck}
+              draggable={false}
+            />
+          </div>
+        </div>
       )}
     </div>
   );

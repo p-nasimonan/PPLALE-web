@@ -1,6 +1,7 @@
 'use client';
 
 import React, { createContext, useContext, useEffect, useState } from 'react';
+import { usePathname } from 'next/navigation';
 
 type ThemeMode = 'light' | 'dark' | 'system';
 
@@ -28,6 +29,7 @@ function applyDarkClass(isDarkMode: boolean): void {
 }
 
 export default function DarkModeProvider({ children }: { children: React.ReactNode }) {
+  const pathname = usePathname();
   const [themeMode, setThemeMode] = useState<ThemeMode>('system');
   const [isDarkMode, setIsDarkMode] = useState(false);
 
@@ -46,7 +48,9 @@ export default function DarkModeProvider({ children }: { children: React.ReactNo
     const mediaQuery = window.matchMedia(DARK_MEDIA_QUERY);
 
     const sync = () => {
-      const nextIsDarkMode = resolveIsDarkMode(themeMode);
+      // トップページでは強制的にライトモード
+      const isTopPage = pathname === '/';
+      const nextIsDarkMode = isTopPage ? false : resolveIsDarkMode(themeMode);
       setIsDarkMode(nextIsDarkMode);
       applyDarkClass(nextIsDarkMode);
     };
@@ -64,7 +68,7 @@ export default function DarkModeProvider({ children }: { children: React.ReactNo
     return () => {
       mediaQuery.removeEventListener('change', onSystemThemeChange);
     };
-  }, [themeMode]);
+  }, [themeMode, pathname]);
 
   const toggleDarkMode = () => {
     setThemeMode(prev => (resolveIsDarkMode(prev) ? 'light' : 'dark'));

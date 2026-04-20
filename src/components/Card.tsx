@@ -221,7 +221,6 @@ const Card: React.FC<CardProps> = ({
                      (max-width: 1024px) ${cardSizes.md.width}px, 
                      ${cardSizes.lg.width}px`}
               priority={false}
-              quality={60}
               unoptimized={false}
               placeholder="blur"
               loading="lazy"
@@ -241,7 +240,6 @@ const Card: React.FC<CardProps> = ({
                      (max-width: 1024px) ${cardSizes.md.width}px, 
                      ${cardSizes.lg.width}px`}
               priority={false}
-              quality={60}
               unoptimized={false}
             />
           </div>

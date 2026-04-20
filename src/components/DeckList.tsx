@@ -27,6 +27,7 @@ interface DeckListProps {
   onRemoveFromSweetDeck: (card: CardInfo) => void;
   onRemovePlayableCard: () => void;
   onDropDeck: (e: React.DragEvent, deckType: string) => void;
+  onAddClick?: (type: string) => void;
 }
 
 /**
@@ -46,6 +47,7 @@ const DeckList: React.FC<DeckListProps> = ({
   onRemoveFromSweetDeck,
   onRemovePlayableCard,
   onDropDeck,
+  onAddClick,
 }) => {
   return (
     <div>
@@ -62,6 +64,7 @@ const DeckList: React.FC<DeckListProps> = ({
               onDragOverDeck={(e) => e.preventDefault()}
               onDragLeaveDeck={() => {}}
               onDropDeck={(e) => onDropDeck(e, 'yojo')}
+              onAddClick={onAddClick}
             />
           )}
 
@@ -74,6 +77,7 @@ const DeckList: React.FC<DeckListProps> = ({
               onDragOverDeck={(e) => e.preventDefault()}
               onDragLeaveDeck={() => {}}
               onDropDeck={(e) => onDropDeck(e, 'sweet')}
+              onAddClick={onAddClick}
             />
           )}
 
@@ -86,6 +90,7 @@ const DeckList: React.FC<DeckListProps> = ({
               onDragOverDeck={(e) => e.preventDefault()}
               onDragLeaveDeck={() => {}}
               onDropDeck={(e) => onDropDeck(e, 'playable')}
+              onAddClick={onAddClick}
             />
           )}
         </>

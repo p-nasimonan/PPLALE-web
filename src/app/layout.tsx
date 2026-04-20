@@ -88,9 +88,7 @@ export default function RootLayout({
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         
         {/* パフォーマンス最適化 */}
-        <link rel="preconnect" href="https://pple.vr2.info" />
-        <link rel="preconnect" href="https://lh3.googleusercontent.com" />
-        <link rel="preload" as="image" href="/pupu_game.webp" />
+        <link rel="preconnect" href="https://apis.google.com" />
         
         {/* Favicon設定 */}
         <link rel="icon" href="/favicon.ico" sizes="any" />
@@ -104,7 +102,8 @@ export default function RootLayout({
               try {
                 const mode = localStorage.getItem('themeMode');
                 const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-                const isDark = mode === 'dark' || (mode !== 'light' && prefersDark);
+                const isTopPage = window.location.pathname === '/';
+                const isDark = !isTopPage && (mode === 'dark' || (mode !== 'light' && prefersDark));
                 document.documentElement.classList.toggle('dark', isDark);
               } catch {}
             })();`,

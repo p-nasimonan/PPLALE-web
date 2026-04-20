@@ -30,6 +30,8 @@ interface DeckProps {
   onDropDeck?: (e: React.DragEvent, deckType: string) => void;
   /** 重複カードを表示するかどうか */
   showDuplicates?: boolean;
+  /** スマホでカード追加ボタン（＋）が押されたときのコールバック */
+  onAddClick?: (type: string) => void;
 }
 
 /**
@@ -81,7 +83,8 @@ const Deck: React.FC<DeckProps> = ({
   onDragOverDeck,
   onDragLeaveDeck,
   onDropDeck,
-  showDuplicates = false
+  showDuplicates = false,
+  onAddClick,
 }) => {
   // ドラッグ中のカードのインデックス
   const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
@@ -269,6 +272,19 @@ const Deck: React.FC<DeckProps> = ({
             />
           </div>
         ))}
+        {/* スマホ用：カード追加ボタン */}
+        {!readOnly && cards.length < maxCards && (
+          <button
+            type="button"
+            onClick={() => onAddClick && onAddClick(type)}
+            className="lg:hidden flex flex-col items-center justify-center w-full aspect-[220/320] rounded-xl border-2 border-dashed border-gray-400/50 bg-gray-50/50 hover:bg-gray-100/50 dark:border-gray-500/50 dark:bg-gray-800/30 dark:hover:bg-gray-700/50 transition-colors"
+          >
+            <svg className="w-10 h-10 text-gray-400 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+            </svg>
+            <span className="text-sm font-bold text-gray-500 dark:text-gray-400">追加</span>
+          </button>
+        )}
       </div>
 
       {/* デッキが空の場合のメッセージ */}
