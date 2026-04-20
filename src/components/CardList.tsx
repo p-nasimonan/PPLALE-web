@@ -5,7 +5,7 @@
  * フィルタリングやソート機能を提供する
  */
 
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo, useEffect, useCallback } from 'react';
 import { CardInfo, FruitType } from '@/types/card';
 import Card from './Card';
 
@@ -77,12 +77,27 @@ const CardList: React.FC<CardListProps> = ({
     return true;
   }), [currentCards, versionFilter, fruitFilter, sweetTypeFilter, searchQuery, displayCardType]);
 
+  const sortedFilteredCards = useMemo(() => {
+    return [...filteredCards].sort((a, b) => {
+      if (displayCardType === 'playable') {
+        const versionCompare = (a.version || '').localeCompare(b.version || '');
+        if (versionCompare !== 0) return versionCompare;
+      }
+      const idNumA = parseInt(a.id.split('_')[1], 10);
+      const idNumB = parseInt(b.id.split('_')[1], 10);
+      if (isNaN(idNumA) && isNaN(idNumB)) return a.id.localeCompare(b.id);
+      if (isNaN(idNumA)) return 1;
+      if (isNaN(idNumB)) return -1;
+      return idNumA - idNumB;
+    });
+  }, [filteredCards, displayCardType]);
+
   const sweetTypes = useMemo(() => Array.from(new Set(allSweetCards.filter(card => card.sweetType).map(card => card.sweetType ?? ''))).filter(Boolean), [allSweetCards]);
   const versions = useMemo(() => Array.from(new Set(allPlayableCards.filter(card => card.version).map(card => card.version ?? ''))).filter(Boolean), [allPlayableCards]);
 
-  const handleCardSelect = (card: CardInfo) => {
+  const handleCardSelect = useCallback((card: CardInfo) => {
     if (onCardSelect) onCardSelect(card);
-  };
+  }, [onCardSelect]);
 
   
   useEffect(() => {
@@ -145,19 +160,7 @@ const CardList: React.FC<CardListProps> = ({
           />
         </div>
         <div className={`grid grid-cols-4 sm:grid-cols-5 md:grid-cols-6 lg:grid-cols-5 xl:grid-cols-6 gap-1 overflow-auto max-h-[calc(75vh-50px)]`}>
-          {filteredCards
-            .sort((a, b) => {
-              if (displayCardType === 'playable') {
-                const versionCompare = (a.version || '').localeCompare(b.version || '');
-                if (versionCompare !== 0) return versionCompare;
-              }
-              const idNumA = parseInt(a.id.split('_')[1], 10);
-              const idNumB = parseInt(b.id.split('_')[1], 10);
-              if (isNaN(idNumA) && isNaN(idNumB)) return a.id.localeCompare(b.id);
-              if (isNaN(idNumA)) return 1;
-              if (isNaN(idNumB)) return -1;
-              return idNumA - idNumB;
-            })
+          {sortedFilteredCards
             .map((card) => (
               <div key={card.id} className="flex justify-center items-center">
                 <Card
@@ -174,7 +177,7 @@ const CardList: React.FC<CardListProps> = ({
         </div>
       </div>
 
-      {filteredCards.length === 0 && (
+      {sortedFilteredCards.length === 0 && (
         <div className="text-center py-8 text-gray-500">
           条件に一致するカードが見つかりませんでした。
         </div>

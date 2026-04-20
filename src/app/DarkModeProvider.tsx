@@ -38,13 +38,7 @@ export default function DarkModeProvider({ children }: { children: React.ReactNo
       return;
     }
 
-    // 旧実装（boolean保存）からの移行
-    const legacyDarkMode = localStorage.getItem('darkMode');
-    if (legacyDarkMode === 'true' || legacyDarkMode === 'false') {
-      setThemeMode(legacyDarkMode === 'true' ? 'dark' : 'light');
-      return;
-    }
-
+    // デフォルトはsystem
     setThemeMode('system');
   }, []);
 

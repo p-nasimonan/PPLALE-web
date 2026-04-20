@@ -5,7 +5,7 @@
  * カードの追加・削除・並べ替えなどの機能を提供する
  */
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useMemo } from 'react';
 import { CardInfo, CardType } from '@/types/card';
 import Card from './Card';
 
@@ -103,24 +103,30 @@ const Deck: React.FC<DeckProps> = ({
     defaultSortCriteria
   );
 
-  // ソートされたカードリスト（重複を除く）
-  const [uniqueSortedCards, setUniqueSortedCards] = useState<CardInfo[]>([]);
-
-  // ソート基準が変更されたときにデッキを更新
-  useEffect(() => {
-    const sortedCards = sortCards(
-      showDuplicates 
-        ? cards.filter((card, index, self) => index === self.findIndex(c => c.id === card.id))
-        : cards,
-      sortCriteria
-    );
-    setUniqueSortedCards(sortedCards);
+  // ソートされたカードリスト
+  const uniqueSortedCards = useMemo(() => {
+    let baseCards = cards;
+    if (showDuplicates) {
+      const seen = new Set<string>();
+      baseCards = [];
+      for (const card of cards) {
+        if (!seen.has(card.id)) {
+          seen.add(card.id);
+          baseCards.push(card);
+        }
+      }
+    }
+    return sortCards(baseCards, sortCriteria);
   }, [cards, sortCriteria, showDuplicates]);
 
-  // カードの重複数を計算する関数
-  const getCardCount = (card: CardInfo) => {
-    return cards.filter(c => c.id === card.id).length;
-  };
+  // カードごとの枚数を事前計算
+  const cardCounts = useMemo(() => {
+    const counts: Record<string, number> = {};
+    for (const card of cards) {
+      counts[card.id] = (counts[card.id] || 0) + 1;
+    }
+    return counts;
+  }, [cards]);
 
   // カードがドラッグ開始されたときの処理
   const handleDragStart = (e: React.DragEvent, index: number) => {
@@ -257,7 +263,7 @@ const Deck: React.FC<DeckProps> = ({
             <Card
               card={card}
               draggable={!readOnly}
-              count={showDuplicates ? getCardCount(card) : 1}
+              count={showDuplicates ? (cardCounts[card.id] || 1) : 1}
               onRemove={!readOnly ? handleCardRemove : undefined}
               showRemoveButton={!readOnly}
             />

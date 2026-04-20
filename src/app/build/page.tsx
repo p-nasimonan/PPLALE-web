@@ -29,16 +29,12 @@ export default function BuildPage() {
   const [deckImages, setDeckImages] = useState<{ [deckId: string]: string }>({});
   const [isCreating, setIsCreating] = useState(false);
   const [deletingDeckId, setDeletingDeckId] = useState<string | null>(null);
-  const [topDecks, setTopDecks] = useState<Deck[]>([]);
-  const [otherDecks, setOtherDecks] = useState<Deck[]>([]);
   const [filter, setFilter] = useState('');
   const [menuOpenId, setMenuOpenId] = useState<string | null>(null);
 
   useEffect(() => {
     if (!user) {
       setRecentDecks([]);
-      setTopDecks([]);
-      setOtherDecks([]);
       return;
     }
     // ログインユーザーのみデッキ取得
@@ -90,10 +86,8 @@ export default function BuildPage() {
     fetchRecentDecks();
   }, [user]);
 
-  useEffect(() => {
-    setTopDecks(recentDecks.slice(0, 3));
-    setOtherDecks(recentDecks.slice(3));
-  }, [recentDecks]);
+  const topDecks = recentDecks.slice(0, 3);
+  const otherDecks = recentDecks.slice(3);
 
   // メニューポップアップ外クリックで閉じる
   useEffect(() => {

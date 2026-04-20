@@ -81,7 +81,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="ja">
+    <html lang="ja" suppressHydrationWarning>
       <head>
         <link rel="canonical" href="https://pplale.vercel.app" />
         <meta name="theme-color" content="#d889cbff" />
