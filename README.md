@@ -39,5 +39,23 @@ VRChatのカードゲーム「ぷぷりえーる」は、VRChatのワールド�
 ハッカソン並みの速度で開発した。
 VRをプレイしながら話を聞きながら実装する超高速アジャイル開発を繰り返して作るため、AIが書きやすいNext.js+Tailwwindを選んだ。
 
+## カードの追加・画像更新
+
+カード画像はリポジトリのサイズを抑えるため **WebP（幅800px）で管理**している。
+画像を追加・更新するときは以下の手順で行う。
+
+1. PNG画像を `public/images/yojo|sweet|playable/` に置く
+2. `src/data/*.json` にカードを追加する（`imageUrl` は **`.png` のままでOK**）
+3. `npm run cards:optimize` を実行 → WebP変換 + JSONの `imageUrl` を `.webp` に自動更新
+4. `npm run cards:check` で整合性チェック（CIでも自動実行される）
+
+```bash
+npm run cards:optimize
+npm run cards:check
+```
+
+- `.png` の参照が残ったままだと `cards:check` がエラーになる（変換し忘れ防止）
+- 元のPNGは不要になったら削除してよい（git履歴に残っている）
+
 ## 環境変数について 
 firebaseを使うためには必要です。

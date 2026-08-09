@@ -25,7 +25,7 @@ if (!getApps().length) {
   });
 }
 
-const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://pplale.pgw.jp';
+const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://pplale.vercel.app';
 const ID_PATTERN = /^[\w-]{1,64}$/;
 
 // カードデータのキャッシュ
@@ -54,21 +54,9 @@ const getCardData = async (cardId: string, cardType: 'yojo' | 'sweet' | 'playabl
   if (card) {
     const cardData = {
       ...card,
-      imageUrl: card.imageUrl.startsWith('http://') || card.imageUrl.startsWith('https://')
-        ? card.imageUrl
-        : `${baseUrl}/Resized${card.imageUrl}`
+      // カード画像はプリ最適化済み WebP。絶対 URL に解決して OGP に埋め込む
+      imageUrl: new URL(card.imageUrl, baseUrl).toString(),
     };
-
-    // 画像の存在確認を試みる
-    try {
-      const response = await fetch(cardData.imageUrl, { method: 'HEAD' });
-      if (!response.ok) {
-        // 画像が見つからない場合もキャッシュ
-      }
-    } catch (error) {
-      // ネットワークエラーなどをスキップ
-      console.debug('Image fetch failed:', error);
-    }
 
     cardCache.set(cacheKey, cardData);
     return cardData;

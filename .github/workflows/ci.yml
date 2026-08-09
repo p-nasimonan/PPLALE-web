@@ -29,5 +29,8 @@ jobs:
       - name: Run linter
         run: npx eslint .
 
+      - name: Check card data/image consistency
+        run: npm run cards:check
+
       - name: Check for vulnerabilities
         run: npm audit --audit-level=moderate || true

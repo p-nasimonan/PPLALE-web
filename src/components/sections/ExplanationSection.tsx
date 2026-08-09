@@ -16,7 +16,7 @@ const explanationCards = [
   { 
     title: 'ぷぷりえーるとは', 
     description: 'ぷぷりえの幼女とお菓子のカードゲーム。20枚の幼女カードと10枚のお菓子カードでデッキを構築し対戦します。ぷぷりえポイント(PP)を使用してカードを使って、先に相手のお菓子(HP)を食べた方が勝ちです。',
-    img: '/images/fruits/いちご.png' 
+    img: '/images/fruits/いちご.webp' 
   },
   { 
     title: 'ぷぷりえとは', 
