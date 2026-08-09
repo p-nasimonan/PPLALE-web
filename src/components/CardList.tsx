@@ -161,7 +161,7 @@ const CardList: React.FC<CardListProps> = ({
         </div>
         <div className={`grid grid-cols-4 sm:grid-cols-5 md:grid-cols-6 lg:grid-cols-5 xl:grid-cols-6 gap-1 overflow-auto max-h-[calc(75vh-50px)]`}>
           {sortedFilteredCards
-            .map((card) => {
+            .map((card, index) => {
               const isAddable = canAddToDeck ? canAddToDeck(card) : true;
               return (
               <div 
@@ -178,6 +178,7 @@ const CardList: React.FC<CardListProps> = ({
                   onDragStart={onDragStart}
                   canAddToDeck={canAddToDeck}
                   onAddToDeck={onAddToDeck}
+                  priority={index < 6}
                 />
               </div>
             )})}

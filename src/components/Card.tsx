@@ -61,6 +61,8 @@ interface CardProps {
   canShowDetail?: boolean;
   /** カードが表向きかどうか (true: 表, false: 裏) */
   isFaceUp?: boolean;
+  /** LCP最適化用: 最初の画面に見えるカードに指定すると優先読み込みされる */
+  priority?: boolean;
 }
 
 const defaultSizes: CardSizes = {
@@ -104,6 +106,7 @@ const Card: React.FC<CardProps> = ({
   isInDeck = false,
   canShowDetail = true,
   isFaceUp = true,
+  priority = false,
 }) => {
   const [showDetail, setShowDetail] = useState(false);
 
@@ -220,10 +223,10 @@ const Card: React.FC<CardProps> = ({
                      (max-width: 768px) ${cardSizes.sm.width}px, 
                      (max-width: 1024px) ${cardSizes.md.width}px, 
                      ${cardSizes.lg.width}px`}
-              priority={false}
+              priority={priority}
               unoptimized={false}
               placeholder="blur"
-              loading="lazy"
+              loading={priority ? undefined : 'lazy'}
               blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/4gHYSUNDX1BST0ZJTEUAAQEAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGwAZQAgAEkAbgBjAC4AIAAyADAAMQA2/9sAQwAUDg8SDw0UEhASFxUUTHx+Hh4eGhodJC0lICQoICQoICQoICQoICQoICQoICQoICQoICQoICQoICQoICQoICQoICQoICQoICQoIP/YAERCAAoACgMBIgACEQEDEQH/xAAVAQEBAAAAAAAAAAAAAAAAAAAAAv/EABQQAQAAAAAAAAAAAAAAAAAAAAD/2gAMAwEAAhADEAAAAJ0AGZf/2Q=="
             />
           </div>
