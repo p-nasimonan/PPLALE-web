@@ -14,7 +14,6 @@ const buttonRecipe = defineRecipe({
     border: 'none',
     transition: 'background-color 0.3s ease',
     _disabled: { opacity: '0.6', cursor: 'not-allowed' },
-    // ripple ::after
     _after: {
       content: '""',
       position: 'absolute',
@@ -27,58 +26,51 @@ const buttonRecipe = defineRecipe({
       transition: 'transform 0.4s ease',
       pointerEvents: 'none',
     },
-    '&:hover::after': {
-      transform: 'translate(-50%, -50%) scale(2.5)',
+    _hover: {
+      _after: {
+        transform: 'translate(-50%, -50%) scale(2.5)',
+      },
     },
   },
   variants: {
     variant: {
       primary: {
-        bg: 'blue.600',
-        color: 'white',
+        bg: 'blue.600', color: 'white',
         _hover: { bg: 'blue.700' },
         _after: { bg: 'white/20' },
       },
       secondary: {
-        bg: 'emerald.600',
-        color: 'white',
+        bg: 'emerald.600', color: 'white',
         _hover: { bg: 'emerald.700' },
         _after: { bg: 'white/20' },
       },
       danger: {
-        bg: 'red.500',
-        color: 'white',
+        bg: 'red.500', color: 'white',
         _hover: { bg: 'red.600' },
         _after: { bg: 'white/20' },
       },
       special: {
-        bg: '#3ec6c4',
-        color: 'white',
+        bg: '#3ec6c4', color: 'white',
         _hover: { bg: '#0f8c8c' },
         _after: { bg: 'white/20' },
       },
       ghost: {
-        bg: 'transparent',
-        color: 'gray.700',
+        bg: 'transparent', color: 'gray.700',
         _hover: { bg: 'gray.100' },
         _after: { bg: 'black/8' },
         _dark: { color: 'gray.300', _hover: { bg: 'gray.800' } },
       },
       outline: {
-        bg: 'white',
-        color: 'gray.800',
-        borderWidth: '1px',
-        borderColor: 'gray.300',
+        bg: 'white', color: 'gray.800',
+        borderWidth: '1px', borderColor: 'gray.300',
         _hover: { bg: 'gray.100' },
         _after: { bg: 'black/6' },
         _dark: { borderColor: 'gray.600', bg: 'gray.800', color: 'gray.100', _hover: { bg: 'gray.700' } },
       },
       link: {
         display: 'inline-block',
-        bg: 'var(--colors-background-color)',
-        color: 'var(--colors-text-color)',
-        borderWidth: '1px',
-        borderColor: '#3ec6c4',
+        bg: 'var(--colors-background-color)', color: 'var(--colors-text-color)',
+        borderWidth: '1px', borderColor: '#3ec6c4',
         _hover: { bg: '#0f8c8c' },
         _after: { bg: 'black/8' },
       },
@@ -89,10 +81,7 @@ const buttonRecipe = defineRecipe({
       lg: { px: '6', py: '3', fontSize: 'base', rounded: 'lg' },
     },
   },
-  defaultVariants: {
-    variant: 'primary',
-    size: 'md',
-  },
+  defaultVariants: { variant: 'primary', size: 'md' },
 });
 
 const iconButtonRecipe = defineRecipe({
@@ -104,6 +93,7 @@ const iconButtonRecipe = defineRecipe({
     alignItems: 'center',
     justifyContent: 'center',
     cursor: 'pointer',
+    border: 'none',
     transition: 'background-color 0.2s ease',
     _after: {
       content: '""',
@@ -117,22 +107,22 @@ const iconButtonRecipe = defineRecipe({
       transition: 'transform 0.4s ease',
       pointerEvents: 'none',
     },
-    '&:hover::after': {
-      transform: 'translate(-50%, -50%) scale(2.5)',
+    _hover: {
+      _after: {
+        transform: 'translate(-50%, -50%) scale(2.5)',
+      },
     },
   },
   variants: {
     variant: {
       ghost: {
-        bg: 'transparent',
-        color: 'gray.800',
+        bg: 'transparent', color: 'gray.800',
         _hover: { bg: 'gray.100' },
         _after: { bg: 'black/8' },
         _dark: { color: 'gray.100', _hover: { bg: 'gray.800' } },
       },
       dark: {
-        bg: 'black/30',
-        color: 'white',
+        bg: 'black/30', color: 'white',
         backdropFilter: 'blur(4px)',
         _hover: { bg: 'black/50' },
         _after: { bg: 'white/15' },
@@ -141,28 +131,21 @@ const iconButtonRecipe = defineRecipe({
     size: {
       md: { w: '10', h: '10', rounded: 'full' },
       lg: { w: '12', h: '12', rounded: 'full', fontSize: 'xl' },
-      xl: { px: '4', py: '2', rounded: 'md', fontSize: '4xl' },
+      xl: { w: '12', h: '12', rounded: 'md', fontSize: '4xl' },
     },
   },
-  defaultVariants: {
-    variant: 'ghost',
-    size: 'md',
-  },
+  defaultVariants: { variant: 'ghost', size: 'md' },
 });
 
 export default defineConfig({
   preflight: false,
-
   include: ['./src/app/**/*.{ts,tsx}', './src/components/**/*.{ts,tsx}'],
   exclude: [],
   hash: { cssVar: false, className: true },
 
   theme: {
     extend: {
-      recipes: {
-        button: buttonRecipe,
-        iconButton: iconButtonRecipe,
-      },
+      recipes: { button: buttonRecipe, iconButton: iconButtonRecipe },
       tokens: {
         colors: {
           'primary-color': { value: '#3b82f6' },
@@ -177,11 +160,8 @@ export default defineConfig({
           'sweet-deck-text-color': { value: '#008080' },
           'playable-deck-text-color': { value: '#000080' },
         },
-        radii: {
-          'border-radius': { value: '0.5rem' },
-        },
+        radii: { 'border-radius': { value: '0.5rem' } },
       },
-
       semanticTokens: {
         colors: {
           'background-color': { value: { base: '#f3f4f6', _dark: '#1f2937' } },
@@ -213,6 +193,5 @@ export default defineConfig({
       },
     },
   },
-
   outdir: 'styled-system',
 });

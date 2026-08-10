@@ -124,7 +124,7 @@ export default function SettingsButton() {
             {!is2PickPage && !isMainPage ?(
             <div className={css({ display: 'flex', flexDirection: 'column', gap: '2' })}>
               <button
-                className={button({ variant: 'primary', size: 'md' })}
+                className={`${button({ variant: 'primary' })} ${css({ w: 'full' })}`}
                 onClick={() => window.dispatchEvent(new CustomEvent('exportDeck'))}
               >
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className={css({ w: '5', h: '5' })}>
@@ -133,7 +133,7 @@ export default function SettingsButton() {
                 <span>エクスポート</span>
               </button>
               <button
-                className={button({ variant: 'secondary', size: 'md' })}
+                className={`${button({ variant: 'secondary' })} ${css({ w: 'full' })}`}
                 onClick={() => window.dispatchEvent(new CustomEvent('importDeck'))}
               >
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className={css({ w: '5', h: '5' })}>
