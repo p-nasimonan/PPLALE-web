@@ -1,9 +1,15 @@
+'use client';
+
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import SettingsButton from '@/components/SideMenu';
 import FireBaseLogin from '@/components/FireBaseLogin';
 import { css } from 'styled-system/css';
 
-export default function BuildLayout({ children }: { children: React.ReactNode }) {
+export default function AppLayout({ children }: { children: React.ReactNode }) {
+  const pathname = usePathname();
+  const is2Pick = pathname === '/deck/2pick';
+
   return (
     <>
       <header className={css({
@@ -15,9 +21,13 @@ export default function BuildLayout({ children }: { children: React.ReactNode })
       })}>
         <div className={css({ maxW: 'breakpoint-2xl', mx: 'auto', px: '4', h: 'full', display: 'flex', alignItems: 'center', justifyContent: 'space-between' })}>
           <div className={css({ display: 'flex', alignItems: 'center', gap: '4', minW: '0' })}>
-            <Link className={css({ fontSize: 'xl', fontWeight: 'bold', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' })} href="/">
-              ぷぷりえーる デッキ構築
-            </Link>
+            {is2Pick ? (
+              <p className={css({ fontSize: '2xl', fontWeight: 'bold' })}>2Pick構築</p>
+            ) : (
+              <Link className={css({ fontSize: 'xl', fontWeight: 'bold', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' })} href="/">
+                ぷぷりえーる デッキ構築
+              </Link>
+            )}
           </div>
           <div className={css({ display: 'flex', alignItems: 'center', gap: '3', flexShrink: '0' })}>
             <SettingsButton />
