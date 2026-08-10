@@ -53,7 +53,7 @@ export default function SettingsButton() {
   return (
     <div className={css({ position: 'relative' })} ref={menuRef}>
       <button
-        className={css({
+        className={`ripple-dark ${css({
           rounded: 'md',
           borderWidth: '1px',
           borderColor: 'gray.300',
@@ -62,15 +62,10 @@ export default function SettingsButton() {
           py: '1',
           fontSize: '2xl',
           color: 'gray.800',
-          transitionProperty: 'background-size, background-color',
-          transitionDuration: '300ms',
-          backgroundImage: 'radial-gradient(circle, rgba(0,0,0,0.06) 0%, transparent 70%)',
-          backgroundSize: '0% 0%',
-          backgroundPosition: 'center',
-          backgroundRepeat: 'no-repeat',
-          _hover: { backgroundSize: '200% 200%' },
-          _dark: { borderColor: 'gray.600', bg: 'gray.800', color: 'gray.100' },
-        })}
+          transitionProperty: 'color, background-color, border-color, text-decoration-color, fill, stroke',
+          _hover: { bg: 'gray.100' },
+          _dark: { borderColor: 'gray.600', bg: 'gray.800', color: 'gray.100', _hover: { bg: 'gray.700' } },
+        })}`}
         onClick={() => setShowSettings(!showSettings)}
         aria-label="メニュー"
       >
@@ -152,7 +147,7 @@ export default function SettingsButton() {
             {!is2PickPage && !isMainPage ?(
             <div className={css({ display: 'flex', flexDirection: 'column', gap: '2' })}>
               <button
-                className={css({
+                className={`ripple-light ${css({
                   display: 'flex',
                   w: 'full',
                   alignItems: 'center',
@@ -165,14 +160,9 @@ export default function SettingsButton() {
                   fontSize: 'sm',
                   fontWeight: 'semibold',
                   color: 'white',
-                  transitionProperty: 'background-size, background-color',
-                  transitionDuration: '300ms',
-                  backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.2) 0%, transparent 70%)',
-                  backgroundSize: '0% 0%',
-                  backgroundPosition: 'center',
-                  backgroundRepeat: 'no-repeat',
-                  _hover: { backgroundSize: '200% 200%', bg: 'blue.700' },
-                })}
+                  transitionProperty: 'color, background-color, border-color, text-decoration-color, fill, stroke',
+                  _hover: { bg: 'blue.700' },
+                })}`}
                 onClick={() => window.dispatchEvent(new CustomEvent('exportDeck'))}
               >
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className={css({ w: '5', h: '5' })}>
@@ -181,7 +171,7 @@ export default function SettingsButton() {
                 <span>エクスポート</span>
               </button>
               <button
-                className={css({
+                className={`ripple-light ${css({
                   display: 'flex',
                   w: 'full',
                   alignItems: 'center',
@@ -194,14 +184,9 @@ export default function SettingsButton() {
                   fontSize: 'sm',
                   fontWeight: 'semibold',
                   color: 'white',
-                  transitionProperty: 'background-size, background-color',
-                  transitionDuration: '300ms',
-                  backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.2) 0%, transparent 70%)',
-                  backgroundSize: '0% 0%',
-                  backgroundPosition: 'center',
-                  backgroundRepeat: 'no-repeat',
-                  _hover: { backgroundSize: '200% 200%', bg: 'emerald.700' },
-                })}
+                  transitionProperty: 'color, background-color, border-color, text-decoration-color, fill, stroke',
+                  _hover: { bg: 'emerald.700' },
+                })}`}
                 onClick={() => window.dispatchEvent(new CustomEvent('importDeck'))}
               >
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className={css({ w: '5', h: '5' })}>

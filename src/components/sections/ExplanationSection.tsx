@@ -94,21 +94,16 @@ export default function ExplanationSection({ explanationOpacity, explanationY }:
             {explanationCards.map((card) => (
               <motion.div
                 key={card.title}
-                className={css({
+                className={`ripple-dark ${css({
                   bg: 'yellow.200/90',
                   backdropBlur: 'md',
                   rounded: '2xl',
                   p: '6',
                   borderWidth: '1px',
                   borderColor: 'white/20',
-                  transitionProperty: 'background-size, background-color',
+                  transitionProperty: 'color, background-color',
                   transitionDuration: '300ms',
-                  backgroundImage: 'radial-gradient(circle, rgba(0,0,0,0.05) 0%, transparent 70%)',
-                  backgroundSize: '0% 0%',
-                  backgroundPosition: 'center',
-                  backgroundRepeat: 'no-repeat',
-                  _hover: { backgroundSize: '200% 200%' },
-                })}
+                })}`}
                 variants={explanationVariants}
                 initial="hidden"
                 whileInView="visible"

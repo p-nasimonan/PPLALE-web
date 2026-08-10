@@ -19,48 +19,40 @@ export default function DeckViewPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // カードコードが変更されたら自動で画像を生成
   useEffect(() => {
     const generateImage = async () => {
       try {
         setError(null);
         setLoading(true);
 
-        // 幼女デッキのカードIDを取得
         const yojoIds = yojoCardIds
           .split(',')
           .map(id => id.trim())
           .filter(id => id !== '')
           .map(id => {
-            // 数値部分を取得して先頭の0を削除
             const num = parseInt(id, 10).toString();
             return `y_${num}`;
           });
 
-        // 幼女デッキのカードを取得
         const yojoDeck = yojoIds
           .map(id => allYojoCards.find(card => card.id === id))
           .filter((card): card is CardInfo => card !== undefined);
 
-        // お菓子デッキのカードIDを取得
         const sweetIds = sweetCardIds
           .split(',')
           .map(id => id.trim())
           .filter(id => id !== '')
           .map(id => `s_${id.padStart(2, '0')}`);
 
-        // お菓子デッキのカードを取得
         const sweetDeck = sweetIds
           .map(id => allSweetCards.find(card => card.id === id))
           .filter((card): card is CardInfo => card !== undefined);
 
-        // プレイアブルカードのIDを取得
         const playableId = playableCardId.trim();
         const playableCard = playableId
           ? allPlayableCards.find(card => card.id === playableId) || null
           : null;
 
-        // 画像を生成
         if (yojoDeck.length > 0 || sweetDeck.length > 0 || playableCard) {
           const imageUrl = await generateDeckImageDataUrl(yojoDeck, sweetDeck, playableCard);
           setDeckImage(imageUrl);
@@ -74,13 +66,8 @@ export default function DeckViewPage() {
       }
     };
 
-    // 入力がある場合のみ生成
     if (yojoCardIds || sweetCardIds || playableCardId) {
-      // デバウンス処理（500ms待ってから実行）
-      const timer = setTimeout(() => {
-        generateImage();
-      }, 500);
-
+      const timer = setTimeout(() => { generateImage(); }, 500);
       return () => clearTimeout(timer);
     } else {
       setDeckImage(null);
@@ -92,7 +79,6 @@ export default function DeckViewPage() {
     <div className={`container ${css({ px: '4', py: '8' })}`}>
 
       <div className={css({ maxW: '4xl', mx: 'auto' })}>
-        {/* 入力フォーム */}
         <div className={`main-background ${css({ p: '6', rounded: 'lg', mb: '8' })}`}>
           <div className={css({ display: 'flex', flexDirection: 'column', gap: '6' })}>
             <div>
@@ -101,10 +87,7 @@ export default function DeckViewPage() {
               </label>
               <textarea
                 className={css({
-                  w: 'full',
-                  p: '3',
-                  borderWidth: '1px',
-                  rounded: 'md',
+                  w: 'full', p: '3', borderWidth: '1px', rounded: 'md',
                   _focus: { boxShadow: '0 0 0 2px #3b82f6', borderColor: 'transparent' },
                 })}
                 rows={3}
@@ -123,10 +106,7 @@ export default function DeckViewPage() {
               </label>
               <textarea
                 className={css({
-                  w: 'full',
-                  p: '3',
-                  borderWidth: '1px',
-                  rounded: 'md',
+                  w: 'full', p: '3', borderWidth: '1px', rounded: 'md',
                   _focus: { boxShadow: '0 0 0 2px #3b82f6', borderColor: 'transparent' },
                 })}
                 rows={2}
@@ -155,32 +135,19 @@ export default function DeckViewPage() {
                   <div
                     key={card.id}
                     onClick={() => setPlayableCardId(playableCardId === card.id ? '' : card.id)}
-                    className={css({
-                      cursor: 'pointer',
-                      rounded: 'lg',
-                      overflow: 'hidden',
-                      transitionProperty: 'background-size, border-color',
-                      transitionDuration: '300ms',
+                    className={`ripple-dark ${css({
+                      cursor: 'pointer', rounded: 'lg',
+                      transitionProperty: 'border-color', transitionDuration: '300ms',
                       borderWidth: '2px',
                       borderColor: playableCardId === card.id ? '#3b82f6' : '#d1d5db',
-                      backgroundImage: 'radial-gradient(circle, rgba(0,0,0,0.06) 0%, transparent 70%)',
-                      backgroundSize: '0% 0%',
-                      backgroundPosition: 'center',
-                      backgroundRepeat: 'no-repeat',
-                      _hover: {
-                        backgroundSize: '200% 200%',
-                        borderColor: playableCardId === card.id ? '#3b82f6' : '#9ca3af',
-                      },
-                    })}
+                      _hover: { borderColor: playableCardId === card.id ? '#3b82f6' : '#9ca3af' },
+                    })}`}
                   >
                     <div className={css({ position: 'relative', aspectRatio: '220/320' })}>
                       <Image
-                        src={card.imageUrl}
-                        alt={card.name}
-                        fill
+                        src={card.imageUrl} alt={card.name} fill
                         sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, (max-width: 1024px) 25vw, 20vw"
-                        className={css({ objectFit: 'cover' })}
-                        unoptimized
+                        className={css({ objectFit: 'cover' })} unoptimized
                       />
                     </div>
                     <div className={css({ p: '2', bg: 'white', textAlign: 'center' })}>
@@ -196,14 +163,12 @@ export default function DeckViewPage() {
           </div>
         </div>
 
-        {/* エラー表示 */}
         {error && (
           <div className={css({ bg: 'red.100', borderWidth: '1px', borderColor: 'red.400', color: 'red.700', px: '4', py: '3', rounded: 'sm', mb: '4' })}>
             {error}
           </div>
         )}
 
-        {/* ローディング表示 */}
         {loading && (
           <div className={css({ textAlign: 'center', py: '12' })}>
             <div className={css({ display: 'inline-block', animation: 'spin', rounded: 'full', h: '12', w: '12', borderBottomWidth: '2px', borderColor: 'blue.500' })}></div>
@@ -211,33 +176,21 @@ export default function DeckViewPage() {
           </div>
         )}
 
-        {/* 生成された画像の表示 */}
         {!loading && deckImage && (
           <div className={`main-background ${css({ p: '6', rounded: 'lg' })}`}>
             <h2 className={`main-color ${css({ fontSize: 'xl', fontWeight: 'bold', mb: '4' })}`}>生成されたデッキ画像</h2>
             <div className={css({ mb: '4' })}>
-              <Image
-                src={deckImage}
-                alt="デッキ画像"
-                width={1920}
-                height={1080}
-                className={css({ w: 'full', h: 'auto', rounded: 'lg', boxShadow: 'lg' })}
-                unoptimized
-              />
+              <Image src={deckImage} alt="デッキ画像" width={1920} height={1080}
+                className={css({ w: 'full', h: 'auto', rounded: 'lg', boxShadow: 'lg' })} unoptimized />
             </div>
             <div className={css({ display: 'flex', justifyContent: 'center' })}>
-              <a
-                href={deckImage}
-                download="deck.png"
-                className={`btn-primary ${css({ display: 'inline-block' })}`}
-              >
+              <a href={deckImage} download="deck.png" className={`btn-primary ${css({ display: 'inline-block' })}`}>
                 画像をダウンロード
               </a>
             </div>
           </div>
         )}
 
-        {/* 入力がない場合の表示 */}
         {!loading && !deckImage && !yojoCardIds && !sweetCardIds && !playableCardId && (
           <div className={css({ textAlign: 'center', py: '12', color: 'gray.500' })}>
             <p className={css({ fontSize: 'lg' })}>カードコードを入力すると自動で画像が生成されます</p>

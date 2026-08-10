@@ -253,61 +253,39 @@ video {
 
 /* グローバルスタイル（トークンはpanda.config.tsのtokens/semanticTokensから生成） */
 
-.main-color {
-  color: var(--colors-text-color);
-}
-.main-background {
-  background-color: var(--colors-background-color);
-}
+.main-color { color: var(--colors-text-color); }
+.main-background { background-color: var(--colors-background-color); }
 
-.light-color {
-  color: var(--colors-text-color);
-}
-.light-background {
-  background-color: var(--colors-background-light);
-}
+.light-color { color: var(--colors-text-color); }
+.light-background { background-color: var(--colors-background-light); }
 
-a.main-background:hover {
-  background-color: var(--colors-hover-back-color);
-}
-
-a.light-background:hover {
-  background-color: var(--colors-hover-back-color-light);
-}
+a.main-background:hover { background-color: var(--colors-hover-back-color); }
+a.light-background:hover { background-color: var(--colors-hover-back-color-light); }
 
 .deck-color {
   background-color: var(--colors-deck-background-color);
   color: var(--colors-deck-text-color);
 }
-
 .yojo-deck-color {
   background-color: var(--colors-yojo-deck-background-color);
   color: var(--colors-yojo-deck-text-color);
   border-color: var(--colors-yojo-deck-border-color);
 }
-
 .sweet-deck-color {
   background-color: var(--colors-sweet-deck-background-color);
   color: var(--colors-sweet-deck-text-color);
   border-color: var(--colors-sweet-deck-border-color);
 }
-
 .playable-deck-color {
   background-color: var(--colors-playable-deck-background-color);
   color: var(--colors-playable-deck-text-color);
   border-color: var(--colors-playable-deck-border-color);
 }
 
-button.main-color:hover {
-  background-color: var(--colors-hover-back-color);
-  color: var(--colors-text-light);
-  background-size: 200% 200%;
-}
-
+button.main-color:hover,
 a.main-color:hover {
   background-color: var(--colors-hover-back-color);
   color: var(--colors-text-light);
-  background-size: 200% 200%;
 }
 
 .reverse-color {
@@ -332,25 +310,10 @@ article {
   z-index: auto;
 }
 
-select {
-  background-color: var(--colors-background-color);
-  color: var(--colors-text-light);
-}
-
-option {
-  background-color: var(--colors-background-color);
-  color: var(--colors-text-light);
-}
-
-input {
-  background-color: var(--colors-background-color);
-  color: var(--colors-text-color);
-}
-
-textarea {
-  background-color: var(--colors-background-color);
-  color: var(--colors-text-color);
-}
+select { background-color: var(--colors-background-color); color: var(--colors-text-light); }
+option { background-color: var(--colors-background-color); color: var(--colors-text-light); }
+input { background-color: var(--colors-background-color); color: var(--colors-text-color); }
+textarea { background-color: var(--colors-background-color); color: var(--colors-text-color); }
 
 .container {
   max-width: 1700px;
@@ -371,16 +334,9 @@ header {
   border-radius: var(--radii-border-radius);
   margin-bottom: 2rem;
 }
+header h1 { font-size: 1.5rem; font-weight: 600; color: white; }
 
-header h1 {
-  font-size: 1.5rem;
-  font-weight: 600;
-  color: white;
-}
-
-label {
-  color: var(--colors-text-color);
-}
+label { color: var(--colors-text-color); }
 
 pre {
   background-color: var(--colors-background-color);
@@ -393,265 +349,182 @@ pre {
 header::before {
   content: '';
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  top: 0; left: 0; right: 0; bottom: 0;
   background-color: rgba(0, 0, 0, 0.4);
   border-radius: var(--radii-border-radius);
   z-index: 0;
 }
+header > * { position: relative; z-index: 1; }
 
-header > * {
+/* ===== 共通::afterリップル ===== */
+.btn-primary,
+.btn-secondary,
+.btn-danger,
+.btn-export,
+.btn-import,
+.btn-select,
+.btn-reset,
+a.lnk-mode,
+.ripple-dark,
+.ripple-light {
   position: relative;
-  z-index: 1;
+  overflow: hidden;
 }
 
+/* 暗色背景用リップル（白） */
+.btn-primary::after,
+.btn-secondary::after,
+.btn-danger::after,
+.btn-export::after,
+.btn-import::after,
+.btn-select::after,
+.ripple-light::after {
+  content: '';
+  position: absolute;
+  top: 50%; left: 50%;
+  width: 100%; padding-bottom: 100%;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  transform: translate(-50%, -50%) scale(0);
+  transition: transform 0.4s ease;
+  pointer-events: none;
+}
+
+/* 明色背景用リップル（黒） */
+.btn-reset::after,
+a.lnk-mode::after,
+.ripple-dark::after {
+  content: '';
+  position: absolute;
+  top: 50%; left: 50%;
+  width: 100%; padding-bottom: 100%;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.08);
+  transform: translate(-50%, -50%) scale(0);
+  transition: transform 0.4s ease;
+  pointer-events: none;
+}
+
+/* hover時に円が広がる */
+.btn-primary:hover::after,
+.btn-secondary:hover::after,
+.btn-danger:hover::after,
+.btn-export:hover::after,
+.btn-import:hover::after,
+.btn-select:hover::after,
+.btn-reset:hover::after,
+a.lnk-mode:hover::after,
+.ripple-dark:hover::after,
+.ripple-light:hover::after {
+  transform: translate(-50%, -50%) scale(2.5);
+}
+
+/* 各ボタンスタイル */
 .btn-primary {
-  background-color: var(--colors-primary-color);
-  color: white;
-  border-radius: 10px;
-  padding: 0.6rem 0.75rem;
-  font-weight: 600;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: background-size 0.3s ease, background-color 0.3s ease;
-  border: none;
-  background-image: radial-gradient(circle, rgba(255,255,255,0.2) 0%, transparent 70%);
-  background-size: 0% 0%;
-  background-position: center;
-  background-repeat: no-repeat;
+  background-color: var(--colors-primary-color); color: white;
+  border-radius: 10px; padding: 0.6rem 0.75rem;
+  font-weight: 600; font-size: 1rem; cursor: pointer;
+  transition: background-color 0.3s ease; border: none;
 }
-.btn-primary:hover {
-  background-color: var(--colors-primary-hover);
-  background-size: 200% 200%;
-}
+.btn-primary:hover { background-color: var(--colors-primary-hover); }
+
 .btn-secondary {
-  background-color: var(--colors-secondary-color);
-  color: white;
-  border-radius: 10px;
-  padding: 0.5rem;
-  padding: 0.6rem 0.75rem;
-  font-weight: 600;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: background-size 0.3s ease, background-color 0.3s ease;
-  border: none;
-  background-image: radial-gradient(circle, rgba(255,255,255,0.2) 0%, transparent 70%);
-  background-size: 0% 0%;
-  background-position: center;
-  background-repeat: no-repeat;
+  background-color: var(--colors-secondary-color); color: white;
+  border-radius: 10px; padding: 0.6rem 0.75rem;
+  font-weight: 600; font-size: 1rem; cursor: pointer;
+  transition: background-color 0.3s ease; border: none;
 }
-.btn-secondary:hover {
-  background-color: var(--colors-secondary-hover);
-  background-size: 200% 200%;
-  padding: 0.5rem;
-}
+.btn-secondary:hover { background-color: var(--colors-secondary-hover); }
+
 .btn-danger {
-  background-color: var(--colors-danger-color);
-  color: white;
-  border-radius: 10px;
-  padding: 0.6rem 0.75rem;
-  font-weight: 600;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: background-size 0.3s ease, background-color 0.3s ease;
-  border: none;
-  background-image: radial-gradient(circle, rgba(255,255,255,0.2) 0%, transparent 70%);
-  background-size: 0% 0%;
-  background-position: center;
-  background-repeat: no-repeat;
+  background-color: var(--colors-danger-color); color: white;
+  border-radius: 10px; padding: 0.6rem 0.75rem;
+  font-weight: 600; font-size: 1rem; cursor: pointer;
+  transition: background-color 0.3s ease; border: none;
 }
-.btn-danger:hover {
-  background-color: var(--colors-danger-hover);
-  background-size: 200% 200%;
-}
+.btn-danger:hover { background-color: var(--colors-danger-hover); }
 
 .btn-export {
-  background-color: var(--colors-primary-color);
-  color: white;
-  border-radius: 10px;
-  padding: 0.5rem;
-  font-weight: 600;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: background-size 0.3s ease, background-color 0.3s ease;
-  border: none;
-  background-image: radial-gradient(circle, rgba(255,255,255,0.2) 0%, transparent 70%);
-  background-size: 0% 0%;
-  background-position: center;
-  background-repeat: no-repeat;
+  background-color: var(--colors-primary-color); color: white;
+  border-radius: 10px; padding: 0.5rem;
+  font-weight: 600; font-size: 1rem; cursor: pointer;
+  transition: background-color 0.3s ease; border: none;
 }
-
-.btn-export:hover {
-  background-color: var(--colors-primary-hover);
-  background-size: 200% 200%;
-}
+.btn-export:hover { background-color: var(--colors-primary-hover); }
 
 .btn-import {
-  background-color: var(--colors-secondary-color);
-  color: white;
-  border-radius: 10px;
-  padding: 0.5rem;
-  font-weight: 600;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: background-size 0.3s ease, background-color 0.3s ease;
-  border: none;
-  background-image: radial-gradient(circle, rgba(255,255,255,0.2) 0%, transparent 70%);
-  background-size: 0% 0%;
-  background-position: center;
-  background-repeat: no-repeat;
+  background-color: var(--colors-secondary-color); color: white;
+  border-radius: 10px; padding: 0.5rem;
+  font-weight: 600; font-size: 1rem; cursor: pointer;
+  transition: background-color 0.3s ease; border: none;
 }
-
-.btn-import:hover {
-  background-color: var(--colors-secondary-hover);
-  background-size: 200% 200%;
-}
+.btn-import:hover { background-color: var(--colors-secondary-hover); }
 
 .btn-select {
-  background-color: var(--colors-special);
-  font-weight: 1000;
-  color: white;
-  border-radius: 60px;
-  padding: 1.19rem 1rem;
-  font-weight: 600;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: background-size 0.3s ease, background-color 0.3s ease;
-  border: none;
-  background-image: radial-gradient(circle, rgba(255,255,255,0.2) 0%, transparent 70%);
-  background-size: 0% 0%;
-  background-position: center;
-  background-repeat: no-repeat;
+  background-color: var(--colors-special); font-weight: 600; color: white;
+  border-radius: 60px; padding: 1.19rem 1rem;
+  font-size: 1rem; cursor: pointer;
+  transition: background-color 0.3s ease; border: none;
 }
-
-.btn-select:hover {
-  background-color: var(--colors-special-hover);
-  color: white;
-  background-size: 200% 200%;
-}
+.btn-select:hover { background-color: var(--colors-special-hover); color: white; }
 
 .btn-reset {
-  position: fixed;
-  bottom: 1rem;
-  right: 1rem;
-  border-radius: 20px;
-  background-color: var(--colors-special);
+  position: fixed; bottom: 1rem; right: 1rem;
+  border-radius: 20px; background-color: var(--colors-special);
   color: var(--colors-text-color);
   border: 1px solid var(--colors-text-light);
-  padding: 1.5rem 1.5rem;
-  cursor: pointer;
-  transition: background-color 0.3s, color 0.3s;
-  font-size: 1rem;
+  padding: 1.5rem 1.5rem; cursor: pointer;
+  transition: background-color 0.3s, color 0.3s; font-size: 1rem;
 }
-
-.btn-reset:hover {
-  background-color: var(--colors-special-hover);
-  color: var(--colors-background-color);
-}
+.btn-reset:hover { background-color: var(--colors-special-hover); color: var(--colors-background-color); }
 
 a.lnk-mode {
-  display: inline-block;
-  padding: 0.55rem 1.5rem;
-  border-radius: 10px;
-  background-color: var(--colors-background-color);
-  color: var(--colors-text-color);
-  font-weight: 600;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: background-size 0.3s ease, background-color 0.3s ease;
+  display: inline-block; padding: 0.55rem 1.5rem;
+  border-radius: 10px; background-color: var(--colors-background-color);
+  color: var(--colors-text-color); font-weight: 600; font-size: 1rem;
+  cursor: pointer; transition: background-color 0.3s ease;
   border: 1px solid var(--colors-special);
-  background-image: radial-gradient(circle, rgba(0,0,0,0.08) 0%, transparent 70%);
-  background-size: 0% 0%;
-  background-position: center;
-  background-repeat: no-repeat;
 }
+a.lnk-mode:hover { background-color: var(--colors-special-hover); }
 
-a.lnk-mode:hover {
-  background-color: var(--colors-special-hover);
-  background-size: 200% 200%;
-}
-
-.btn:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-  box-shadow: none;
-}
+.btn:disabled { opacity: 0.6; cursor: not-allowed; box-shadow: none; }
 
 /* カードスタイル */
-.card {
-  border-radius: var(--radii-border-radius);
-  padding: 0.5rem;
-  box-shadow: var(--shadows-shadow);
-}
+.card { border-radius: var(--radii-border-radius); padding: 0.5rem; box-shadow: var(--shadows-shadow); }
 
-/* ドラッグアンドドロップ */
 .dropzone {
   border: 2px dashed #cbd5e1;
   border-radius: var(--radii-border-radius);
   padding: 1rem;
   transition: border-color 0.2s;
 }
-
-.dropzone:hover {
-  border-color: var(--colors-primary-color);
-}
+.dropzone:hover { border-color: var(--colors-primary-color); }
 
 .toggle-dark-mode {
-  position: fixed;
-  top: 1rem;
-  right: 1rem;
+  position: fixed; top: 1rem; right: 1rem;
   background-color: var(--colors-card-background);
   color: var(--colors-text-color);
   border: 1px solid var(--colors-text-light);
   border-radius: var(--radii-border-radius);
-  padding: 0.5rem 1rem;
-  cursor: pointer;
-  transition: background-color 0.3s, color 0.3s;
-  font-size: 0.5rem;
+  padding: 0.5rem 1rem; cursor: pointer;
+  transition: background-color 0.3s, color 0.3s; font-size: 0.5rem;
 }
-
-.toggle-dark-mode:hover {
-  background-color: var(--colors-text-light);
-  color: var(--colors-background-color);
-}
+.toggle-dark-mode:hover { background-color: var(--colors-text-light); color: var(--colors-background-color); }
 
 .popup {
-  position: fixed;
-  background-color: var(--colors-card-background);
+  position: fixed; background-color: var(--colors-card-background);
   color: var(--colors-text-color);
-  border-radius: var(--radii-border-radius);
-  padding: 1.5rem;
+  border-radius: var(--radii-border-radius); padding: 1.5rem;
 }
 
-/* アニメーション（.transform, .transform-leave, .transform-slide-leaveは未使用のため削除済み） */
 @keyframes slideIn {
-  from {
-    transform: translateX(100%);
-    opacity: 0;
-  }
-  to {
-    transform: translateX(0);
-    opacity: 1;
-  }
+  from { transform: translateX(100%); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
 }
-
-.transform-slide {
-  animation: slideIn 0.3s ease-out forwards;
-}
+.transform-slide { animation: slideIn 0.3s ease-out forwards; }
 
 @keyframes disappear {
-  0% {
-    transform: scale(1);
-    opacity: 1;
-  }
-  100% {
-    transform: scale(1.5);
-    opacity: 0;
-  }
+  0% { transform: scale(1); opacity: 1; }
+  100% { transform: scale(1.5); opacity: 0; }
 }
-
-.animate-disappear {
-  animation: disappear 0.5s ease-out forwards;
-}
+.animate-disappear { animation: disappear 0.5s ease-out forwards; }
