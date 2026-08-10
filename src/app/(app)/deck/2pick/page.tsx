@@ -14,7 +14,7 @@ import { useForm } from 'react-hook-form';
 import { css } from 'styled-system/css';
 import { CardInfo, CardType, FruitType } from '@/types/card';
 import { allYojoCards, allSweetCards, allPlayableCards } from '@/data/cards';
-import { useSettings } from "@/app/SideMenuProvider";
+import { useSettings } from "@/app/SettingsProvider";
 import { useAuth } from '@/lib/auth';
 import { doc, setDoc, getDoc } from 'firebase/firestore';
 import { db } from '@/lib/firebase';

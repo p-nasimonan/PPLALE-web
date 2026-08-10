@@ -14,7 +14,7 @@ import ImportPopup from '@/components/popup/ImportPopup';
 import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 import { auth } from '@/lib/firebase';
 import ShareButtons from '@/components/ui/ShareButtons';
-import { useSettings } from '@/app/SideMenuProvider';
+import { useSettings } from '@/app/SettingsProvider';
 import DeckList from '@/components/deck/DeckList';
 import TabButtons, { TabDefinition } from '@/components/ui/TabButtons';
 import { css } from 'styled-system/css';

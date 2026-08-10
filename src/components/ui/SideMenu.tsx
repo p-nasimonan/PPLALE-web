@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useRef, useEffect } from 'react';
-import { useSettings } from '@/app/SideMenuProvider';
+import { useSettings } from '@/app/SettingsProvider';
 import { useDarkMode } from '@/app/DarkModeProvider';
 import { usePathname } from 'next/navigation';
 import { css } from 'styled-system/css';
