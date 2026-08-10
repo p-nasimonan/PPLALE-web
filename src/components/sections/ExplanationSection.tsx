@@ -94,7 +94,7 @@ export default function ExplanationSection({ explanationOpacity, explanationY }:
             {explanationCards.map((card) => (
               <motion.div
                 key={card.title}
-                className={`ripple-dark ${css({
+                className={`${css({
                   bg: 'yellow.200/90',
                   backdropBlur: 'md',
                   rounded: '2xl',

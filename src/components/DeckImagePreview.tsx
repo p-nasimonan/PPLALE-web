@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { CardInfo } from '@/types/card';
 import Image from 'next/image';
 import { css } from 'styled-system/css';
+import { button } from 'styled-system/recipes';
 
 /**
  * 幼女・お菓子・プレイアブルカードからデッキ画像（dataURL）を生成するユーティリティ関数
@@ -292,12 +293,12 @@ const DeckImagePreview: React.FC<DeckImagePreviewProps> = ({ yojoDeck, sweetDeck
             ) : imgUrl ? (
               <>
                 <Image src={imgUrl} alt="デッキ画像" className={css({ mb: '4', maxW: 'full' })} width={1920} height={1080} unoptimized />
-                <a href={imgUrl} download="deck.png" className={`btn btn-primary ${css({ mb: '2' })}`}>画像をダウンロード</a>
+                <a href={imgUrl} download="deck.png" className={`${button({ variant: 'primary', size: 'md' })} ${css({ mb: '2' })}`}>画像をダウンロード</a>
               </>
             ) : (
               <div className={css({ my: '8', color: 'red.500' })}>画像生成に失敗しました</div>
             )}
-            <button className={`btn btn-secondary ${css({ mt: '2' })}`} onClick={onClose}>閉じる</button>
+            <button className={`${button({ variant: 'secondary', size: 'md' })} ${css({ mt: '2' })}`} onClick={onClose}>閉じる</button>
           </div>
         </div>
       ) : (
@@ -308,7 +309,7 @@ const DeckImagePreview: React.FC<DeckImagePreviewProps> = ({ yojoDeck, sweetDeck
           ) : imgUrl ? (
             <>
               <Image src={imgUrl} alt="デッキ画像" className={css({ mb: '4', maxW: 'full' })} width={1920} height={1080} unoptimized />
-              <a href={imgUrl} download="deck.png" className={`btn btn-primary ${css({ mb: '2' })}`}>画像をダウンロード</a>
+              <a href={imgUrl} download="deck.png" className={`${button({ variant: 'primary', size: 'md' })} ${css({ mb: '2' })}`}>画像をダウンロード</a>
             </>
           ) : (
             <div className={css({ my: '8', color: 'red.500' })}>画像生成に失敗しました</div>

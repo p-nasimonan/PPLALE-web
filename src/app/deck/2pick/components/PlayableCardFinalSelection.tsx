@@ -13,6 +13,7 @@ import React, { useState, useEffect } from 'react';
 import { CardInfo } from '@/types/card';
 import Card from '@/components/Card';
 import { css } from 'styled-system/css';
+import { button } from 'styled-system/recipes';
 
 /**
  * プレイアブルカード最終選択コンポーネントのProps
@@ -98,7 +99,7 @@ const PlayableCardFinalSelection: React.FC<PlayableCardFinalSelectionProps> = ({
           {/* デッキ確認ボタン */}
           <div className={css({ display: 'flex', alignItems: 'center', gap: '4', mt: '4', justifyContent: 'center' })}>
           <button
-            className="btn-secondary"
+            className={button({ variant: 'secondary', size: 'md' })}
             onClick={onCheckDeck}
           >
             デッキ確認
@@ -128,13 +129,13 @@ const PlayableCardFinalSelection: React.FC<PlayableCardFinalSelectionProps> = ({
             </div>
           </div>
           <button
-            className={`btn-select ${css({ position: 'absolute', bottom: '40', right: '0' })}`}
+            className={`${button({ variant: 'special', size: 'lg' })} ${css({ position: 'absolute', bottom: '40', right: '0' })}`}
             onClick={onConfirm}
           >
             選択
           </button>
           <button
-            className={`btn-secondary ${css({ position: 'absolute', top: '0', left: '0' })}`}
+            className={`${button({ variant: 'secondary', size: 'md' })} ${css({ position: 'absolute', top: '0', left: '0' })}`}
             onClick={onBack}
           >
             ◀︎戻る

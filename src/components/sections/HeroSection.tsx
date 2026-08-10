@@ -6,6 +6,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { Darumadrop_One } from 'next/font/google';
 import { css } from 'styled-system/css';
+import { iconButton } from 'styled-system/recipes';
 
 const darumadrop = Darumadrop_One({
   weight: '400',
@@ -101,9 +102,7 @@ export default function HeroSection({ cardsYPosition, isMounted }: HeroSectionPr
             style={{ top: '-10vh' }}
           >
             <button
-              className={`ripple-light ${css({
-                p: '3', bg: 'black/30', rounded: 'full', backdropBlur: 'sm',
-                transitionProperty: 'color, background-color',
+              className={`${iconButton({ variant: 'dark', size: 'md' })} ${css({
                 opacity: activeIndex === 0 ? '0' : '1',
                 pointerEvents: activeIndex === 0 ? 'none' : 'auto',
                 _hover: activeIndex === 0 ? undefined : { bg: 'black/50' },
@@ -116,9 +115,7 @@ export default function HeroSection({ cardsYPosition, isMounted }: HeroSectionPr
               </svg>
             </button>
             <button
-              className={`ripple-light ${css({
-                p: '3', bg: 'black/30', rounded: 'full', backdropBlur: 'sm',
-                transitionProperty: 'color, background-color',
+              className={`${iconButton({ variant: 'dark', size: 'md' })} ${css({
                 opacity: activeIndex === cardButtons.length - 1 ? '0' : '1',
                 pointerEvents: activeIndex === cardButtons.length - 1 ? 'none' : 'auto',
                 _hover: activeIndex === cardButtons.length - 1 ? undefined : { bg: 'black/50' },

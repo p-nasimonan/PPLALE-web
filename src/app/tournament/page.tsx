@@ -5,6 +5,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { Darumadrop_One } from 'next/font/google';
 import { css } from 'styled-system/css';
+import { button } from 'styled-system/recipes';
 
 const darumadrop = Darumadrop_One({
   weight: '400',
@@ -46,22 +47,17 @@ export default function TournamentPage() {
 
           <div className={css({ display: 'grid', gridTemplateColumns: 'repeat(1, minmax(0, 1fr))', md: { gridTemplateColumns: 'repeat(2, minmax(0, 1fr))' }, gap: '4' })}>
             <a href="https://discord.com/invite/tjvQHMNgYc" target="_blank" rel="noopener noreferrer"
-              className={`ripple-light ${css({
+              className={`${button({ variant: 'primary', size: 'lg' })} ${css({
                 display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '3',
-                bg: 'blue.600', color: 'white', px: '6', py: '3', rounded: 'lg', fontWeight: 'bold',
-                transitionProperty: 'color, background-color',
-                _hover: { bg: 'blue.700' },
               })}`}>
               <Image src="/Discord-Symbol-Black.svg" alt="Discord" width={24} height={24} className={css({ filter: 'invert(1)' })} />
               Discordサーバーに参加
             </a>
 
             <a href="https://vrchat.com/home/group/grp_866c5ce6-7c41-49ce-9f60-6a1a143d7acf" target="_blank" rel="noopener noreferrer"
-              className={`ripple-light ${css({
+              className={`${button({ variant: 'primary', size: 'lg' })} ${css({
                 display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '3',
-                bg: 'gray.900', color: 'white', px: '6', py: '3', rounded: 'lg', fontWeight: 'bold',
-                transitionProperty: 'color, background-color',
-                _hover: { bg: 'black' },
+                bg: 'gray.900', _hover: { bg: 'black' },
               })}`}>
               <Image src="/VRChat-Logo-Black.png" alt="VRChat" width={24} height={24} className={css({ filter: 'invert(1)' })} />
               VRChatグループに参加
@@ -95,7 +91,7 @@ export default function TournamentPage() {
                 </div>
                 <p className={css({ color: 'gray.700', lineHeight: 'relaxed', fontSize: 'base', mb: '4' })}>{tournament.description}</p>
                 <Link href={tournament.link || '#'}>
-                  <button className="btn-primary">デッキ構築してみる</button>
+                  <button className={button({ variant: 'primary', size: 'md' })}>デッキ構築してみる</button>
                 </Link>
               </div>
             ))}
@@ -106,7 +102,7 @@ export default function TournamentPage() {
           <h2 className={`${darumadrop.className} ${css({ fontSize: '3xl', mb: '8', color: 'gray.800' })}`}>その他</h2>
           <div className={css({ display: 'grid', gridTemplateColumns: 'repeat(1, minmax(0, 1fr))', md: { gridTemplateColumns: 'repeat(2, minmax(0, 1fr))' }, gap: '6' })}>
             <Link href="/build">
-              <div className={`main-background ripple-dark ${css({
+              <div className={`main-background ${css({
                 p: '6', rounded: 'xl', cursor: 'pointer',
                 transitionProperty: 'color, background-color',
               })}`}>
@@ -115,7 +111,7 @@ export default function TournamentPage() {
               </div>
             </Link>
             <Link href="/deck-view">
-              <div className={`main-background ripple-dark ${css({
+              <div className={`main-background ${css({
                 p: '6', rounded: 'xl', cursor: 'pointer',
                 transitionProperty: 'color, background-color',
               })}`}>

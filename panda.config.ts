@@ -1,24 +1,168 @@
-import { defineConfig } from '@pandacss/dev';
+import { defineConfig, defineRecipe } from '@pandacss/dev';
+
+const buttonRecipe = defineRecipe({
+  className: 'btn',
+  base: {
+    position: 'relative',
+    overflow: 'hidden',
+    display: 'inline-flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: '2',
+    fontWeight: 'semibold',
+    cursor: 'pointer',
+    border: 'none',
+    transition: 'background-color 0.3s ease',
+    _disabled: { opacity: '0.6', cursor: 'not-allowed' },
+    // ripple ::after
+    _after: {
+      content: '""',
+      position: 'absolute',
+      top: '50%',
+      left: '50%',
+      width: '100%',
+      paddingBottom: '100%',
+      borderRadius: '50%',
+      transform: 'translate(-50%, -50%) scale(0)',
+      transition: 'transform 0.4s ease',
+      pointerEvents: 'none',
+    },
+    '&:hover::after': {
+      transform: 'translate(-50%, -50%) scale(2.5)',
+    },
+  },
+  variants: {
+    variant: {
+      primary: {
+        bg: 'blue.600',
+        color: 'white',
+        _hover: { bg: 'blue.700' },
+        _after: { bg: 'white/20' },
+      },
+      secondary: {
+        bg: 'emerald.600',
+        color: 'white',
+        _hover: { bg: 'emerald.700' },
+        _after: { bg: 'white/20' },
+      },
+      danger: {
+        bg: 'red.500',
+        color: 'white',
+        _hover: { bg: 'red.600' },
+        _after: { bg: 'white/20' },
+      },
+      special: {
+        bg: '#3ec6c4',
+        color: 'white',
+        _hover: { bg: '#0f8c8c' },
+        _after: { bg: 'white/20' },
+      },
+      ghost: {
+        bg: 'transparent',
+        color: 'gray.700',
+        _hover: { bg: 'gray.100' },
+        _after: { bg: 'black/8' },
+        _dark: { color: 'gray.300', _hover: { bg: 'gray.800' } },
+      },
+      outline: {
+        bg: 'white',
+        color: 'gray.800',
+        borderWidth: '1px',
+        borderColor: 'gray.300',
+        _hover: { bg: 'gray.100' },
+        _after: { bg: 'black/6' },
+        _dark: { borderColor: 'gray.600', bg: 'gray.800', color: 'gray.100', _hover: { bg: 'gray.700' } },
+      },
+      link: {
+        display: 'inline-block',
+        bg: 'var(--colors-background-color)',
+        color: 'var(--colors-text-color)',
+        borderWidth: '1px',
+        borderColor: '#3ec6c4',
+        _hover: { bg: '#0f8c8c' },
+        _after: { bg: 'black/8' },
+      },
+    },
+    size: {
+      sm: { px: '2', py: '1', fontSize: 'xs', rounded: 'md' },
+      md: { px: '4', py: '2', fontSize: 'sm', rounded: 'md' },
+      lg: { px: '6', py: '3', fontSize: 'base', rounded: 'lg' },
+    },
+  },
+  defaultVariants: {
+    variant: 'primary',
+    size: 'md',
+  },
+});
+
+const iconButtonRecipe = defineRecipe({
+  className: 'icon-btn',
+  base: {
+    position: 'relative',
+    overflow: 'hidden',
+    display: 'inline-flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    cursor: 'pointer',
+    transition: 'background-color 0.2s ease',
+    _after: {
+      content: '""',
+      position: 'absolute',
+      top: '50%',
+      left: '50%',
+      width: '100%',
+      paddingBottom: '100%',
+      borderRadius: '50%',
+      transform: 'translate(-50%, -50%) scale(0)',
+      transition: 'transform 0.4s ease',
+      pointerEvents: 'none',
+    },
+    '&:hover::after': {
+      transform: 'translate(-50%, -50%) scale(2.5)',
+    },
+  },
+  variants: {
+    variant: {
+      ghost: {
+        bg: 'transparent',
+        color: 'gray.800',
+        _hover: { bg: 'gray.100' },
+        _after: { bg: 'black/8' },
+        _dark: { color: 'gray.100', _hover: { bg: 'gray.800' } },
+      },
+      dark: {
+        bg: 'black/30',
+        color: 'white',
+        backdropFilter: 'blur(4px)',
+        _hover: { bg: 'black/50' },
+        _after: { bg: 'white/15' },
+      },
+    },
+    size: {
+      md: { w: '10', h: '10', rounded: 'full' },
+      lg: { w: '12', h: '12', rounded: 'full', fontSize: 'xl' },
+      xl: { px: '4', py: '2', rounded: 'md', fontSize: '4xl' },
+    },
+  },
+  defaultVariants: {
+    variant: 'ghost',
+    size: 'md',
+  },
+});
 
 export default defineConfig({
-  // Tailwindのbase相当はglobals.cssに静的移植済みのため、Pandaの独自リセットは無効化
   preflight: false,
 
-  // Where to look for your css declarations
   include: ['./src/app/**/*.{ts,tsx}', './src/components/**/*.{ts,tsx}'],
-
-  // Files to exclude
   exclude: [],
-
-  // atomicクラス名はハッシュ化して転送量を削減。CSS変数名はglobals.cssから`var(--colors-xxx)`として
-  // 直接参照するため可読性を保つ（ハッシュ化しない）
   hash: { cssVar: false, className: true },
-
-  // ダークモードはdocument.documentElementへの`.dark`クラス付与方式（DarkModeProvider.tsx）。
-  // Pandaの`_dark`条件のデフォルト値`.dark &`がそのまま一致するため、conditionsのカスタム設定は不要。
 
   theme: {
     extend: {
+      recipes: {
+        button: buttonRecipe,
+        iconButton: iconButtonRecipe,
+      },
       tokens: {
         colors: {
           'primary-color': { value: '#3b82f6' },
@@ -36,8 +180,6 @@ export default defineConfig({
         radii: {
           'border-radius': { value: '0.5rem' },
         },
-        // アニメーション用keyframes(.transform-slide, .animate-disappear)は
-        // recipe化せずglobals.cssにプレーンCSSとして残すため、Pandaトークンとしては定義しない
       },
 
       semanticTokens: {
@@ -48,7 +190,6 @@ export default defineConfig({
           'card-background': { value: { base: '#ffffff', _dark: '#374151' } },
           'text-color': { value: { base: '#1f2937', _dark: '#f3f4f6' } },
           'text-light': { value: { base: '#6b7280', _dark: '#9ca3af' } },
-          // :root.darkのみに定義され、ライトモードでは未定義値だった変数。挙動を維持するためbaseはtransparentにする
           'background-light': { value: { base: 'transparent', _dark: '#1f2937' } },
           'revers-background-color': { value: { base: '#1f2937', _dark: '#f3f4f6' } },
           'revers-text-color': { value: { base: '#f3f4f6', _dark: '#1f2937' } },
@@ -73,6 +214,5 @@ export default defineConfig({
     },
   },
 
-  // The output directory for your css system
   outdir: 'styled-system',
 });

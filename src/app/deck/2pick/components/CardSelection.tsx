@@ -14,6 +14,7 @@ import React from 'react';
 import Card from '@/components/Card';
 import { CardInfo } from '@/types/card';
 import { css } from 'styled-system/css';
+import { button } from 'styled-system/recipes';
 
 /**
  * カード選択コンポーネントのProps
@@ -59,7 +60,7 @@ const CardSelection: React.FC<CardSelectionProps> = ({ cards, onSelect }) => {
       </div>
       {cards.every(card => card.isFaceUp) && (
         <button
-          className={`btn-export animate-fadeIn ${css({ mt: '4' })}`}
+          className={`${button({ variant: 'primary', size: 'lg' })} animate-fadeIn ${css({ mt: '4' })}`}
           onClick={onSelect}
         >
           選択

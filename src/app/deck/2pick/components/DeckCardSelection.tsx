@@ -13,6 +13,7 @@ import React from 'react';
 import { CardInfo, CardType } from '@/types/card';
 import CardSelection from './CardSelection';
 import { css } from 'styled-system/css';
+import { button } from 'styled-system/recipes';
 
 /**
  * デッキカード選択コンポーネントのProps
@@ -86,7 +87,7 @@ const DeckCardSelection: React.FC<DeckCardSelectionProps> = ({
 
         {/* デッキ確認ボタン */}
         <div className={css({ display: 'flex', justifyContent: 'center' })}>
-          <button className="btn-import" onClick={onShowDeckClick}>
+          <button className={button({ variant: 'secondary', size: 'lg' })} onClick={onShowDeckClick}>
             デッキ確認
           </button>
         </div>

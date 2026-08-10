@@ -16,6 +16,7 @@ import DeckImagePreview from '@/components/DeckImagePreview';
 import JungaryCopy from '@/svgs/jungary-copy.svg';
 import Link from 'next/link';
 import { css } from 'styled-system/css';
+import { button } from 'styled-system/recipes';
 
 /**
  * 2Pick結果表示コンポーネントのProps
@@ -121,7 +122,7 @@ const TwoPickResult: React.FC<TwoPickResultProps> = ({
             <pre className={css({ fontSize: 'sm' })}>{yojoDeck.map(card => extractNumber(card.id)).join(',')}</pre>
           </div>
           <button
-            className={`btn-primary ${css({ mb: '2' })}`}
+            className={`${button({ variant: 'primary', size: 'md' })} ${css({ mb: '2' })}`}
             onClick={handleCopyYojoDeck}
           >
             {yojoCopied ? 'コピーしました！' : '幼女デッキをコピー'}
@@ -134,7 +135,7 @@ const TwoPickResult: React.FC<TwoPickResultProps> = ({
             <pre className={css({ fontSize: 'sm' })}>{sweetDeck.map(card => extractNumber(card.id)).join(',')}</pre>
           </div>
           <button
-            className={`btn-primary ${css({ mb: '2', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '2' })}`}
+            className={`${button({ variant: 'primary', size: 'md' })} ${css({ mb: '2', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '2' })}`}
             onClick={handleCopySweetDeck}
           >
             <JungaryCopy width={24} height={24} className={css({ display: 'inline-block' })} />
@@ -146,14 +147,14 @@ const TwoPickResult: React.FC<TwoPickResultProps> = ({
       <div className={css({ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4', mb: '4', mt: '10' })}>
         {user ? (
           <button
-            className="btn-primary"
+            className={button({ variant: 'primary', size: 'md' })}
             onClick={onSave}
           >
             デッキを保存
           </button>
         ) : (
           <button
-            className="btn-primary"
+            className={button({ variant: 'primary', size: 'md' })}
             onClick={onSave}
           >
             ログインしてデッキを保存
@@ -161,12 +162,12 @@ const TwoPickResult: React.FC<TwoPickResultProps> = ({
         )}
         <div className={css({ display: 'flex', alignItems: 'center', gap: '4' })}>
         <button
-          className="btn-secondary"
+          className={button({ variant: 'secondary', size: 'md' })}
           onClick={onRestart}
         >
           もう一度プレイ
         </button>
-        <Link href="/" className="btn-secondary">
+        <Link href="/" className={button({ variant: 'secondary', size: 'md' })}>
           ホームに戻る
         </Link>
         </div>

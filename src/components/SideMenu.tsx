@@ -5,22 +5,7 @@ import { useSettings } from '@/app/SideMenuProvider';
 import { useDarkMode } from '@/app/DarkModeProvider';
 import { usePathname } from 'next/navigation';
 import { css } from 'styled-system/css';
-
-function themeToggleButtonClass(isActive: boolean) {
-  const base = css({
-    rounded: 'md',
-    px: '2',
-    py: '1',
-    fontSize: 'xs',
-    fontWeight: 'semibold',
-    transitionProperty: 'color, background-color',
-    bg: isActive ? 'blue.600' : undefined,
-    color: isActive ? 'white' : 'gray.700',
-    _hover: isActive ? undefined : { bg: 'gray.100' },
-    _dark: isActive ? undefined : { color: 'gray.300', _hover: { bg: 'gray.800' } },
-  });
-  return `${isActive ? 'ripple-light' : 'ripple-dark'} ${base}`;
-}
+import { button, iconButton } from 'styled-system/recipes';
 
 export default function SettingsButton() {
   const { 
@@ -54,19 +39,7 @@ export default function SettingsButton() {
   return (
     <div className={css({ position: 'relative' })} ref={menuRef}>
       <button
-        className={`ripple-dark ${css({
-          rounded: 'md',
-          borderWidth: '1px',
-          borderColor: 'gray.300',
-          bg: 'white',
-          px: '4',
-          py: '2',
-          fontSize: '4xl',
-          color: 'gray.800',
-          transitionProperty: 'color, background-color',
-          _hover: { bg: 'gray.100' },
-          _dark: { borderColor: 'gray.600', bg: 'gray.800', color: 'gray.100', _hover: { bg: 'gray.700' } },
-        })}`}
+        className={iconButton({ variant: 'ghost', size: 'xl' })}
         onClick={() => setShowSettings(!showSettings)}
         aria-label="メニュー"
       >
@@ -117,7 +90,10 @@ export default function SettingsButton() {
                     <button
                       key={mode.key}
                       onClick={() => setThemeMode(mode.key as 'system' | 'light' | 'dark')}
-                      className={themeToggleButtonClass(isActive)}
+                      className={isActive
+                        ? button({ variant: 'primary', size: 'sm' })
+                        : button({ variant: 'ghost', size: 'sm' })
+                      }
                       aria-pressed={isActive}
                     >
                       {mode.label}
@@ -148,22 +124,7 @@ export default function SettingsButton() {
             {!is2PickPage && !isMainPage ?(
             <div className={css({ display: 'flex', flexDirection: 'column', gap: '2' })}>
               <button
-                className={`ripple-light ${css({
-                  display: 'flex',
-                  w: 'full',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  gap: '2',
-                  rounded: 'md',
-                  bg: 'blue.600',
-                  px: '3',
-                  py: '2',
-                  fontSize: 'sm',
-                  fontWeight: 'semibold',
-                  color: 'white',
-                  transitionProperty: 'color, background-color, border-color, text-decoration-color, fill, stroke',
-                  _hover: { bg: 'blue.700' },
-                })}`}
+                className={button({ variant: 'primary', size: 'md' })}
                 onClick={() => window.dispatchEvent(new CustomEvent('exportDeck'))}
               >
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className={css({ w: '5', h: '5' })}>
@@ -172,22 +133,7 @@ export default function SettingsButton() {
                 <span>エクスポート</span>
               </button>
               <button
-                className={`ripple-light ${css({
-                  display: 'flex',
-                  w: 'full',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  gap: '2',
-                  rounded: 'md',
-                  bg: 'emerald.600',
-                  px: '3',
-                  py: '2',
-                  fontSize: 'sm',
-                  fontWeight: 'semibold',
-                  color: 'white',
-                  transitionProperty: 'color, background-color, border-color, text-decoration-color, fill, stroke',
-                  _hover: { bg: 'emerald.700' },
-                })}`}
+                className={button({ variant: 'secondary', size: 'md' })}
                 onClick={() => window.dispatchEvent(new CustomEvent('importDeck'))}
               >
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className={css({ w: '5', h: '5' })}>

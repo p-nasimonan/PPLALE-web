@@ -13,6 +13,7 @@ import React from 'react';
 import { CardInfo } from '@/types/card';
 import Deck from '@/components/Deck';
 import { css } from 'styled-system/css';
+import { button } from 'styled-system/recipes';
 
 /**
  * デッキ確認ポップアップコンポーネントのProps
@@ -80,7 +81,7 @@ const DeckViewPopup: React.FC<DeckViewPopupProps> = ({
         </div>
         <div className={css({ display: 'flex', justifyContent: 'flex-end' })}>
           <button
-            className="btn-primary"
+            className={button({ variant: 'primary', size: 'md' })}
             onClick={onClose}
           >
             閉じる

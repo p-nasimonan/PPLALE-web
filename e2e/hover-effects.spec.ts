@@ -85,7 +85,7 @@ test.describe('Hover effects: scale removed, ripple added', () => {
     await page.evaluate(() => window.scrollTo(0, 600));
     await page.waitForTimeout(1000);
 
-    const cards = page.locator('[class*="ripple-dark"]');
+    const cards = page.locator('[class*="btn_"]');
     const count = await cards.count();
     if (count > 0) {
       const card = cards.first();

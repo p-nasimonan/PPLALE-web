@@ -13,6 +13,7 @@ import React, { useState, useEffect } from 'react';
 import { CardInfo } from '@/types/card';
 import Card from '@/components/Card';
 import { css } from 'styled-system/css';
+import { button } from 'styled-system/recipes';
 
 /**
  * プレイアブルカードプレビューコンポーネントのProps
@@ -76,7 +77,7 @@ const PlayableCardPreview: React.FC<PlayableCardPreviewProps> = ({
           />
         ))}
       </div>
-      <button onClick={onSubmit} className={`btn-primary ${css({ mt: '4' })}`}>
+      <button onClick={onSubmit} className={`${button({ variant: 'primary', size: 'md' })} ${css({ mt: '4' })}`}>
         次へ
       </button>
     </div>

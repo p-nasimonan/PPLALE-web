@@ -13,6 +13,7 @@ import { Controller, Control, UseFormHandleSubmit, ControllerRenderProps } from 
 import { FruitType } from '@/types/card';
 import Image from 'next/image';
 import { css } from 'styled-system/css';
+import { button } from 'styled-system/recipes';
 
 /**
  * フルーツとバージョン選択コンポーネントのProps
@@ -179,7 +180,7 @@ const FruitVersionSelection: React.FC<FruitVersionSelectionProps> = ({
         <div className={css({ display: 'flex', justifyContent: 'center', mt: '8' })}>
           <button
             type="submit"
-            className={`btn-primary ${css({
+            className={`${button({ variant: 'primary', size: 'lg' })} ${css({
               opacity: (selectedFruits.length === 0 || selectedPlayableVersions.length === 0) ? '0.5' : undefined,
             })}`}
             disabled={selectedFruits.length === 0 || selectedPlayableVersions.length === 0}

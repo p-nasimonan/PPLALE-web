@@ -6,6 +6,7 @@ import { allYojoCards, allSweetCards, allPlayableCards } from '@/data/cards';
 import { generateDeckImageDataUrl } from '@/components/DeckImagePreview';
 import Image from 'next/image';
 import { css } from 'styled-system/css';
+import { button } from 'styled-system/recipes';
 
 /**
  * デッキ表示ページ
@@ -135,7 +136,7 @@ export default function DeckViewPage() {
                   <div
                     key={card.id}
                     onClick={() => setPlayableCardId(playableCardId === card.id ? '' : card.id)}
-                    className={`ripple-dark ${css({
+                    className={`${css({
                       cursor: 'pointer', rounded: 'lg',
                       transitionProperty: 'border-color', transitionDuration: '300ms',
                       borderWidth: '2px',
@@ -184,7 +185,7 @@ export default function DeckViewPage() {
                 className={css({ w: 'full', h: 'auto', rounded: 'lg', boxShadow: 'lg' })} unoptimized />
             </div>
             <div className={css({ display: 'flex', justifyContent: 'center' })}>
-              <a href={deckImage} download="deck.png" className={`btn-primary ${css({ display: 'inline-block' })}`}>
+              <a href={deckImage} download="deck.png" className={`${button({ variant: 'primary', size: 'lg' })} ${css({ display: 'inline-block' })}`}>
                 画像をダウンロード
               </a>
             </div>
