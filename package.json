@@ -14,7 +14,9 @@
     "lint:fix": "eslint . --fix",
     "typecheck": "tsc --noEmit",
     "cards:optimize": "node scripts/optimize-images.mjs",
-    "cards:check": "node scripts/check-cards.mjs"
+    "cards:check": "node scripts/check-cards.mjs",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui"
   },
   "dependencies": {
     "@vercel/og": "^1.0.1",
@@ -32,6 +34,7 @@
   "devDependencies": {
     "@eslint/eslintrc": "^3",
     "@pandacss/dev": "^1.12.0",
+    "@playwright/test": "^1.62.1",
     "@svgr/plugin-svgo": "^8.1.0",
     "@svgr/webpack": "^8.1.0",
     "@types/node": "^20",
