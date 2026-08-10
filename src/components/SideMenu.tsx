@@ -7,18 +7,19 @@ import { usePathname } from 'next/navigation';
 import { css } from 'styled-system/css';
 
 function themeToggleButtonClass(isActive: boolean) {
-  return css({
+  const base = css({
     rounded: 'md',
     px: '2',
     py: '1',
     fontSize: 'xs',
     fontWeight: 'semibold',
-    transitionProperty: 'color, background-color, border-color, text-decoration-color, fill, stroke',
+    transitionProperty: 'color, background-color',
     bg: isActive ? 'blue.600' : undefined,
     color: isActive ? 'white' : 'gray.700',
     _hover: isActive ? undefined : { bg: 'gray.100' },
     _dark: isActive ? undefined : { color: 'gray.300', _hover: { bg: 'gray.800' } },
   });
+  return `${isActive ? 'ripple-light' : 'ripple-dark'} ${base}`;
 }
 
 export default function SettingsButton() {
@@ -58,11 +59,11 @@ export default function SettingsButton() {
           borderWidth: '1px',
           borderColor: 'gray.300',
           bg: 'white',
-          px: '3',
-          py: '1',
-          fontSize: '2xl',
+          px: '4',
+          py: '2',
+          fontSize: '4xl',
           color: 'gray.800',
-          transitionProperty: 'color, background-color, border-color, text-decoration-color, fill, stroke',
+          transitionProperty: 'color, background-color',
           _hover: { bg: 'gray.100' },
           _dark: { borderColor: 'gray.600', bg: 'gray.800', color: 'gray.100', _hover: { bg: 'gray.700' } },
         })}`}
