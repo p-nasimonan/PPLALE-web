@@ -12,6 +12,7 @@
 import React, { useState, useEffect } from 'react';
 import { CardInfo } from '@/types/card';
 import Card from '@/components/Card';
+import { css } from 'styled-system/css';
 
 /**
  * プレイアブルカードプレビューコンポーネントのProps
@@ -57,9 +58,9 @@ const PlayableCardPreview: React.FC<PlayableCardPreviewProps> = ({
   }, [playableChoices]); // playableChoicesが変更された時にも再実行
 
   return (
-    <div className="flex flex-col items-center mt-8">
-      <h2 className="text-xl font-bold mb-4">プレイアブルカードを確認してください</h2>
-      <div className="grid grid-cols-3 gap-4 w-full max-w-6xl mx-auto place-items-center">
+    <div className={css({ display: 'flex', flexDirection: 'column', alignItems: 'center', mt: '8' })}>
+      <h2 className={css({ fontSize: 'xl', fontWeight: 'bold', mb: '4' })}>プレイアブルカードを確認してください</h2>
+      <div className={css({ display: 'grid', gridTemplateColumns: 'repeat(3, minmax(0, 1fr))', gap: '4', w: 'full', maxW: '6xl', mx: 'auto', placeItems: 'center' })}>
         {playableChoices.map((card, index) => (
           <Card
             key={card.id}
@@ -75,7 +76,7 @@ const PlayableCardPreview: React.FC<PlayableCardPreviewProps> = ({
           />
         ))}
       </div>
-      <button onClick={onSubmit} className="btn-primary mt-4">
+      <button onClick={onSubmit} className={`btn-primary ${css({ mt: '4' })}`}>
         次へ
       </button>
     </div>

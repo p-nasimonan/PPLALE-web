@@ -9,8 +9,9 @@
 
 'use client';
 
-import React, { Suspense, useState, useEffect, useCallback} from 'react'; 
+import React, { Suspense, useState, useEffect, useCallback} from 'react';
 import { useForm } from 'react-hook-form';
+import { css } from 'styled-system/css';
 import { CardInfo, CardType, FruitType } from '@/types/card';
 import { allYojoCards, allSweetCards, allPlayableCards } from '@/data/cards';
 import { useSettings } from "../../SideMenuProvider";
@@ -347,7 +348,7 @@ function TwoPickContent() {
 
   return (
   <div>
-    <div className={isShowDeck ? 'blur-sm ' : '"container relative"'}>
+    <div className={isShowDeck ? css({ filter: 'blur(4px)' }) : '"container relative"'}>
         {/* フルーツとバージョン選択画面 */}
         {selectionPhase === 'fruitSelection' && (
           <FruitVersionSelection
@@ -421,7 +422,7 @@ function TwoPickContent() {
 
 function TwoPickFallback() {
   return (
-    <div className="container relative py-8 text-center text-gray-700 dark:text-gray-200">
+    <div className={`container ${css({ position: 'relative', py: '8', textAlign: 'center', color: 'gray.700', _dark: { color: 'gray.200' } })}`}>
       読み込み中...
     </div>
   );

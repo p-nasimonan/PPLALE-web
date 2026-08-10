@@ -11,6 +11,7 @@ import React, { useState } from 'react';
 import Image from 'next/image';
 import { CardInfo } from '@/types/card';
 import CardDetail from './CardDetail';
+import { css } from 'styled-system/css';
 
 const isGitHubPages = process.env.NEXT_PUBLIC_GITHUB_PAGES === 'true';
 const basePath = isGitHubPages ? '/PPLALE-web_front' : '';
@@ -148,11 +149,16 @@ const Card: React.FC<CardProps> = ({
   return (
     <>
       <div
-        className={`
-          relative rounded-lg overflow-hidden card-container w-full h-full
-          ${(canShowDetail && isFaceUp) || onClick ? 'cursor-pointer' : ''} flex-shrink-0
-          ${showDetail ? 'pointer-events-none' : ''}
-        `}
+        className={`card-container ${css({
+          position: 'relative',
+          rounded: 'lg',
+          overflow: 'hidden',
+          w: 'full',
+          h: 'full',
+          flexShrink: '0',
+          cursor: (canShowDetail && isFaceUp) || onClick ? 'pointer' : undefined,
+          pointerEvents: showDetail ? 'none' : undefined,
+        })}`}
         style={{
           width: `${cardSizes.base.width}px`,
           height: `${cardSizes.base.height}px`,
@@ -218,7 +224,7 @@ const Card: React.FC<CardProps> = ({
               src={imagePath}
               alt={card.name}
               fill
-              className="rounded-lg object-contain"
+              className={css({ rounded: 'lg', objectFit: 'contain' })}
               sizes={`(max-width: 640px) ${cardSizes.base.width}px, 
                      (max-width: 768px) ${cardSizes.sm.width}px, 
                      (max-width: 1024px) ${cardSizes.md.width}px, 
@@ -237,7 +243,7 @@ const Card: React.FC<CardProps> = ({
               src={loadingImagePath}
               alt="カード裏面"
               fill
-              className="rounded-lg object-contain"
+              className={css({ rounded: 'lg', objectFit: 'contain' })}
               sizes={`(max-width: 640px) ${cardSizes.base.width}px, 
                      (max-width: 768px) ${cardSizes.sm.width}px, 
                      (max-width: 1024px) ${cardSizes.md.width}px, 
@@ -250,14 +256,14 @@ const Card: React.FC<CardProps> = ({
 
         {/* 選択中のオーバーレイ */}
         {isSelected && card.type === 'プレイアブル' && !showDetail && isFaceUp && (
-          <div className="absolute inset-0 bg-black/50 flex items-center justify-center rounded-lg">
-            <p className="text-white text-lg font-bold">選択中</p>
+          <div className={css({ position: 'absolute', inset: '0', bg: 'black/50', display: 'flex', alignItems: 'center', justifyContent: 'center', rounded: 'lg' })}>
+            <p className={css({ color: 'white', fontSize: 'lg', fontWeight: 'bold' })}>選択中</p>
           </div>
         )}
 
         {/* 重複数の表示 */}
         {count > 1 && !showDetail && isFaceUp && (
-          <div className="absolute bottom-2 left-2 bg-black bg-opacity-50 text-white rounded-full w-6 h-6 flex items-center justify-center text-s">
+          <div className={css({ position: 'absolute', bottom: '2', left: '2', bg: 'black/50', color: 'white', rounded: 'full', w: '6', h: '6', display: 'flex', alignItems: 'center', justifyContent: 'center' })}>
             ×{count}
           </div>
         )}
@@ -265,7 +271,23 @@ const Card: React.FC<CardProps> = ({
         {/* 削除ボタン */}
         {showRemoveButton && !showDetail && isFaceUp && (
           <button
-            className="absolute top-1 right-1 bg-gray-300 text-gray-700 rounded-full w-6 h-6 flex items-center justify-center text-sm hover:bg-red-500 hover:text-white transition-colors duration-200"
+            className={css({
+              position: 'absolute',
+              top: '1',
+              right: '1',
+              bg: 'gray.300',
+              color: 'gray.700',
+              rounded: 'full',
+              w: '6',
+              h: '6',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              fontSize: 'sm',
+              transitionProperty: 'color, background-color, border-color, text-decoration-color, fill, stroke',
+              transitionDuration: '200ms',
+              _hover: { bg: 'red.500', color: 'white' },
+            })}
             onClick={handleRemove}
             aria-label={`${card.name}を削除`}
           >

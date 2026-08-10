@@ -12,6 +12,7 @@
 import React from 'react';
 import { CardInfo, CardType } from '@/types/card';
 import CardSelection from './CardSelection';
+import { css } from 'styled-system/css';
 
 /**
  * デッキカード選択コンポーネントのProps
@@ -63,17 +64,17 @@ const DeckCardSelection: React.FC<DeckCardSelectionProps> = ({
 }) => {
 
   if (currentChoices.length < 4) {
-    return <div className="text-center py-8">カードを読み込み中...</div>;
+    return <div className={css({ textAlign: 'center', py: '8' })}>カードを読み込み中...</div>;
   }
 
   const maxRound = currentPhase === '幼女' ? maxYojoRound : maxSweetRound;
 
   return (
-    <div className="mt-4 flex flex-col items-center">
-      <h2 className="text-xl font-bold mb-4 text-center">
+    <div className={css({ mt: '4', display: 'flex', flexDirection: 'column', alignItems: 'center' })}>
+      <h2 className={css({ fontSize: 'xl', fontWeight: 'bold', mb: '4', textAlign: 'center' })}>
         {round} / {maxRound}: {currentPhase}カードを選択してください
       </h2>
-      <div className="flex justify-between items-center">
+      <div className={css({ display: 'flex', justifyContent: 'space-between', alignItems: 'center' })}>
         {/* 左側のカード選択 */}
         <CardSelection
           cards={[
@@ -84,7 +85,7 @@ const DeckCardSelection: React.FC<DeckCardSelectionProps> = ({
         />
 
         {/* デッキ確認ボタン */}
-        <div className="flex justify-center">
+        <div className={css({ display: 'flex', justifyContent: 'center' })}>
           <button className="btn-import" onClick={onShowDeckClick}>
             デッキ確認
           </button>

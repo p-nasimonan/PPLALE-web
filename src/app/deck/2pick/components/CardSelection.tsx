@@ -13,6 +13,7 @@
 import React from 'react';
 import Card from '@/components/Card';
 import { CardInfo } from '@/types/card';
+import { css } from 'styled-system/css';
 
 /**
  * カード選択コンポーネントのProps
@@ -39,8 +40,8 @@ const CardSelection: React.FC<CardSelectionProps> = ({ cards, onSelect }) => {
 
   if (cards.length < 2) return null;
   return (
-    <div className="grid gap-1 items-center">
-      <div className="flex justify-center gap-4">
+    <div className={css({ display: 'grid', gap: '1', alignItems: 'center' })}>
+      <div className={css({ display: 'flex', justifyContent: 'center', gap: '4' })}>
         {cards.map(card => (
           <Card
             key={card.id} 
@@ -58,7 +59,7 @@ const CardSelection: React.FC<CardSelectionProps> = ({ cards, onSelect }) => {
       </div>
       {cards.every(card => card.isFaceUp) && (
         <button
-          className="btn-export mt-4 animate-fadeIn"
+          className={`btn-export animate-fadeIn ${css({ mt: '4' })}`}
           onClick={onSelect}
         >
           選択

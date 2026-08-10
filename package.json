@@ -3,6 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "prepare": "panda codegen",
+    "predev": "panda codegen",
+    "prebuild": "panda codegen",
     "dev": "next dev",
     "build": "next build",
     "export": "next export",
@@ -28,12 +31,12 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
+    "@pandacss/dev": "^1.12.0",
     "@svgr/plugin-svgo": "^8.1.0",
     "@svgr/webpack": "^8.1.0",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
-    "autoprefixer": "^10.4.23",
     "eslint": "^9.39.2",
     "eslint-config-next": "^16.2.3",
     "eslint-plugin-react": "^7.37.5",
@@ -43,7 +46,6 @@
     "file-loader": "^6.2.0",
     "postcss": "^8.5.6",
     "sharp": "^0.35.3",
-    "tailwindcss": "^3.4.17",
     "typescript": "^5"
   }
 }

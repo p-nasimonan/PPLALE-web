@@ -10,6 +10,7 @@ import Image from 'next/image';
 import { generateDeckImageDataUrl } from '@/components/DeckImagePreview';
 import { allYojoCards, allSweetCards, allPlayableCards } from '@/data/cards';
 import { nanoid } from 'nanoid';
+import { css } from 'styled-system/css';
 
 interface Deck {
   id: string;
@@ -172,45 +173,69 @@ export default function BuildPage() {
   };
 
   return (
-    <main className="min-h-screen p-8">
-      <div className="max-w-7xl mx-auto">
-        
+    <main className={css({ minH: '100vh', p: '8' })}>
+      <div className={css({ maxW: '7xl', mx: 'auto' })}>
+
         {/* 新しいデッキ作成セクション */}
-        <section className="mb-12">
-          <h2 className="mb-4 text-2xl font-semibold text-gray-900 dark:text-gray-100">新しいデッキを作成</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <button 
+        <section className={css({ mb: '12' })}>
+          <h2 className={css({ mb: '4', fontSize: '2xl', fontWeight: 'semibold', color: 'gray.900', _dark: { color: 'gray.100' } })}>新しいデッキを作成</h2>
+          <div className={css({ display: 'grid', gridTemplateColumns: 'repeat(1, minmax(0, 1fr))', md: { gridTemplateColumns: 'repeat(2, minmax(0, 1fr))' }, gap: '4' })}>
+            <button
               onClick={() => handleCreateDeck('normal')}
               disabled={isCreating}
-              className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm transition-shadow hover:shadow-lg dark:border-gray-700 dark:bg-gray-800"
+              className={css({
+                rounded: 'lg',
+                borderWidth: '1px',
+                borderColor: 'gray.200',
+                bg: 'white',
+                p: '6',
+                boxShadow: 'xs',
+                transitionProperty: 'box-shadow',
+                transitionDuration: '150ms',
+                transitionTimingFunction: 'cubic-bezier(0.4, 0, 0.2, 1)',
+                _hover: { boxShadow: 'lg' },
+                _dark: { borderColor: 'gray.700', bg: 'gray.800' },
+              })}
             >
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 bg-blue-100 dark:bg-blue-200 rounded-full flex items-center justify-center">
-                  <svg className="w-6 h-6 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div className={css({ display: 'flex', alignItems: 'center', gap: '4' })}>
+                <div className={css({ w: '12', h: '12', bg: 'blue.100', rounded: 'full', display: 'flex', alignItems: 'center', justifyContent: 'center', _dark: { bg: 'blue.200' } })}>
+                  <svg className={css({ w: '6', h: '6', color: 'blue.600', _dark: { color: 'blue.400' } })} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
                   </svg>
                 </div>
                 <div>
-                  <h3 className="text-lg font-medium text-gray-800 dark:text-gray-100">通常構築</h3>
-                  <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">新しいデッキを最初から構築します</p>
+                  <h3 className={css({ fontSize: 'lg', fontWeight: 'medium', color: 'gray.800', _dark: { color: 'gray.100' } })}>通常構築</h3>
+                  <p className={css({ mt: '1', fontSize: 'sm', color: 'gray.500', _dark: { color: 'gray.400' } })}>新しいデッキを最初から構築します</p>
                 </div>
               </div>
             </button>
 
-            <button 
+            <button
               onClick={() => handleCreateDeck('2pick')}
               disabled={isCreating}
-              className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm transition-shadow hover:shadow-lg dark:border-gray-700 dark:bg-gray-800"
+              className={css({
+                rounded: 'lg',
+                borderWidth: '1px',
+                borderColor: 'gray.200',
+                bg: 'white',
+                p: '6',
+                boxShadow: 'xs',
+                transitionProperty: 'box-shadow',
+                transitionDuration: '150ms',
+                transitionTimingFunction: 'cubic-bezier(0.4, 0, 0.2, 1)',
+                _hover: { boxShadow: 'lg' },
+                _dark: { borderColor: 'gray.700', bg: 'gray.800' },
+              })}
             >
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 bg-green-100 dark:bg-green-900 rounded-full flex items-center justify-center">
-                  <svg className="w-6 h-6 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div className={css({ display: 'flex', alignItems: 'center', gap: '4' })}>
+                <div className={css({ w: '12', h: '12', bg: 'green.100', rounded: 'full', display: 'flex', alignItems: 'center', justifyContent: 'center', _dark: { bg: 'green.900' } })}>
+                  <svg className={css({ w: '6', h: '6', color: 'green.600', _dark: { color: 'green.400' } })} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16m-7 6h7" />
                   </svg>
                 </div>
                 <div>
-                  <h3 className="text-lg font-medium text-gray-800 dark:text-gray-100">2pick</h3>
-                  <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">2枚選択方式でデッキを構築します</p>
+                  <h3 className={css({ fontSize: 'lg', fontWeight: 'medium', color: 'gray.800', _dark: { color: 'gray.100' } })}>2pick</h3>
+                  <p className={css({ mt: '1', fontSize: 'sm', color: 'gray.500', _dark: { color: 'gray.400' } })}>2枚選択方式でデッキを構築します</p>
                 </div>
               </div>
             </button>
@@ -220,39 +245,72 @@ export default function BuildPage() {
         {/* 最近作成したデッキセクション（ログインユーザーのみ表示） */}
         {user && (
           <section>
-            <h2 className="mb-4 text-2xl font-semibold text-gray-900 dark:text-gray-100">最近作成したデッキ</h2>
+            <h2 className={css({ mb: '4', fontSize: '2xl', fontWeight: 'semibold', color: 'gray.900', _dark: { color: 'gray.100' } })}>最近作成したデッキ</h2>
             {/* 直近3つを大きく表示 */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
+            <div className={css({
+              display: 'grid',
+              gridTemplateColumns: 'repeat(1, minmax(0, 1fr))',
+              md: { gridTemplateColumns: 'repeat(2, minmax(0, 1fr))' },
+              lg: { gridTemplateColumns: 'repeat(3, minmax(0, 1fr))' },
+              gap: '4',
+              mb: '8',
+            })}>
               {topDecks
                 .filter(deck => deck.name.includes(filter))
                 .map((deck) => (
-                  <div key={deck.id} className="relative group">
+                  <div key={deck.id} className={`group ${css({ position: 'relative' })}`}>
                     <Link
                       href={`/deck/${user?.uid}/${deck.id}`}
-                      className="block rounded-lg border border-gray-200 bg-white p-3 shadow-sm transition-shadow hover:shadow-lg dark:border-gray-700 dark:bg-gray-800"
+                      className={css({
+                        display: 'block',
+                        rounded: 'lg',
+                        borderWidth: '1px',
+                        borderColor: 'gray.200',
+                        bg: 'white',
+                        p: '3',
+                        boxShadow: 'xs',
+                        transitionProperty: 'box-shadow',
+                        transitionDuration: '150ms',
+                        transitionTimingFunction: 'cubic-bezier(0.4, 0, 0.2, 1)',
+                        _hover: { boxShadow: 'lg' },
+                        _dark: { borderColor: 'gray.700', bg: 'gray.800' },
+                      })}
                     >
-                      <div className="aspect-video relative bg-orange-200 rounded mb-3 overflow-hidden">
+                      <div className={css({ aspectRatio: '16/9', position: 'relative', bg: 'orange.200', rounded: 'sm', mb: '3', overflow: 'hidden' })}>
                         {deck.yojoDeckIds && deck.yojoDeckIds.length > 0 && deckImages[deck.id] && (
                           <Image
                             src={deckImages[deck.id]}
                             alt={`${deck.name}のデッキ画像`}
                             fill
-                            className="object-cover"
+                            className={css({ objectFit: 'cover' })}
                             unoptimized
                           />
                         )}
                       </div>
-                      <h3 className="font-medium text-gray-800 dark:text-gray-100">{deck.name}</h3>
-                      <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+                      <h3 className={css({ fontWeight: 'medium', color: 'gray.800', _dark: { color: 'gray.100' } })}>{deck.name}</h3>
+                      <p className={css({ mt: '1', fontSize: 'sm', color: 'gray.500', _dark: { color: 'gray.400' } })}>
                         最終更新: {deck.updatedAt.toLocaleDateString('ja-JP')}
                       </p>
                     </Link>
                     <button
                       onClick={() => setDeletingDeckId(deck.id)}
-                      className="absolute top-2 right-2 p-2 bg-red-500 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                      className={css({
+                        position: 'absolute',
+                        top: '2',
+                        right: '2',
+                        p: '2',
+                        bg: 'red.500',
+                        color: 'white',
+                        rounded: 'full',
+                        opacity: '0',
+                        transitionProperty: 'opacity',
+                        transitionDuration: '150ms',
+                        transitionTimingFunction: 'cubic-bezier(0.4, 0, 0.2, 1)',
+                        _groupHover: { opacity: '1' },
+                      })}
                       aria-label="デッキを削除"
                     >
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <svg className={css({ w: '4', h: '4' })} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                       </svg>
                     </button>
@@ -261,15 +319,31 @@ export default function BuildPage() {
             </div>
             {/* それ以外を小さくリスト表示 */}
             {otherDecks.length > 0 && (
-              <div className="rounded border border-gray-200 bg-gray-50 p-4 dark:border-gray-700 dark:bg-gray-800/60">
+              <div className={css({ rounded: 'sm', borderWidth: '1px', borderColor: 'gray.200', bg: 'gray.50', p: '4', _dark: { borderColor: 'gray.700', bg: 'gray.800/60' } })}>
                 {/* フィルターとソートUIをここに移動 */}
-                <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-4 gap-2">
+                <div className={css({
+                  display: 'flex',
+                  flexDirection: 'column',
+                  md: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
+                  mb: '4',
+                  gap: '2',
+                })}>
                   <input
                     type="text"
                     placeholder="デッキ名でフィルター"
                     value={filter}
                     onChange={e => setFilter(e.target.value)}
-                    className="w-full max-w-xs rounded border border-gray-300 bg-white p-2 text-gray-900 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100"
+                    className={css({
+                      w: 'full',
+                      maxW: 'xs',
+                      rounded: 'sm',
+                      borderWidth: '1px',
+                      borderColor: 'gray.300',
+                      bg: 'white',
+                      p: '2',
+                      color: 'gray.900',
+                      _dark: { borderColor: 'gray.600', bg: 'gray.800', color: 'gray.100' },
+                    })}
                   />
                   {/* ソートUI例: */}
                   {/* <select className="p-2 border rounded main-color">
@@ -277,23 +351,49 @@ export default function BuildPage() {
                     <option value="name">名前順</option>
                   </select> */}
                 </div>
-                <h3 className="mb-2 text-lg font-semibold text-gray-900 dark:text-gray-100">その他のデッキ</h3>
+                <h3 className={css({ mb: '2', fontSize: 'lg', fontWeight: 'semibold', color: 'gray.900', _dark: { color: 'gray.100' } })}>その他のデッキ</h3>
                 <ul>
                   {otherDecks
                     .filter(deck => deck.name.includes(filter))
                     .map(deck => (
-                      <li key={deck.id} className="group relative flex items-center justify-between border-b border-gray-200 py-2 dark:border-gray-700">
-                        <Link href={`/deck/${user?.uid}/${deck.id}`} className="flex min-w-0 flex-1 items-center rounded px-2 py-1 hover:bg-gray-100 dark:hover:bg-gray-700/60">
-                          <span className="truncate font-medium text-gray-800 dark:text-gray-100">{deck.name}</span>
-                          <span className="ml-2 text-xs text-gray-500 flex-shrink-0">{deck.updatedAt.toLocaleDateString('ja-JP')}</span>
+                      <li key={deck.id} className={`group ${css({
+                        position: 'relative',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        borderBottomWidth: '1px',
+                        borderColor: 'gray.200',
+                        py: '2',
+                        _dark: { borderColor: 'gray.700' },
+                      })}`}>
+                        <Link href={`/deck/${user?.uid}/${deck.id}`} className={css({
+                          display: 'flex',
+                          minW: '0',
+                          flex: '1',
+                          alignItems: 'center',
+                          rounded: 'sm',
+                          px: '2',
+                          py: '1',
+                          _hover: { bg: 'gray.100' },
+                          _dark: { _hover: { bg: 'gray.700/60' } },
+                        })}>
+                          <span className={css({ truncate: true, fontWeight: 'medium', color: 'gray.800', _dark: { color: 'gray.100' } })}>{deck.name}</span>
+                          <span className={css({ ml: '2', fontSize: 'xs', color: 'gray.500', flexShrink: '0' })}>{deck.updatedAt.toLocaleDateString('ja-JP')}</span>
                         </Link>
                         <button
                           onClick={e => { e.stopPropagation(); setMenuOpenId(menuOpenId === deck.id ? null : deck.id); }}
-                          className="ml-2 rounded p-1 text-gray-700 hover:bg-gray-200 dark:text-gray-200 dark:hover:bg-gray-700"
+                          className={css({
+                            ml: '2',
+                            rounded: 'sm',
+                            p: '1',
+                            color: 'gray.700',
+                            _hover: { bg: 'gray.200' },
+                            _dark: { color: 'gray.200', _hover: { bg: 'gray.700' } },
+                          })}
                           aria-label="メニューを開く"
                         >
                           {/* 3点縦メニューアイコン */}
-                          <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <svg className={css({ w: '5', h: '5', color: 'gray.600' })} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <circle cx="12" cy="5" r="1.5"/>
                             <circle cx="12" cy="12" r="1.5"/>
                             <circle cx="12" cy="19" r="1.5"/>
@@ -302,12 +402,22 @@ export default function BuildPage() {
                         {/* メニューポップアップ */}
                         {menuOpenId === deck.id && (
                           <div
-                            className="absolute right-0 top-8 z-10 bg-white border rounded shadow-md min-w-[120px]"
+                            className={css({
+                              position: 'absolute',
+                              right: '0',
+                              top: '8',
+                              zIndex: '10',
+                              bg: 'white',
+                              borderWidth: '1px',
+                              rounded: 'sm',
+                              boxShadow: 'md',
+                              minW: '120px',
+                            })}
                             onClick={e => e.stopPropagation()}
                           >
                             <button
                               onClick={e => { e.stopPropagation(); setDeletingDeckId(deck.id); setMenuOpenId(null); }}
-                              className="block w-full text-left px-4 py-2 hover:bg-red-100 text-red-600"
+                              className={css({ display: 'block', w: 'full', textAlign: 'left', px: '4', py: '2', _hover: { bg: 'red.100' }, color: 'red.600' })}
                             >
                               削除
                             </button>
@@ -317,7 +427,7 @@ export default function BuildPage() {
                                 navigator.clipboard.writeText(`${window.location.origin}/deck/${user?.uid}/${deck.id}`);
                                 setMenuOpenId(null);
                               }}
-                              className="block w-full text-left px-4 py-2 hover:bg-blue-100 text-blue-600"
+                              className={css({ display: 'block', w: 'full', textAlign: 'left', px: '4', py: '2', _hover: { bg: 'blue.100' }, color: 'blue.600' })}
                             >
                               共有リンクをコピー
                             </button>
@@ -333,20 +443,39 @@ export default function BuildPage() {
 
         {/* 削除確認モーダル */}
         {deletingDeckId && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-            <div className="mx-4 w-full max-w-sm rounded-lg bg-white p-6 text-gray-900 shadow-xl dark:bg-gray-800 dark:text-gray-100">
-              <h3 className="mb-4 text-lg font-bold">デッキの削除</h3>
-              <p className="mb-6 text-sm text-gray-600 dark:text-gray-300">このデッキを削除してもよろしいですか？この操作は取り消せません。</p>
-              <div className="flex justify-end gap-4">
+          <div className={css({ position: 'fixed', inset: '0', bg: 'black/50', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: '50' })}>
+            <div className={css({
+              mx: '4',
+              w: 'full',
+              maxW: 'sm',
+              rounded: 'lg',
+              bg: 'white',
+              p: '6',
+              color: 'gray.900',
+              boxShadow: 'xl',
+              _dark: { bg: 'gray.800', color: 'gray.100' },
+            })}>
+              <h3 className={css({ mb: '4', fontSize: 'lg', fontWeight: 'bold' })}>デッキの削除</h3>
+              <p className={css({ mb: '6', fontSize: 'sm', color: 'gray.600', _dark: { color: 'gray.300' } })}>このデッキを削除してもよろしいですか？この操作は取り消せません。</p>
+              <div className={css({ display: 'flex', justifyContent: 'flex-end', gap: '4' })}>
                 <button
                   onClick={() => setDeletingDeckId(null)}
-                  className="rounded border border-gray-300 px-4 py-2 text-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:text-gray-200 dark:hover:bg-gray-700"
+                  className={css({
+                    rounded: 'sm',
+                    borderWidth: '1px',
+                    borderColor: 'gray.300',
+                    px: '4',
+                    py: '2',
+                    color: 'gray.700',
+                    _hover: { bg: 'gray.100' },
+                    _dark: { borderColor: 'gray.600', color: 'gray.200', _hover: { bg: 'gray.700' } },
+                  })}
                 >
                   キャンセル
                 </button>
                 <button
                   onClick={() => handleDeleteDeck(deletingDeckId)}
-                  className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
+                  className={css({ px: '4', py: '2', bg: 'red.500', color: 'white', rounded: 'sm', _hover: { bg: 'red.600' } })}
                 >
                   削除する
                 </button>

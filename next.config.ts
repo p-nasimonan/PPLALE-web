@@ -83,6 +83,7 @@ const config: NextConfig = {
   turbopack: {
     resolveAlias: {
       '@': './src',
+      'styled-system': './styled-system',
     },
   },
 };

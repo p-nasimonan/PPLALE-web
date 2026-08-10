@@ -12,6 +12,7 @@
 import React from 'react';
 import { CardInfo } from '@/types/card';
 import Deck from '@/components/Deck';
+import { css } from 'styled-system/css';
 
 /**
  * デッキ確認ポップアップコンポーネントのProps
@@ -46,12 +47,12 @@ const DeckViewPopup: React.FC<DeckViewPopupProps> = ({
   onClose,
 }) => {
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-white p-4 rounded-lg w-full max-w-8xl max-h-[100vh] overflow-auto">
+    <div className={css({ position: 'fixed', inset: '0', bg: 'black/50', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: '50' })}>
+      <div className={css({ bg: 'white', p: '4', rounded: 'lg', w: 'full', maxH: '100vh', overflow: 'auto' })}>
         {/* 3つのデッキを同時に表示 */}
-        <div className="flex flex-col lg:flex-row gap-4">
-          {/* 左側：幼女デッキ */}
-          <div className="w-full lg:w-1/2">
+        <div className={css({ display: 'flex', flexDirection: 'column', lg: { flexDirection: 'row' }, gap: '4' })}>
+          {/* 左側:幼女デッキ */}
+          <div className={css({ w: 'full', lg: { w: '1/2' } })}>
             <Deck
               cards={yojoDeck}
               type="幼女"
@@ -60,8 +61,8 @@ const DeckViewPopup: React.FC<DeckViewPopupProps> = ({
             />
           </div>
 
-          {/* 右側：お菓子デッキとプレイアブルカード */}
-          <div className="flex flex-col gap-4 w-full lg:w-1/2">
+          {/* 右側:お菓子デッキとプレイアブルカード */}
+          <div className={css({ display: 'flex', flexDirection: 'column', gap: '4', w: 'full', lg: { w: '1/2' } })}>
             <Deck
               cards={sweetDeck}
               type="お菓子"
@@ -77,7 +78,7 @@ const DeckViewPopup: React.FC<DeckViewPopupProps> = ({
             />
           </div>
         </div>
-        <div className="flex justify-end">
+        <div className={css({ display: 'flex', justifyContent: 'flex-end' })}>
           <button
             className="btn-primary"
             onClick={onClose}

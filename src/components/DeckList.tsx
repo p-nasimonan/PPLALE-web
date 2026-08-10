@@ -3,6 +3,7 @@
 import React from 'react';
 import { CardInfo } from '@/types/card';
 import Deck from '@/components/Deck';
+import { css } from 'styled-system/css';
 
 /**
  * @JSDoc
@@ -97,9 +98,9 @@ const DeckList: React.FC<DeckListProps> = ({
       ) : (
         <>
           {/* 3つのデッキを同時に表示（閲覧モードの場合） */}
-          <div className="flex flex-col lg:flex-row gap-4">
+          <div className={css({ display: 'flex', flexDirection: 'column', lg: { flexDirection: 'row' }, gap: '4' })}>
             {/* 左側：幼女デッキ */}
-            <div className="w-full lg:w-1/2">
+            <div className={css({ w: 'full', lg: { w: '1/2' } })}>
               <Deck
                 cards={yojoDeck}
                 type="幼女"
@@ -110,7 +111,7 @@ const DeckList: React.FC<DeckListProps> = ({
             </div>
 
             {/* 右側：お菓子デッキとプレイアブルカード */}
-            <div className="flex flex-col gap-4 w-full lg:w-1/2">
+            <div className={css({ display: 'flex', flexDirection: 'column', gap: '4', w: 'full', lg: { w: '1/2' } })}>
               <Deck
                 cards={sweetDeck}
                 type="お菓子"

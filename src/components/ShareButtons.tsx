@@ -7,6 +7,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import Image from 'next/image';
 import { CardInfo } from '@/types/card';
 import DeckImagePreview from './DeckImagePreview';
+import { css } from 'styled-system/css';
 
 interface ShareButtonsProps {
   share_url: string;
@@ -100,17 +101,28 @@ const ShareButtons: React.FC<ShareButtonsProps> = ({
   };
 
   return (
-    <div className="relative" ref={share_button_ref}>
+    <div className={css({ position: 'relative' })} ref={share_button_ref}>
       {/* シェアボタン */}
       <button
         onClick={() => set_show_options(!show_options)}
-        className="flex h-8 w-8 items-center justify-center rounded-full text-gray-800 transition-colors hover:bg-gray-100 dark:text-gray-100 dark:hover:bg-gray-800"
+        className={css({
+          display: 'flex',
+          h: '8',
+          w: '8',
+          alignItems: 'center',
+          justifyContent: 'center',
+          rounded: 'full',
+          color: 'gray.800',
+          transitionProperty: 'color, background-color, border-color, text-decoration-color, fill, stroke',
+          _hover: { bg: 'gray.100' },
+          _dark: { color: 'gray.100', _hover: { bg: 'gray.800' } },
+        })}
         aria-label="シェア"
         title="シェア"
       >
-        <Image 
-          src={ShareIcon} 
-          alt="シェアアイコン" 
+        <Image
+          src={ShareIcon}
+          alt="シェアアイコン"
           width={40}
           height={40}
         />
@@ -118,22 +130,49 @@ const ShareButtons: React.FC<ShareButtonsProps> = ({
 
       {/* コピー成功メッセージ */}
       {copy_success && (
-        <span className="ml-2 text-green-600 text-sm">コピーしました！</span>
+        <span className={css({ ml: '2', color: 'green.600', fontSize: 'sm' })}>コピーしました！</span>
       )}
 
       {/* シェアの選択肢（横並びアイコン） */}
       {show_options && (
-        <div className="absolute right-0 z-10 mt-2 flex w-auto gap-2 rounded border border-gray-200 bg-white p-2 shadow-lg dark:border-gray-700 dark:bg-gray-800">
+        <div
+          className={css({
+            position: 'absolute',
+            right: '0',
+            zIndex: '10',
+            mt: '2',
+            display: 'flex',
+            w: 'auto',
+            gap: '2',
+            rounded: 'sm',
+            borderWidth: '1px',
+            borderColor: 'gray.200',
+            bg: 'white',
+            p: '2',
+            boxShadow: 'lg',
+            _dark: { borderColor: 'gray.700', bg: 'gray.800' },
+          })}
+        >
           {/* リンクコピーボタン */}
           <button
             onClick={handle_copy_link}
-            className="flex h-10 w-10 items-center justify-center rounded-full transition-colors hover:bg-gray-100 dark:hover:bg-gray-700"
+            className={css({
+              display: 'flex',
+              h: '10',
+              w: '10',
+              alignItems: 'center',
+              justifyContent: 'center',
+              rounded: 'full',
+              transitionProperty: 'color, background-color, border-color, text-decoration-color, fill, stroke',
+              _hover: { bg: 'gray.100' },
+              _dark: { _hover: { bg: 'gray.700' } },
+            })}
             aria-label="リンクをコピー"
             title="リンクをコピー"
           >
-            <Image 
-              src={LinkIcon} 
-              alt="リンクアイコン" 
+            <Image
+              src={LinkIcon}
+              alt="リンクアイコン"
               width={50}
               height={50}
             />
@@ -144,13 +183,23 @@ const ShareButtons: React.FC<ShareButtonsProps> = ({
               window.open(twitter_url, '_blank', 'noopener,noreferrer');
               set_show_options(false);
             }}
-            className="flex h-10 w-10 items-center justify-center rounded-full bg-sky-500 transition-colors hover:bg-sky-600"
+            className={css({
+              display: 'flex',
+              h: '10',
+              w: '10',
+              alignItems: 'center',
+              justifyContent: 'center',
+              rounded: 'full',
+              bg: 'sky.500',
+              transitionProperty: 'color, background-color, border-color, text-decoration-color, fill, stroke',
+              _hover: { bg: 'sky.600' },
+            })}
             aria-label="Twitterでシェア"
             title="Twitterでシェア"
           >
-            <Image 
-              src={TwitterIcon} 
-              alt="Twitterアイコン" 
+            <Image
+              src={TwitterIcon}
+              alt="Twitterアイコン"
               width={50}
               height={50}
             />
@@ -161,13 +210,23 @@ const ShareButtons: React.FC<ShareButtonsProps> = ({
               setShowImagePreview(true);
               set_show_options(false);
             }}
-            className="flex h-10 w-10 items-center justify-center rounded-full transition-colors hover:bg-gray-100 dark:hover:bg-gray-700"
+            className={css({
+              display: 'flex',
+              h: '10',
+              w: '10',
+              alignItems: 'center',
+              justifyContent: 'center',
+              rounded: 'full',
+              transitionProperty: 'color, background-color, border-color, text-decoration-color, fill, stroke',
+              _hover: { bg: 'gray.100' },
+              _dark: { _hover: { bg: 'gray.700' } },
+            })}
             aria-label="デッキの画像を表示"
             title="デッキの画像を表示"
           >
-            <Image 
-              src={ImageIcon} 
-              alt="画像アイコン" 
+            <Image
+              src={ImageIcon}
+              alt="画像アイコン"
               width={50}
               height={50}
             />

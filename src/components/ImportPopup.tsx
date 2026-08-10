@@ -10,6 +10,7 @@
 import React, { useState } from 'react';
 import { CardInfo } from '@/types/card';
 import { allYojoCards, allSweetCards, allPlayableCards } from '@/data/cards';
+import { css } from 'styled-system/css';
 
 interface ImportedDeck {
   yojoDeck: CardInfo[];
@@ -126,33 +127,72 @@ const ImportPopup: React.FC<ImportPopupProps> = ({ onImport, onClose }) => {
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="w-full max-w-lg rounded-lg bg-white p-6 text-gray-900 shadow-xl dark:bg-gray-800 dark:text-gray-100">
-        <h2 className="text-xl font-bold mb-4">デッキをインポート</h2>
+    <div
+      className={css({
+        position: 'fixed',
+        inset: '0',
+        bg: 'black/50',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        zIndex: '50',
+      })}
+    >
+      <div
+        className={css({
+          w: 'full',
+          maxW: 'lg',
+          rounded: 'lg',
+          bg: 'white',
+          p: '6',
+          color: 'gray.900',
+          boxShadow: 'xl',
+          _dark: { bg: 'gray.800', color: 'gray.100' },
+        })}
+      >
+        <h2 className={css({ fontSize: 'xl', fontWeight: 'bold', mb: '4' })}>デッキをインポート</h2>
         {error && (
-          <div className="mb-4 p-2 bg-red-100 text-red-700 rounded">
+          <div className={css({ mb: '4', p: '2', bg: 'red.100', color: 'red.700', rounded: 'sm' })}>
             {error}
           </div>
         )}
-        <div className="space-y-4">
+        <div className={css({ display: 'flex', flexDirection: 'column', gap: '4' })}>
           <div>
-            <h4 className="font-bold mb-2">幼女デッキ</h4>
+            <h4 className={css({ fontWeight: 'bold', mb: '2' })}>幼女デッキ</h4>
             <textarea
-              className="w-full rounded-md border border-gray-300 bg-white p-2 text-gray-900 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-100"
+              className={css({
+                w: 'full',
+                rounded: 'md',
+                borderWidth: '1px',
+                borderColor: 'gray.300',
+                bg: 'white',
+                p: '2',
+                color: 'gray.900',
+                _dark: { borderColor: 'gray.600', bg: 'gray.900', color: 'gray.100' },
+              })}
               rows={3}
               value={yojoCardIds}
               onChange={(e) => setYojoCardIds(e.target.value)}
               placeholder="1,2,3,4,5 (任意)"
             />
-            <p className="text-sm text-gray-600 mt-1">
+            <p className={css({ fontSize: 'sm', color: 'gray.600', mt: '1' })}>
               カンマ区切りで数字を入力してください（例：1,2,3,4,5）。IDは1から64の範囲で入力してください。先頭の0は不要です。
             </p>
           </div>
-          
+
           <div>
-            <h4 className="font-bold mb-2">お菓子デッキ</h4>
+            <h4 className={css({ fontWeight: 'bold', mb: '2' })}>お菓子デッキ</h4>
             <textarea
-              className="w-full rounded-md border border-gray-300 bg-white p-2 text-gray-900 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-100"
+              className={css({
+                w: 'full',
+                rounded: 'md',
+                borderWidth: '1px',
+                borderColor: 'gray.300',
+                bg: 'white',
+                p: '2',
+                color: 'gray.900',
+                _dark: { borderColor: 'gray.600', bg: 'gray.900', color: 'gray.100' },
+              })}
               rows={3}
               value={sweetCardIds}
               onChange={(e) => setSweetCardIds(e.target.value)}
@@ -161,25 +201,57 @@ const ImportPopup: React.FC<ImportPopupProps> = ({ onImport, onClose }) => {
           </div>
 
           <div>
-            <h4 className="font-bold mb-2">プレイアブルカード</h4>
+            <h4 className={css({ fontWeight: 'bold', mb: '2' })}>プレイアブルカード</h4>
             <input
               type="text"
-              className="w-full rounded-md border border-gray-300 bg-white p-2 text-gray-900 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-100"
+              className={css({
+                w: 'full',
+                rounded: 'md',
+                borderWidth: '1px',
+                borderColor: 'gray.300',
+                bg: 'white',
+                p: '2',
+                color: 'gray.900',
+                _dark: { borderColor: 'gray.600', bg: 'gray.900', color: 'gray.100' },
+              })}
               value={playableCardId}
               onChange={(e) => setPlayableCardId(e.target.value)}
               placeholder="p_01 (任意)"
             />
           </div>
         </div>
-        <div className="flex justify-end gap-4 mt-6">
+        <div className={css({ display: 'flex', justifyContent: 'flex-end', gap: '4', mt: '6' })}>
           <button
-            className="rounded-md border border-gray-300 px-4 py-2 text-gray-700 transition-colors hover:bg-gray-100 dark:border-gray-600 dark:text-gray-200 dark:hover:bg-gray-700"
+            className={css({
+              rounded: 'md',
+              borderWidth: '1px',
+              borderColor: 'gray.300',
+              px: '4',
+              py: '2',
+              color: 'gray.700',
+              transitionProperty: 'color, background-color, border-color, text-decoration-color, fill, stroke',
+              _hover: { bg: 'gray.100' },
+              _dark: {
+                borderColor: 'gray.600',
+                color: 'gray.200',
+                _hover: { bg: 'gray.700' },
+              },
+            })}
             onClick={handleClose}
           >
             キャンセル
           </button>
           <button
-            className="rounded-md bg-blue-600 px-4 py-2 font-semibold text-white transition-colors hover:bg-blue-700"
+            className={css({
+              rounded: 'md',
+              bg: 'blue.600',
+              px: '4',
+              py: '2',
+              fontWeight: 'semibold',
+              color: 'white',
+              transitionProperty: 'color, background-color, border-color, text-decoration-color, fill, stroke',
+              _hover: { bg: 'blue.700' },
+            })}
             onClick={handleImport}
           >
             インポート

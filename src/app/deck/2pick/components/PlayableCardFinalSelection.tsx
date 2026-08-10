@@ -12,6 +12,7 @@
 import React, { useState, useEffect } from 'react';
 import { CardInfo } from '@/types/card';
 import Card from '@/components/Card';
+import { css } from 'styled-system/css';
 
 /**
  * プレイアブルカード最終選択コンポーネントのProps
@@ -73,11 +74,11 @@ const PlayableCardFinalSelection: React.FC<PlayableCardFinalSelectionProps> = ({
   }, [playableChoices]);
 
   return (
-    <div className="mt-4 flex flex-col items-center">
-      <h2 className="text-xl font-bold mb-4 text-center">プレイアブルカードを選択してください</h2>
+    <div className={css({ mt: '4', display: 'flex', flexDirection: 'column', alignItems: 'center' })}>
+      <h2 className={css({ fontSize: 'xl', fontWeight: 'bold', mb: '4', textAlign: 'center' })}>プレイアブルカードを選択してください</h2>
       {!selectedPlayableCard && (
         <div>
-          <div className="flex gap-4">
+          <div className={css({ display: 'flex', gap: '4' })}>
             {playableChoices.map((card, index) => (
               <Card
                 key={card.id}
@@ -95,7 +96,7 @@ const PlayableCardFinalSelection: React.FC<PlayableCardFinalSelectionProps> = ({
             ))}
           </div>
           {/* デッキ確認ボタン */}
-          <div className="flex items-center gap-4 mt-4 justify-center">
+          <div className={css({ display: 'flex', alignItems: 'center', gap: '4', mt: '4', justifyContent: 'center' })}>
           <button
             className="btn-secondary"
             onClick={onCheckDeck}
@@ -108,11 +109,11 @@ const PlayableCardFinalSelection: React.FC<PlayableCardFinalSelectionProps> = ({
 
       {/* スライド表示されたカード */}
       {selectedPlayableCard && (
-        <div className="relative w-full max-w-4xl mx-auto p-4">
-          <div className={`flex flex-col items-center justify-center gap-6 w-full transform-slide ${
-            isCardDisappearing ? 'animate-disappear' : ''
-          }`}>
-            <div className="w-full lg:w-1/2 flex justify-center">
+        <div className={css({ position: 'relative', w: 'full', maxW: '4xl', mx: 'auto', p: '4' })}>
+          <div className={`transform-slide ${isCardDisappearing ? 'animate-disappear' : ''} ${css({
+            display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '6', w: 'full',
+          })}`}>
+            <div className={css({ w: 'full', lg: { w: '1/2' }, display: 'flex', justifyContent: 'center' })}>
               <Card
                 card={selectedPlayableCard}
                 sizes={{
@@ -127,13 +128,13 @@ const PlayableCardFinalSelection: React.FC<PlayableCardFinalSelectionProps> = ({
             </div>
           </div>
           <button
-            className="btn-select absolute bottom-40 right-0"
+            className={`btn-select ${css({ position: 'absolute', bottom: '40', right: '0' })}`}
             onClick={onConfirm}
           >
             選択
           </button>
           <button
-            className="btn-secondary absolute top-0 left-0"
+            className={`btn-secondary ${css({ position: 'absolute', top: '0', left: '0' })}`}
             onClick={onBack}
           >
             ◀︎戻る

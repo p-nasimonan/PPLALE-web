@@ -8,6 +8,7 @@
 import React, { useState, useMemo } from 'react';
 import { CardInfo, CardType } from '@/types/card';
 import Card from './Card';
+import { css } from 'styled-system/css';
 
 interface DeckProps {
   /** デッキに含まれるカードのリスト */
@@ -177,38 +178,65 @@ const Deck: React.FC<DeckProps> = ({
   const getDeckTheme = () => {
     if (type === '幼女') {
       return {
-        container: 'border-red-200 bg-rose-100/80 text-red-900 dark:border-red-900 dark:bg-rose-900/40 dark:text-rose-100',
-        title: 'text-red-900 dark:text-rose-100',
+        container: css({
+          borderColor: 'red.200',
+          bg: 'rose.100/80',
+          color: 'red.900',
+          _dark: { borderColor: 'red.900', bg: 'rose.900/40', color: 'rose.100' },
+        }),
+        title: css({ color: 'red.900', _dark: { color: 'rose.100' } }),
       };
     }
 
     if (type === 'お菓子') {
       return {
-        container: 'border-cyan-200 bg-cyan-100/80 text-cyan-900 dark:border-cyan-900 dark:bg-cyan-900/30 dark:text-cyan-100',
-        title: 'text-cyan-900 dark:text-cyan-100',
+        container: css({
+          borderColor: 'cyan.200',
+          bg: 'cyan.100/80',
+          color: 'cyan.900',
+          _dark: { borderColor: 'cyan.900', bg: 'cyan.900/30', color: 'cyan.100' },
+        }),
+        title: css({ color: 'cyan.900', _dark: { color: 'cyan.100' } }),
       };
     }
 
     if (type === 'プレイアブル') {
       return {
-        container: 'border-indigo-200 bg-indigo-100/80 text-indigo-900 dark:border-indigo-900 dark:bg-indigo-900/40 dark:text-indigo-100',
-        title: 'text-indigo-900 dark:text-indigo-100',
+        container: css({
+          borderColor: 'indigo.200',
+          bg: 'indigo.100/80',
+          color: 'indigo.900',
+          _dark: { borderColor: 'indigo.900', bg: 'indigo.900/40', color: 'indigo.100' },
+        }),
+        title: css({ color: 'indigo.900', _dark: { color: 'indigo.100' } }),
       };
     }
 
     return {
-      container: 'border-gray-200 bg-gray-100/80 text-gray-900 dark:border-gray-700 dark:bg-gray-800/60 dark:text-gray-100',
-      title: 'text-gray-900 dark:text-gray-100',
+      container: css({
+        borderColor: 'gray.200',
+        bg: 'gray.100/80',
+        color: 'gray.900',
+        _dark: { borderColor: 'gray.700', bg: 'gray.800/60', color: 'gray.100' },
+      }),
+      title: css({ color: 'gray.900', _dark: { color: 'gray.100' } }),
     };
   };
 
   const deckTheme = getDeckTheme();
 
   return (
-    <div 
-      className={`rounded-lg border-2 p-4 transition-all duration-200 ${deckTheme.container} ${
-        isDraggingOver ? 'scale-[1.01] border-4 border-dashed shadow-lg' : ''
-      }`}
+    <div
+      className={`${deckTheme.container} ${css({
+        rounded: 'lg',
+        borderWidth: isDraggingOver ? '4px' : '2px',
+        borderStyle: isDraggingOver ? 'dashed' : undefined,
+        p: '4',
+        transitionProperty: 'all',
+        transitionDuration: '200ms',
+        transform: isDraggingOver ? 'scale(1.01)' : undefined,
+        boxShadow: isDraggingOver ? 'lg' : undefined,
+      })}`}
       onDragOver={(e) => {
         e.preventDefault();
         setIsDraggingOver(true);
@@ -223,14 +251,20 @@ const Deck: React.FC<DeckProps> = ({
         onDropDeck?.(e, type);
       }}
     >
-      <div className="flex justify-between items-center mb-4">
-        <h2 className={`text-xl font-bold ${deckTheme.title}`}>
+      <div className={css({ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: '4' })}>
+        <h2 className={`${deckTheme.title} ${css({ fontSize: 'xl', fontWeight: 'bold' })}`}>
           {type}デッキ ({cards.length}/{maxCards})
         </h2>
         {!readOnly && (
-          <div className="relative">
+          <div className={css({ position: 'relative' })}>
             <select
-              className="px-1 py-1 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className={css({
+                px: '1',
+                py: '1',
+                borderWidth: '1px',
+                rounded: 'md',
+                _focus: { outline: 'none', boxShadow: '0 0 0 2px #3b82f6' },
+              })}
               value={sortCriteria}
               onChange={(e) => setSortCriteria(e.target.value as 'none' | 'id' | 'name' | 'cost' | 'attack' | 'hp')}
             >
@@ -246,13 +280,37 @@ const Deck: React.FC<DeckProps> = ({
       </div>
 
       {/* デッキのカードリスト */}
-      <div className={`grid ${
-        readOnly 
-          ? type === '幼女'
-            ? 'grid-cols-4 sm:grid-cols-5 md:grid-cols-5 lg:grid-cols-4 xl:grid-cols-5'
-            : 'grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6'
-          : 'grid-cols-4 sm:grid-cols-5 md:grid-cols-5 lg:grid-cols-4 xl:grid-cols-5'
-      } gap-2 overflow-auto max-h-[calc(80vh-52px)]`}>
+      <div
+        className={css({
+          display: 'grid',
+          gridTemplateColumns: readOnly
+            ? type === '幼女'
+              ? {
+                  base: 'repeat(4, minmax(0, 1fr))',
+                  sm: 'repeat(5, minmax(0, 1fr))',
+                  md: 'repeat(5, minmax(0, 1fr))',
+                  lg: 'repeat(4, minmax(0, 1fr))',
+                  xl: 'repeat(5, minmax(0, 1fr))',
+                }
+              : {
+                  base: 'repeat(2, minmax(0, 1fr))',
+                  sm: 'repeat(3, minmax(0, 1fr))',
+                  md: 'repeat(4, minmax(0, 1fr))',
+                  lg: 'repeat(5, minmax(0, 1fr))',
+                  xl: 'repeat(6, minmax(0, 1fr))',
+                }
+            : {
+                base: 'repeat(4, minmax(0, 1fr))',
+                sm: 'repeat(5, minmax(0, 1fr))',
+                md: 'repeat(5, minmax(0, 1fr))',
+                lg: 'repeat(4, minmax(0, 1fr))',
+                xl: 'repeat(5, minmax(0, 1fr))',
+              },
+          gap: '2',
+          overflow: 'auto',
+          maxH: 'calc(80vh - 52px)',
+        })}
+      >
         {uniqueSortedCards.map((card, index) => (
           <div
             key={`${card.id}-${index}`}
@@ -261,7 +319,7 @@ const Deck: React.FC<DeckProps> = ({
             onDragOver={(e) => handleDragOver(e, index)}
             onDrop={handleDrop}
             onDragEnd={handleDragEnd}
-            className={`relative ${draggedIndex === index ? 'opacity-50' : ''}`}
+            className={css({ position: 'relative', opacity: draggedIndex === index ? '0.5' : undefined })}
           >
             <Card
               card={card}
@@ -277,19 +335,34 @@ const Deck: React.FC<DeckProps> = ({
           <button
             type="button"
             onClick={() => onAddClick && onAddClick(type)}
-            className="lg:hidden flex flex-col items-center justify-center w-full aspect-[220/320] rounded-xl border-2 border-dashed border-gray-400/50 bg-gray-50/50 hover:bg-gray-100/50 dark:border-gray-500/50 dark:bg-gray-800/30 dark:hover:bg-gray-700/50 transition-colors"
+            className={css({
+              display: { base: 'flex', lg: 'none' },
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+              w: 'full',
+              aspectRatio: '220/320',
+              rounded: 'xl',
+              borderWidth: '2px',
+              borderStyle: 'dashed',
+              borderColor: 'gray.400/50',
+              bg: 'gray.50/50',
+              _hover: { bg: 'gray.100/50' },
+              _dark: { borderColor: 'gray.500/50', bg: 'gray.800/30', _hover: { bg: 'gray.700/50' } },
+              transitionProperty: 'color, background-color, border-color, text-decoration-color, fill, stroke',
+            })}
           >
-            <svg className="w-10 h-10 text-gray-400 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className={css({ w: '10', h: '10', color: 'gray.400', mb: '2' })} fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
             </svg>
-            <span className="text-sm font-bold text-gray-500 dark:text-gray-400">追加</span>
+            <span className={css({ fontSize: 'sm', fontWeight: 'bold', color: 'gray.500', _dark: { color: 'gray.400' } })}>追加</span>
           </button>
         )}
       </div>
 
       {/* デッキが空の場合のメッセージ */}
       {cards.length === 0 && (
-        <div className="text-center py-8 text-gray-500">
+        <div className={css({ textAlign: 'center', py: '8', color: 'gray.500' })}>
           デッキにカードがありません
         </div>
       )}

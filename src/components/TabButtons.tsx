@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import { css } from 'styled-system/css';
 
 /**
  * @JSDoc
@@ -43,36 +44,76 @@ const TabButtons: React.FC<TabButtonsProps> = ({
 
   const getButtonColor = (tabKey: string) => {
     if (tabKey === 'yojo') {
-      return 'bg-rose-200 text-rose-900 border-rose-300 dark:bg-rose-900/40 dark:text-rose-100 dark:border-rose-700';
+      return css({
+        bg: 'rose.200',
+        color: 'rose.900',
+        borderColor: 'rose.300',
+        _dark: { bg: 'rose.900/40', color: 'rose.100', borderColor: 'rose.700' },
+      });
     } else if (tabKey === 'sweet') {
-      return 'bg-cyan-200 text-cyan-900 border-cyan-300 dark:bg-cyan-900/40 dark:text-cyan-100 dark:border-cyan-700';
+      return css({
+        bg: 'cyan.200',
+        color: 'cyan.900',
+        borderColor: 'cyan.300',
+        _dark: { bg: 'cyan.900/40', color: 'cyan.100', borderColor: 'cyan.700' },
+      });
     } else if (tabKey === 'playable') {
-      return 'bg-indigo-200 text-indigo-900 border-indigo-300 dark:bg-indigo-900/40 dark:text-indigo-100 dark:border-indigo-700';
+      return css({
+        bg: 'indigo.200',
+        color: 'indigo.900',
+        borderColor: 'indigo.300',
+        _dark: { bg: 'indigo.900/40', color: 'indigo.100', borderColor: 'indigo.700' },
+      });
     }
-    return 'bg-gray-200 text-gray-900 border-gray-300 dark:bg-gray-700 dark:text-gray-100 dark:border-gray-600';
+    return css({
+      bg: 'gray.200',
+      color: 'gray.900',
+      borderColor: 'gray.300',
+      _dark: { bg: 'gray.700', color: 'gray.100', borderColor: 'gray.600' },
+    });
   };
 
   const getButtonClassName = (tabKey: string) => {
     const isActive = tabKey === activeTabKey;
     if (variant === 'cardList') {
-      return `rounded-t-md border-2 px-4 py-2 text-sm font-medium transition-colors 
-              ${isActive 
-                ? `border-b-transparent ${getButtonColor(tabKey)}` 
-                : `border-transparent bg-transparent text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200`}
-              `;
+      const base = css({
+        roundedTop: 'md',
+        borderWidth: '2px',
+        px: '4',
+        py: '2',
+        fontSize: 'sm',
+        fontWeight: 'medium',
+        transitionProperty: 'color, background-color, border-color, text-decoration-color, fill, stroke',
+      });
+      return isActive
+        ? `${base} ${css({ borderBottomColor: 'transparent' })} ${getButtonColor(tabKey)}`
+        : `${base} ${css({
+            borderColor: 'transparent',
+            bg: 'transparent',
+            color: 'gray.500',
+            _hover: { color: 'gray.700' },
+            _dark: { color: 'gray.400', _hover: { color: 'gray.200' } },
+          })}`;
     }
     // default variant (DeckList用)
-    return `rounded px-4 py-2 ${isActive ? 'bg-blue-500 text-white' : 'text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800'}`;
+    const base = css({ rounded: 'sm', px: '4', py: '2' });
+    return isActive
+      ? `${base} ${css({ bg: 'blue.500', color: 'white' })}`
+      : `${base} ${css({
+          color: 'gray.700',
+          _hover: { bg: 'gray.100' },
+          _dark: { color: 'gray.300', _hover: { bg: 'gray.800' } },
+        })}`;
   };
 
 
   return (
-    <div className={`flex `}>
+    <div className={css({ display: 'flex' })}>
       {tabs.map((tab) => (
         <button
           key={tab.key}
           onClick={() => onTabClick(tab.key)}
-          className={`${getButtonClassName(tab.key)} `}
+          className={getButtonClassName(tab.key)}
         >
           {tab.label}
         </button>

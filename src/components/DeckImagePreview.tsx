@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { CardInfo } from '@/types/card';
 import Image from 'next/image';
+import { css } from 'styled-system/css';
 
 /**
  * 幼女・お菓子・プレイアブルカードからデッキ画像（dataURL）を生成するユーティリティ関数
@@ -260,35 +261,57 @@ const DeckImagePreview: React.FC<DeckImagePreviewProps> = ({ yojoDeck, sweetDeck
   return (
     <>
       {isPopup ? (
-        <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
-          <div className="bg-white p-6 rounded-lg shadow-lg max-w-5xl w-full flex flex-col items-center">
-            <h3 className="text-lg font-bold mb-4">デッキ画像プレビュー</h3>
+        <div
+          className={css({
+            position: 'fixed',
+            inset: '0',
+            bg: 'rgba(0, 0, 0, 0.4)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            zIndex: '50',
+          })}
+        >
+          <div
+            className={css({
+              bg: 'white',
+              p: '6',
+              rounded: 'lg',
+              boxShadow: 'lg',
+              maxW: '5xl',
+              w: 'full',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+            })}
+          >
+            <h3 className={css({ fontSize: 'lg', fontWeight: 'bold', mb: '4' })}>デッキ画像プレビュー</h3>
             <canvas ref={canvasRef} width={CANVAS_WIDTH} height={CANVAS_HEIGHT} style={{ display: 'none' }} />
             {loading ? (
-              <div className="my-8">画像生成中...</div>
+              <div className={css({ my: '8' })}>画像生成中...</div>
             ) : imgUrl ? (
               <>
-                <Image src={imgUrl} alt="デッキ画像" className="mb-4 max-w-full" width={1920} height={1080} unoptimized />
-                <a href={imgUrl} download="deck.png" className="btn btn-primary mb-2">画像をダウンロード</a>
+                <Image src={imgUrl} alt="デッキ画像" className={css({ mb: '4', maxW: 'full' })} width={1920} height={1080} unoptimized />
+                <a href={imgUrl} download="deck.png" className={`btn btn-primary ${css({ mb: '2' })}`}>画像をダウンロード</a>
               </>
             ) : (
-              <div className="my-8 text-red-500">画像生成に失敗しました</div>
+              <div className={css({ my: '8', color: 'red.500' })}>画像生成に失敗しました</div>
             )}
-            <button className="btn btn-secondary mt-2" onClick={onClose}>閉じる</button>
+            <button className={`btn btn-secondary ${css({ mt: '2' })}`} onClick={onClose}>閉じる</button>
           </div>
         </div>
       ) : (
-        <div className="flex flex-col items-center">
+        <div className={css({ display: 'flex', flexDirection: 'column', alignItems: 'center' })}>
           <canvas ref={canvasRef} width={CANVAS_WIDTH} height={CANVAS_HEIGHT} style={{ display: 'none' }} />
           {loading ? (
-            <div className="my-8">画像生成中...</div>
+            <div className={css({ my: '8' })}>画像生成中...</div>
           ) : imgUrl ? (
             <>
-              <Image src={imgUrl} alt="デッキ画像" className="mb-4 max-w-full" width={1920} height={1080} unoptimized />
-              <a href={imgUrl} download="deck.png" className="btn btn-primary mb-2">画像をダウンロード</a>
+              <Image src={imgUrl} alt="デッキ画像" className={css({ mb: '4', maxW: 'full' })} width={1920} height={1080} unoptimized />
+              <a href={imgUrl} download="deck.png" className={`btn btn-primary ${css({ mb: '2' })}`}>画像をダウンロード</a>
             </>
           ) : (
-            <div className="my-8 text-red-500">画像生成に失敗しました</div>
+            <div className={css({ my: '8', color: 'red.500' })}>画像生成に失敗しました</div>
           )}
         </div>
       )}

@@ -8,6 +8,7 @@
 import React, { useState, useMemo, useEffect, useCallback } from 'react';
 import { CardInfo, FruitType } from '@/types/card';
 import Card from './Card';
+import { css } from 'styled-system/css';
 
 /**
  * @JSDoc
@@ -108,15 +109,25 @@ const CardList: React.FC<CardListProps> = ({
   }, [displayCardType]); // displayCardType の変更を監視
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className={css({ display: 'flex', flexDirection: 'column', gap: '4' })}>
       {/* TabButtons は DeckPageClient に移動したので削除 */}
 
       {/* フィルターセクション */}
-      <div className="space-y-3">
-        <div className="flex flex-col sm:flex-row gap-2">
+      <div className={css({ display: 'flex', flexDirection: 'column', gap: '3' })}>
+        <div className={css({ display: 'flex', flexDirection: 'column', sm: { flexDirection: 'row' }, gap: '2' })}>
           {displayCardType === 'yojo' && (
             <select
-              className="rounded-md border border-gray-300 bg-white px-2 py-1 text-sm text-gray-900 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-100"
+              className={css({
+                rounded: 'md',
+                borderWidth: '1px',
+                borderColor: 'gray.300',
+                bg: 'white',
+                px: '2',
+                py: '1',
+                fontSize: 'sm',
+                color: 'gray.900',
+                _dark: { borderColor: 'gray.600', bg: 'gray.900', color: 'gray.100' },
+              })}
               value={fruitFilter}
               onChange={(e) => setFruitFilter(e.target.value as FruitType | 'all')}
             >
@@ -129,7 +140,17 @@ const CardList: React.FC<CardListProps> = ({
           )}
           {displayCardType === 'sweet' && (
             <select
-              className="rounded-md border border-gray-300 bg-white px-2 py-1 text-sm text-gray-900 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-100"
+              className={css({
+                rounded: 'md',
+                borderWidth: '1px',
+                borderColor: 'gray.300',
+                bg: 'white',
+                px: '2',
+                py: '1',
+                fontSize: 'sm',
+                color: 'gray.900',
+                _dark: { borderColor: 'gray.600', bg: 'gray.900', color: 'gray.100' },
+              })}
               value={sweetTypeFilter}
               onChange={(e) => setSweetTypeFilter(e.target.value)}
             >
@@ -141,7 +162,17 @@ const CardList: React.FC<CardListProps> = ({
           )}
           {displayCardType === 'playable' && (
             <select
-              className="rounded-md border border-gray-300 bg-white px-2 py-1 text-sm text-gray-900 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-100"
+              className={css({
+                rounded: 'md',
+                borderWidth: '1px',
+                borderColor: 'gray.300',
+                bg: 'white',
+                px: '2',
+                py: '1',
+                fontSize: 'sm',
+                color: 'gray.900',
+                _dark: { borderColor: 'gray.600', bg: 'gray.900', color: 'gray.100' },
+              })}
               value={versionFilter}
               onChange={(e) => setVersionFilter(e.target.value)}
             >
@@ -154,21 +185,48 @@ const CardList: React.FC<CardListProps> = ({
           <input
             type="text"
             placeholder="カード名検索..."
-            className="flex-grow rounded-md border border-gray-300 bg-white px-2 py-1 text-sm text-gray-900 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-100"
+            className={css({
+              flexGrow: '1',
+              rounded: 'md',
+              borderWidth: '1px',
+              borderColor: 'gray.300',
+              bg: 'white',
+              px: '2',
+              py: '1',
+              fontSize: 'sm',
+              color: 'gray.900',
+              _dark: { borderColor: 'gray.600', bg: 'gray.900', color: 'gray.100' },
+            })}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
         </div>
-        <div className={`grid grid-cols-4 sm:grid-cols-5 md:grid-cols-6 lg:grid-cols-5 xl:grid-cols-6 gap-1 overflow-auto max-h-[calc(75vh-50px)]`}>
+        <div className={css({
+          display: 'grid',
+          gridTemplateColumns: 'repeat(4, minmax(0, 1fr))',
+          gap: '1',
+          overflow: 'auto',
+          maxH: 'calc(75vh - 50px)',
+          sm: { gridTemplateColumns: 'repeat(5, minmax(0, 1fr))' },
+          md: { gridTemplateColumns: 'repeat(6, minmax(0, 1fr))' },
+          lg: { gridTemplateColumns: 'repeat(5, minmax(0, 1fr))' },
+          xl: { gridTemplateColumns: 'repeat(6, minmax(0, 1fr))' },
+        })}>
           {sortedFilteredCards
             .map((card, index) => {
               const isAddable = canAddToDeck ? canAddToDeck(card) : true;
               return (
-              <div 
-                key={card.id} 
-                className={`flex justify-center items-center transition-all ${
-                  !isAddable ? 'opacity-40 saturate-50 pointer-events-none' : ''
-                }`}
+              <div
+                key={card.id}
+                className={css({
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  transitionProperty: 'all',
+                  opacity: !isAddable ? '40' : undefined,
+                  filter: !isAddable ? 'saturate(0.5)' : undefined,
+                  pointerEvents: !isAddable ? 'none' : undefined,
+                })}
               >
                 <Card
                   card={card}
@@ -186,7 +244,7 @@ const CardList: React.FC<CardListProps> = ({
       </div>
 
       {sortedFilteredCards.length === 0 && (
-        <div className="text-center py-8 text-gray-500">
+        <div className={css({ textAlign: 'center', py: '8', color: 'gray.500' })}>
           条件に一致するカードが見つかりませんでした。
         </div>
       )}

@@ -12,6 +12,7 @@ import React from 'react';
 import { Controller, Control, UseFormHandleSubmit, ControllerRenderProps } from 'react-hook-form';
 import { FruitType } from '@/types/card';
 import Image from 'next/image';
+import { css } from 'styled-system/css';
 
 /**
  * フルーツとバージョン選択コンポーネントのProps
@@ -58,20 +59,20 @@ const FruitVersionSelection: React.FC<FruitVersionSelectionProps> = ({
   onSubmit,
 }) => {
   return (
-    <div className="flex flex-col items-center mt-8">
-      <h2 className="text-xl font-bold mb-8">カードのフルーツを選択してください</h2>
+    <div className={css({ display: 'flex', flexDirection: 'column', alignItems: 'center', mt: '8' })}>
+      <h2 className={css({ fontSize: 'xl', fontWeight: 'bold', mb: '8' })}>カードのフルーツを選択してください</h2>
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="space-y-8 w-full max-w-4xl"
+        className={css({ display: 'flex', flexDirection: 'column', gap: '8', w: 'full', maxW: '4xl' })}
       >
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+        <div className={css({ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', md: { gridTemplateColumns: 'repeat(4, minmax(0, 1fr))' }, gap: '6' })}>
           {(['いちご', 'ぶどう', 'めろん', 'おれんじ'] as FruitType[]).map(fruit => (
             <Controller
               key={fruit}
               name="fruits"
               control={control}
               render={({ field }: { field: ControllerRenderProps<FormData, 'fruits'> }) => (
-                <label className="relative cursor-pointer group">
+                <label className={css({ position: 'relative', cursor: 'pointer' })}>
                   <input
                     type="checkbox"
                     value={fruit}
@@ -84,46 +85,51 @@ const FruitVersionSelection: React.FC<FruitVersionSelectionProps> = ({
                           : field.value;
                       field.onChange(newValue);
                     }}
-                    className="hidden"
+                    className={css({ display: 'none' })}
                   />
-                  <div className={`relative rounded-xl overflow-hidden transition-all duration-300 ${
-                    field.value.includes(fruit) ? 'ring-4 ring-special' : 'ring-2 ring-gray-200'
-                  }`}>
-                    <div className="w-full h-32 relative" style={{ backgroundColor: fruit === 'いちご' ? '#9B4341' : fruit === 'ぶどう' ? '#6E25AB' : fruit === 'めろん' ? '#40923D' : '#E5872C' }}>
+                  <div className={css({
+                    position: 'relative',
+                    rounded: 'xl',
+                    overflow: 'hidden',
+                    transitionProperty: 'all',
+                    transitionDuration: '300ms',
+                    boxShadow: field.value.includes(fruit) ? '0 0 0 4px var(--colors-special)' : '0 0 0 2px var(--colors-gray-200)',
+                  })}>
+                    <div className={css({ w: 'full', h: '32', position: 'relative' })} style={{ backgroundColor: fruit === 'いちご' ? '#9B4341' : fruit === 'ぶどう' ? '#6E25AB' : fruit === 'めろん' ? '#40923D' : '#E5872C' }}>
                       <Image
                         src="/pupu_game.webp"
                         alt="background"
                         width={500}
                         height={281}
-                        className="w-full h-full object-cover"
+                        className={css({ w: 'full', h: 'full', objectFit: 'cover' })}
                       />
                     </div>
                     {field.value.includes(fruit) && (
-                      <div className="absolute inset-0 bg-black/20 flex items-center justify-center">
-                        <div className="w-12 h-12 bg-special rounded-full flex items-center justify-center">
-                          <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <div className={css({ position: 'absolute', inset: '0', bg: 'black/20', display: 'flex', alignItems: 'center', justifyContent: 'center' })}>
+                        <div className={css({ w: '12', h: '12', bg: 'special', rounded: 'full', display: 'flex', alignItems: 'center', justifyContent: 'center' })}>
+                          <svg className={css({ w: '8', h: '8', color: 'white' })} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" />
                           </svg>
                         </div>
                       </div>
                     )}
                   </div>
-                  <p className="text-center mt-2 font-medium">{fruit}</p>
+                  <p className={css({ textAlign: 'center', mt: '2', fontWeight: 'medium' })}>{fruit}</p>
                 </label>
               )}
             />
           ))}
         </div>
 
-        <h2 className="text-xl font-bold mb-8 mt-12">プレイアブルカードのバージョンを選択してください</h2>
-        <div className="grid grid-cols-2 gap-6">
+        <h2 className={css({ fontSize: 'xl', fontWeight: 'bold', mb: '8', mt: '12' })}>プレイアブルカードのバージョンを選択してください</h2>
+        <div className={css({ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: '6' })}>
           {(['通常', 'β'] as string[]).map(version => (
             <Controller
               key={version}
               name="playableVersions"
               control={control}
               render={({ field }: { field: ControllerRenderProps<FormData, 'playableVersions'> }) => (
-                <label className="relative cursor-pointer group">
+                <label className={css({ position: 'relative', cursor: 'pointer' })}>
                   <input
                     type="checkbox"
                     value={version}
@@ -136,43 +142,46 @@ const FruitVersionSelection: React.FC<FruitVersionSelectionProps> = ({
                           : field.value;
                       field.onChange(newValue);
                     }}
-                    className="hidden"
+                    className={css({ display: 'none' })}
                   />
-                  <div className={`relative rounded-xl overflow-hidden transition-all duration-300 ${
-                    field.value.includes(version) ? 'ring-4 ring-special' : 'ring-2 ring-gray-200'
-                  }`}>
+                  <div className={css({
+                    position: 'relative',
+                    rounded: 'xl',
+                    overflow: 'hidden',
+                    transitionProperty: 'all',
+                    transitionDuration: '300ms',
+                    boxShadow: field.value.includes(version) ? '0 0 0 4px var(--colors-special)' : '0 0 0 2px var(--colors-gray-200)',
+                  })}>
                     <Image
                       src={`/images/versions/${version}.webp`}
                       alt={version}
-                      className="w-full h-48 object-cover"
+                      className={css({ w: 'full', h: '48', objectFit: 'cover' })}
                       width={200}
                       height={200}
                       priority
                     />
                     {field.value.includes(version) && (
-                      <div className="absolute inset-0 bg-black/20 flex items-center justify-center">
-                        <div className="w-12 h-12 bg-special rounded-full flex items-center justify-center">
-                          <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <div className={css({ position: 'absolute', inset: '0', bg: 'black/20', display: 'flex', alignItems: 'center', justifyContent: 'center' })}>
+                        <div className={css({ w: '12', h: '12', bg: 'special', rounded: 'full', display: 'flex', alignItems: 'center', justifyContent: 'center' })}>
+                          <svg className={css({ w: '8', h: '8', color: 'white' })} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" />
                           </svg>
                         </div>
                       </div>
                     )}
                   </div>
-                  <p className="text-center mt-2 font-medium">{version}</p>
+                  <p className={css({ textAlign: 'center', mt: '2', fontWeight: 'medium' })}>{version}</p>
                 </label>
               )}
             />
           ))}
         </div>
-        <div className="flex justify-center mt-8">
-          <button 
-            type="submit" 
-            className={`btn-primary text-lg px-8 py-3 ${
-              selectedFruits.length === 0 || selectedPlayableVersions.length === 0
-                ? 'opacity-50 cursor-not-allowed'
-                : ''
-            }`}
+        <div className={css({ display: 'flex', justifyContent: 'center', mt: '8' })}>
+          <button
+            type="submit"
+            className={`btn-primary ${css({
+              opacity: (selectedFruits.length === 0 || selectedPlayableVersions.length === 0) ? '0.5' : undefined,
+            })}`}
             disabled={selectedFruits.length === 0 || selectedPlayableVersions.length === 0}
           >
             次へ

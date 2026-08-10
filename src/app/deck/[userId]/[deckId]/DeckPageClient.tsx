@@ -17,6 +17,7 @@ import ShareButtons from '@/components/ShareButtons';
 import { useSettings } from '../../../SideMenuProvider';
 import DeckList from '@/components/DeckList';
 import TabButtons, { TabDefinition } from '@/components/TabButtons';
+import { css } from 'styled-system/css';
 
 const yojoLimit = 20;
 const sweetLimit = 10;
@@ -420,11 +421,11 @@ export default function DeckPageClient({
   };
 
   if (isLoading) {
-    return <div className="mx-auto max-w-[1700px] p-4 text-gray-800 dark:text-gray-100">読み込み中...</div>;
+    return <div className={css({ mx: 'auto', maxW: '1700px', p: '4', color: 'gray.800', _dark: { color: 'gray.100' } })}>読み込み中...</div>;
   }
 
   if (error) {
-    return <div className="mx-auto max-w-[1700px] p-4 text-red-500">{error}</div>;
+    return <div className={css({ mx: 'auto', maxW: '1700px', p: '4', color: 'red.500' })}>{error}</div>;
   }
 
   const deckViewTabs: TabDefinition[] = [
@@ -434,17 +435,34 @@ export default function DeckPageClient({
   ];
 
   const getCardListColor = () => {
-    return deckViewActiveTab === 'yojo' ? 'border border-rose-300 bg-rose-100/80 dark:border-rose-700 dark:bg-rose-900/40'
-    : deckViewActiveTab === 'sweet' ? 'border border-cyan-300 bg-cyan-100/80 dark:border-cyan-700 dark:bg-cyan-900/40'
-    : deckViewActiveTab === 'playable' ? 'border border-indigo-300 bg-indigo-100/80 dark:border-indigo-700 dark:bg-indigo-900/40'
-    : 'border border-gray-300 bg-gray-100/80 dark:border-gray-700 dark:bg-gray-800/60';
+    return css({
+      borderWidth: '1px',
+      borderColor: deckViewActiveTab === 'yojo' ? 'rose.300'
+        : deckViewActiveTab === 'sweet' ? 'cyan.300'
+        : deckViewActiveTab === 'playable' ? 'indigo.300'
+        : 'gray.300',
+      bg: deckViewActiveTab === 'yojo' ? 'rose.100/80'
+        : deckViewActiveTab === 'sweet' ? 'cyan.100/80'
+        : deckViewActiveTab === 'playable' ? 'indigo.100/80'
+        : 'gray.100/80',
+      _dark: {
+        borderColor: deckViewActiveTab === 'yojo' ? 'rose.700'
+          : deckViewActiveTab === 'sweet' ? 'cyan.700'
+          : deckViewActiveTab === 'playable' ? 'indigo.700'
+          : 'gray.700',
+        bg: deckViewActiveTab === 'yojo' ? 'rose.900/40'
+          : deckViewActiveTab === 'sweet' ? 'cyan.900/40'
+          : deckViewActiveTab === 'playable' ? 'indigo.900/40'
+          : 'gray.800/60',
+      },
+    });
   };
 
   return (
-    <div className="mx-auto max-w-[1700px] p-2 text-gray-900 dark:text-gray-100">
-      <div className="flex items-center mb-5">
+    <div className={css({ mx: 'auto', maxW: '1700px', p: '2', color: 'gray.900', _dark: { color: 'gray.100' } })}>
+      <div className={css({ display: 'flex', alignItems: 'center', mb: '5' })}>
         {isEditing ? (
-          <div className="flex items-center gap-2">
+          <div className={css({ display: 'flex', alignItems: 'center', gap: '2' })}>
             <input
               type="text"
               value={deckName}
@@ -455,20 +473,27 @@ export default function DeckPageClient({
                   handleNameChange(deckName);
                 }
               }}
-              className="text-3xl font-bold p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className={css({
+                fontSize: '3xl',
+                fontWeight: 'bold',
+                p: '2',
+                borderWidth: '1px',
+                rounded: 'md',
+                _focus: { outline: 'none', boxShadow: '0 0 0 2px rgba(59, 130, 246, 0.5)' },
+              })}
               autoFocus
             />
           </div>
         ) : (
-          <div className="flex items-center justify-between w-full">
-            <h1 
-              className="text-3xl font-bold"
+          <div className={css({ display: 'flex', alignItems: 'center', justifyContent: 'space-between', w: 'full' })}>
+            <h1
+              className={css({ fontSize: '3xl', fontWeight: 'bold' })}
               onClick={() => isOwner && setIsEditing(true)}
               style={{ cursor: isOwner ? 'pointer' : 'default' }}
             >
               {deckName}
               {isOwner && (
-                <span className="ml-2 text-sm text-gray-500">
+                <span className={css({ ml: '2', fontSize: 'sm', color: 'gray.500' })}>
                   (クリックして編集)
                 </span>
               )}
@@ -477,7 +502,17 @@ export default function DeckPageClient({
               {userId === 'local' && user &&(
                     <button
                       onClick={handleLoginAndSave}
-                      className="rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-blue-700"
+                      className={css({
+                        rounded: 'md',
+                        bg: 'blue.600',
+                        px: '4',
+                        py: '2',
+                        fontSize: 'sm',
+                        fontWeight: 'semibold',
+                        color: 'white',
+                        transitionProperty: 'color, background-color, border-color, text-decoration-color, fill, stroke',
+                        _hover: { bg: 'blue.700' },
+                      })}
                     >
                       アカウントにデッキを保存
                     </button>
@@ -496,11 +531,17 @@ export default function DeckPageClient({
         )}
       </div>
 
-      <div className={`grid grid-cols-1 ${isOwner ? 'lg:grid-cols-2' : ''} gap-2`}>
+      <div className={css({
+        display: 'grid',
+        gridTemplateColumns: isOwner
+          ? { base: 'repeat(1, minmax(0, 1fr))', lg: 'repeat(2, minmax(0, 1fr))' }
+          : 'repeat(1, minmax(0, 1fr))',
+        gap: '2',
+      })}>
         {/* デッキ側のカラム（スマホ時はここにタブを表示） */}
-        <div className="flex flex-col gap-2">
+        <div className={css({ display: 'flex', flexDirection: 'column', gap: '2' })}>
           {isOwner && (
-            <div className="lg:hidden">
+            <div className={css({ lg: { display: 'none' } })}>
               <TabButtons
                 tabs={deckViewTabs}
                 activeTabKey={deckViewActiveTab}
@@ -525,14 +566,24 @@ export default function DeckPageClient({
         </div>
 
         {isOwner && (
-          <div className="hidden lg:block rounded-lg border border-gray-200 bg-white p-2 shadow-sm dark:border-gray-700 dark:bg-gray-800">
+          <div className={css({
+            display: 'none',
+            lg: { display: 'block' },
+            rounded: 'lg',
+            borderWidth: '1px',
+            borderColor: 'gray.200',
+            bg: 'white',
+            p: '2',
+            boxShadow: 'sm',
+            _dark: { borderColor: 'gray.700', bg: 'gray.800' },
+          })}>
             <TabButtons
               tabs={deckViewTabs}
               activeTabKey={deckViewActiveTab}
               onTabClick={(key: string) => setDeckViewActiveTab(key as 'yojo' | 'sweet' | 'playable')}
               variant="cardList"
             />
-          <div className={` ${getCardListColor()} rounded-b-md p-2`}>
+          <div className={`${getCardListColor()} ${css({ roundedBottom: 'md', p: '2' })}`}>
             <CardList
               allYojoCards={allYojoCards}
               allSweetCards={allSweetCards}
@@ -581,31 +632,68 @@ export default function DeckPageClient({
 
       {/* スマホ用カード追加ポップアップ */}
       {mobileAddModalType && (
-        <div className="fixed inset-0 z-50 flex flex-col bg-black/70 backdrop-blur-sm lg:hidden pt-12 px-2 pb-2">
+        <div className={css({
+          position: 'fixed',
+          inset: '0',
+          zIndex: '50',
+          display: 'flex',
+          flexDirection: 'column',
+          bg: 'black/70',
+          backdropFilter: 'blur(4px)',
+          lg: { display: 'none' },
+          pt: '12',
+          px: '2',
+          pb: '2',
+        })}>
           {/* ヘッダー */}
-          <div className="flex justify-between items-center bg-white dark:bg-gray-800 p-4 rounded-t-xl shadow-lg relative z-10">
-            <h3 className="text-xl font-bold flex items-center gap-2">
-              <span className="text-2xl">
+          <div className={css({
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            bg: 'white',
+            _dark: { bg: 'gray.800' },
+            p: '4',
+            roundedTop: 'xl',
+            boxShadow: 'lg',
+            position: 'relative',
+            zIndex: '10',
+          })}>
+            <h3 className={css({ fontSize: 'xl', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '2' })}>
+              <span className={css({ fontSize: '2xl' })}>
                 {mobileAddModalType === 'yojo' ? '🎀' : mobileAddModalType === 'sweet' ? '🍬' : '✨'}
               </span>
               {mobileAddModalType === 'yojo' ? '幼女カードを追加' : mobileAddModalType === 'sweet' ? 'お菓子カードを追加' : 'プレイアブルカードを追加'}
             </h3>
-            <button 
+            <button
               onClick={() => setMobileAddModalType(null)}
-              className="p-2 bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 rounded-full transition-colors"
+              className={css({
+                p: '2',
+                bg: 'gray.100',
+                _hover: { bg: 'gray.200' },
+                _dark: { bg: 'gray.700', _hover: { bg: 'gray.600' } },
+                rounded: 'full',
+                transitionProperty: 'color, background-color, border-color, text-decoration-color, fill, stroke',
+              })}
               aria-label="閉じる"
             >
-              <svg className="w-6 h-6 text-gray-600 dark:text-gray-300" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24">
+              <svg className={css({ w: '6', h: '6', color: 'gray.600', _dark: { color: 'gray.300' } })} fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24">
                  <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
               </svg>
             </button>
           </div>
           {/* リスト領域 */}
-          <div 
-            className={`flex-1 overflow-y-auto rounded-b-xl shadow-xl p-3 
-              ${mobileAddModalType === 'yojo' ? 'bg-rose-100 dark:bg-rose-900/40' : 
-                mobileAddModalType === 'sweet' ? 'bg-cyan-100 dark:bg-cyan-900/40' : 
-                'bg-indigo-100 dark:bg-indigo-900/40'}`}
+          <div
+            className={css({
+              flex: '1 1 0%',
+              overflowY: 'auto',
+              roundedBottom: 'xl',
+              boxShadow: 'xl',
+              p: '3',
+              bg: mobileAddModalType === 'yojo' ? 'rose.100' : mobileAddModalType === 'sweet' ? 'cyan.100' : 'indigo.100',
+              _dark: {
+                bg: mobileAddModalType === 'yojo' ? 'rose.900/40' : mobileAddModalType === 'sweet' ? 'cyan.900/40' : 'indigo.900/40',
+              },
+            })}
           >
             <CardList
               allYojoCards={allYojoCards}

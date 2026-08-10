@@ -5,6 +5,7 @@ import { CardInfo } from '@/types/card';
 import { allYojoCards, allSweetCards, allPlayableCards } from '@/data/cards';
 import { generateDeckImageDataUrl } from '@/components/DeckImagePreview';
 import Image from 'next/image';
+import { css } from 'styled-system/css';
 
 /**
  * デッキ表示ページ
@@ -88,76 +89,107 @@ export default function DeckViewPage() {
   }, [yojoCardIds, sweetCardIds, playableCardId]);
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className={`container ${css({ px: '4', py: '8' })}`}>
 
-      <div className="max-w-4xl mx-auto">
+      <div className={css({ maxW: '4xl', mx: 'auto' })}>
         {/* 入力フォーム */}
-        <div className="main-background p-6 rounded-lg mb-8">
-          <div className="space-y-6">
+        <div className={`main-background ${css({ p: '6', rounded: 'lg', mb: '8' })}`}>
+          <div className={css({ display: 'flex', flexDirection: 'column', gap: '6' })}>
             <div>
-              <label className="block font-bold mb-2 main-color">
+              <label className={`main-color ${css({ display: 'block', fontWeight: 'bold', mb: '2' })}`}>
                 幼女デッキ（カンマ区切り）
               </label>
               <textarea
-                className="w-full p-3 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className={css({
+                  w: 'full',
+                  p: '3',
+                  borderWidth: '1px',
+                  rounded: 'md',
+                  _focus: { boxShadow: '0 0 0 2px #3b82f6', borderColor: 'transparent' },
+                })}
                 rows={3}
                 value={yojoCardIds}
                 onChange={(e) => setYojoCardIds(e.target.value)}
                 placeholder="例: 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20"
               />
-              <p className="text-sm text-gray-600 mt-1">
+              <p className={css({ fontSize: 'sm', color: 'gray.600', mt: '1' })}>
                 1〜64の数字をカンマ区切りで入力してください（最大20枚）
               </p>
             </div>
 
             <div>
-              <label className="block font-bold mb-2 main-color">
+              <label className={`main-color ${css({ display: 'block', fontWeight: 'bold', mb: '2' })}`}>
                 お菓子デッキ（カンマ区切り）
               </label>
               <textarea
-                className="w-full p-3 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className={css({
+                  w: 'full',
+                  p: '3',
+                  borderWidth: '1px',
+                  rounded: 'md',
+                  _focus: { boxShadow: '0 0 0 2px #3b82f6', borderColor: 'transparent' },
+                })}
                 rows={2}
                 value={sweetCardIds}
                 onChange={(e) => setSweetCardIds(e.target.value)}
                 placeholder="例: 1,2,3,4,5,6,7,8,9,10"
               />
-              <p className="text-sm text-gray-600 mt-1">
+              <p className={css({ fontSize: 'sm', color: 'gray.600', mt: '1' })}>
                 お菓子カードの番号をカンマ区切りで入力してください（最大10枚）
               </p>
             </div>
 
             <div>
-              <label className="block font-bold mb-2 main-color">
+              <label className={`main-color ${css({ display: 'block', fontWeight: 'bold', mb: '2' })}`}>
                 プレイアブルカード（任意）
               </label>
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
+              <div className={css({
+                display: 'grid',
+                gridTemplateColumns: 'repeat(2, minmax(0, 1fr))',
+                sm: { gridTemplateColumns: 'repeat(3, minmax(0, 1fr))' },
+                md: { gridTemplateColumns: 'repeat(4, minmax(0, 1fr))' },
+                lg: { gridTemplateColumns: 'repeat(5, minmax(0, 1fr))' },
+                gap: '3',
+              })}>
                 {allPlayableCards.map((card) => (
                   <div
                     key={card.id}
                     onClick={() => setPlayableCardId(playableCardId === card.id ? '' : card.id)}
-                    className={`cursor-pointer rounded-lg overflow-hidden transition-all duration-200 hover:scale-105 ${
-                      playableCardId === card.id
-                        ? 'ring-4 ring-blue-500 shadow-lg'
-                        : 'ring-2 ring-gray-300 hover:ring-gray-400'
-                    }`}
+                    className={css({
+                      cursor: 'pointer',
+                      rounded: 'lg',
+                      overflow: 'hidden',
+                      transitionProperty: 'background-size, border-color',
+                      transitionDuration: '300ms',
+                      borderWidth: '2px',
+                      borderColor: playableCardId === card.id ? '#3b82f6' : '#d1d5db',
+                      backgroundImage: 'radial-gradient(circle, rgba(0,0,0,0.06) 0%, transparent 70%)',
+                      backgroundSize: '0% 0%',
+                      backgroundPosition: 'center',
+                      backgroundRepeat: 'no-repeat',
+                      _hover: {
+                        backgroundSize: '200% 200%',
+                        borderColor: playableCardId === card.id ? '#3b82f6' : '#9ca3af',
+                      },
+                    })}
                   >
-                    <div className="relative aspect-[220/320]">
+                    <div className={css({ position: 'relative', aspectRatio: '220/320' })}>
                       <Image
                         src={card.imageUrl}
                         alt={card.name}
                         fill
                         sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, (max-width: 1024px) 25vw, 20vw"
-                        className="object-cover"
+                        className={css({ objectFit: 'cover' })}
                         unoptimized
                       />
                     </div>
-                    <div className="p-2 bg-white text-center">
-                      <p className="text-xs font-medium truncate">{card.name}</p>
+                    <div className={css({ p: '2', bg: 'white', textAlign: 'center' })}>
+                      <p className={css({ fontSize: 'xs', fontWeight: 'medium', truncate: true })}>{card.name}</p>
                     </div>
                   </div>
                 ))}
               </div>
-              <p className="text-sm text-gray-600 mt-2">
+              <p className={css({ fontSize: 'sm', color: 'gray.600', mt: '2' })}>
                 カードをクリックして選択してください。もう一度クリックすると選択解除されます。
               </p>
             </div>
@@ -166,38 +198,38 @@ export default function DeckViewPage() {
 
         {/* エラー表示 */}
         {error && (
-          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+          <div className={css({ bg: 'red.100', borderWidth: '1px', borderColor: 'red.400', color: 'red.700', px: '4', py: '3', rounded: 'sm', mb: '4' })}>
             {error}
           </div>
         )}
 
         {/* ローディング表示 */}
         {loading && (
-          <div className="text-center py-12">
-            <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
-            <p className="mt-4 text-gray-600">デッキ画像を生成中...</p>
+          <div className={css({ textAlign: 'center', py: '12' })}>
+            <div className={css({ display: 'inline-block', animation: 'spin', rounded: 'full', h: '12', w: '12', borderBottomWidth: '2px', borderColor: 'blue.500' })}></div>
+            <p className={css({ mt: '4', color: 'gray.600' })}>デッキ画像を生成中...</p>
           </div>
         )}
 
         {/* 生成された画像の表示 */}
         {!loading && deckImage && (
-          <div className="main-background p-6 rounded-lg">
-            <h2 className="text-xl font-bold mb-4 main-color">生成されたデッキ画像</h2>
-            <div className="mb-4">
-              <Image 
-                src={deckImage} 
-                alt="デッキ画像" 
-                width={1920} 
+          <div className={`main-background ${css({ p: '6', rounded: 'lg' })}`}>
+            <h2 className={`main-color ${css({ fontSize: 'xl', fontWeight: 'bold', mb: '4' })}`}>生成されたデッキ画像</h2>
+            <div className={css({ mb: '4' })}>
+              <Image
+                src={deckImage}
+                alt="デッキ画像"
+                width={1920}
                 height={1080}
-                className="w-full h-auto rounded-lg shadow-lg" 
+                className={css({ w: 'full', h: 'auto', rounded: 'lg', boxShadow: 'lg' })}
                 unoptimized
               />
             </div>
-            <div className="flex justify-center">
+            <div className={css({ display: 'flex', justifyContent: 'center' })}>
               <a
                 href={deckImage}
                 download="deck.png"
-                className="btn-primary inline-block px-6 py-3 rounded-lg font-bold"
+                className={`btn-primary ${css({ display: 'inline-block' })}`}
               >
                 画像をダウンロード
               </a>
@@ -207,8 +239,8 @@ export default function DeckViewPage() {
 
         {/* 入力がない場合の表示 */}
         {!loading && !deckImage && !yojoCardIds && !sweetCardIds && !playableCardId && (
-          <div className="text-center py-12 text-gray-500">
-            <p className="text-lg">カードコードを入力すると自動で画像が生成されます</p>
+          <div className={css({ textAlign: 'center', py: '12', color: 'gray.500' })}>
+            <p className={css({ fontSize: 'lg' })}>カードコードを入力すると自動で画像が生成されます</p>
           </div>
         )}
       </div>

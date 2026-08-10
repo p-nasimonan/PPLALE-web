@@ -10,6 +10,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import {signInWithPopup, GoogleAuthProvider, signOut, User } from 'firebase/auth';
 import Image from 'next/image';
 import { auth } from '@/lib/firebase';
+import { css } from 'styled-system/css';
 
 const provider = new GoogleAuthProvider();
 
@@ -86,7 +87,31 @@ const FireBaseLogin: React.FC<FireBaseLoginProps> = () => {
     return (
       <button
         onClick={login_with_google}
-        className="flex items-center justify-center gap-2 truncate rounded-md border border-gray-300 bg-white px-4 py-2 text-gray-800 shadow-sm transition-colors hover:bg-gray-100 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100 dark:hover:bg-gray-700"
+        className={css({
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          gap: '2',
+          overflow: 'hidden',
+          textOverflow: 'ellipsis',
+          whiteSpace: 'nowrap',
+          rounded: 'md',
+          borderWidth: '1px',
+          borderColor: 'gray.300',
+          bg: 'white',
+          px: '4',
+          py: '2',
+          color: 'gray.800',
+          boxShadow: 'xs',
+          transitionProperty: 'color, background-color, border-color, text-decoration-color, fill, stroke',
+          _hover: { bg: 'gray.100' },
+          _dark: {
+            borderColor: 'gray.600',
+            bg: 'gray.800',
+            color: 'gray.100',
+            _hover: { bg: 'gray.700' },
+          },
+        })}
       >
         <svg width="20" height="20" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
           <path 
@@ -112,34 +137,75 @@ const FireBaseLogin: React.FC<FireBaseLoginProps> = () => {
   }
 
   return (
-    <div className="relative" ref={menuRef}>
-      <button 
-        onClick={toggle_menu} 
-        className="flex items-center justify-center rounded-full overflow-hidden focus:outline-none"
+    <div className={css({ position: 'relative' })} ref={menuRef}>
+      <button
+        onClick={toggle_menu}
+        className={css({
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          rounded: 'full',
+          overflow: 'hidden',
+          _focus: { outline: 'none' },
+        })}
       >
         {user.photoURL ? (
-          <Image 
-            src={user.photoURL} 
-            alt={user.displayName ?? "👤"} 
-            width={40} 
-            height={40} 
-            className="rounded-full"
+          <Image
+            src={user.photoURL}
+            alt={user.displayName ?? "👤"}
+            width={40}
+            height={40}
+            className={css({ rounded: 'full' })}
           />
         ) : (
-          <div className="w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center text-white">
+          <div className={css({ w: '10', h: '10', bg: 'gray.300', rounded: 'full', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white' })}>
             {user.displayName?.[0] || user.email?.[0] || '?'}
           </div>
         )}
       </button>
 
       {menu_open && (
-        <div className="absolute right-0 z-10 mt-2 w-48 rounded-md border border-gray-200 bg-white py-1 shadow-lg dark:border-gray-700 dark:bg-gray-800">
-          <div className="border-b border-gray-100 px-4 py-2 text-sm text-gray-700 dark:border-gray-700 dark:text-gray-200">
+        <div
+          className={css({
+            position: 'absolute',
+            right: '0',
+            zIndex: '10',
+            mt: '2',
+            w: '48',
+            rounded: 'md',
+            borderWidth: '1px',
+            borderColor: 'gray.200',
+            bg: 'white',
+            py: '1',
+            boxShadow: 'lg',
+            _dark: { borderColor: 'gray.700', bg: 'gray.800' },
+          })}
+        >
+          <div
+            className={css({
+              borderBottomWidth: '1px',
+              borderColor: 'gray.100',
+              px: '4',
+              py: '2',
+              fontSize: 'sm',
+              color: 'gray.700',
+              _dark: { borderColor: 'gray.700', color: 'gray.200' },
+            })}
+          >
             {user.displayName || user.email}
           </div>
-          <button 
+          <button
             onClick={logout}
-            className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700"
+            className={css({
+              w: 'full',
+              px: '4',
+              py: '2',
+              textAlign: 'left',
+              fontSize: 'sm',
+              color: 'gray.700',
+              _hover: { bg: 'gray.100' },
+              _dark: { color: 'gray.200', _hover: { bg: 'gray.700' } },
+            })}
           >
             ログアウト
           </button>

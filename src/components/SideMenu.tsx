@@ -4,6 +4,22 @@ import React, { useRef, useEffect } from 'react';
 import { useSettings } from '@/app/SideMenuProvider';
 import { useDarkMode } from '@/app/DarkModeProvider';
 import { usePathname } from 'next/navigation';
+import { css } from 'styled-system/css';
+
+function themeToggleButtonClass(isActive: boolean) {
+  return css({
+    rounded: 'md',
+    px: '2',
+    py: '1',
+    fontSize: 'xs',
+    fontWeight: 'semibold',
+    transitionProperty: 'color, background-color, border-color, text-decoration-color, fill, stroke',
+    bg: isActive ? 'blue.600' : undefined,
+    color: isActive ? 'white' : 'gray.700',
+    _hover: isActive ? undefined : { bg: 'gray.100' },
+    _dark: isActive ? undefined : { color: 'gray.300', _hover: { bg: 'gray.800' } },
+  });
+}
 
 export default function SettingsButton() {
   const { 
@@ -35,21 +51,66 @@ export default function SettingsButton() {
   }, [showSettings, setShowSettings]);
 
   return (
-    <div className="relative" ref={menuRef}>
+    <div className={css({ position: 'relative' })} ref={menuRef}>
       <button
-        className="rounded-md border border-gray-300 bg-white px-3 py-1 text-2xl text-gray-800 shadow-sm transition-transform duration-200 hover:scale-110 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100"
+        className={css({
+          rounded: 'md',
+          borderWidth: '1px',
+          borderColor: 'gray.300',
+          bg: 'white',
+          px: '3',
+          py: '1',
+          fontSize: '2xl',
+          color: 'gray.800',
+          transitionProperty: 'background-size, background-color',
+          transitionDuration: '300ms',
+          backgroundImage: 'radial-gradient(circle, rgba(0,0,0,0.06) 0%, transparent 70%)',
+          backgroundSize: '0% 0%',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat',
+          _hover: { backgroundSize: '200% 200%' },
+          _dark: { borderColor: 'gray.600', bg: 'gray.800', color: 'gray.100' },
+        })}
         onClick={() => setShowSettings(!showSettings)}
         aria-label="メニュー"
       >
         {showSettings ? '✕' : '☰'}
       </button>
       {showSettings && (
-        <div className="absolute right-0 z-50 mt-2 w-56 rounded-lg border border-gray-200 bg-white p-4 text-gray-900 shadow-lg dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100">
-          <div className="space-y-4">
+        <div
+          className={css({
+            position: 'absolute',
+            right: '0',
+            zIndex: '50',
+            mt: '2',
+            w: '56',
+            rounded: 'lg',
+            borderWidth: '1px',
+            borderColor: 'gray.200',
+            bg: 'white',
+            p: '4',
+            color: 'gray.900',
+            boxShadow: 'lg',
+            _dark: { borderColor: 'gray.700', bg: 'gray.800', color: 'gray.100' },
+          })}
+        >
+          <div className={css({ display: 'flex', flexDirection: 'column', gap: '4' })}>
             {/* テーマ設定 */}
-            <div className="space-y-2">
-              <p className="text-sm font-medium">テーマ</p>
-              <div className="grid grid-cols-3 gap-1 rounded-lg border border-gray-200 bg-gray-50 p-1 dark:border-gray-700 dark:bg-gray-900">
+            <div className={css({ display: 'flex', flexDirection: 'column', gap: '2' })}>
+              <p className={css({ fontSize: 'sm', fontWeight: 'medium' })}>テーマ</p>
+              <div
+                className={css({
+                  display: 'grid',
+                  gridTemplateColumns: 'repeat(3, 1fr)',
+                  gap: '1',
+                  rounded: 'lg',
+                  borderWidth: '1px',
+                  borderColor: 'gray.200',
+                  bg: 'gray.50',
+                  p: '1',
+                  _dark: { borderColor: 'gray.700', bg: 'gray.900' },
+                })}
+              >
                 {[
                   { key: 'system', label: 'System' },
                   { key: 'light', label: 'Light' },
@@ -60,11 +121,7 @@ export default function SettingsButton() {
                     <button
                       key={mode.key}
                       onClick={() => setThemeMode(mode.key as 'system' | 'light' | 'dark')}
-                      className={`rounded-md px-2 py-1 text-xs font-semibold transition-colors ${
-                        isActive
-                          ? 'bg-blue-600 text-white'
-                          : 'text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800'
-                      }`}
+                      className={themeToggleButtonClass(isActive)}
                       aria-pressed={isActive}
                     >
                       {mode.label}
@@ -75,39 +132,79 @@ export default function SettingsButton() {
             </div>
 
             {/* 2枚制限設定 */}
-            <div className="flex items-center gap-2">
+            <div className={css({ display: 'flex', alignItems: 'center', gap: '2' })}>
               <input
                 type="checkbox"
                 id="twoCardLimit"
                 checked={isTwoCardLimit}
                 onChange={(e) => setIsTwoCardLimit(e.target.checked)}
-                className="form-checkbox h-4 w-4 text-blue-600"
+                className={css({ h: '4', w: '4', color: 'blue.600' })}
               />
-              <label htmlFor="twoCardLimit" className="text-sm">
+              <label htmlFor="twoCardLimit" className={css({ fontSize: 'sm' })}>
                 2枚制限
               </label>
             </div>
-            <p className="text-xs text-gray-600 dark:text-gray-300">
+            <p className={css({ fontSize: 'xs', color: 'gray.600', _dark: { color: 'gray.300' } })}>
               {isTwoCardLimit ? "同じカードは最大2枚まで" : "同じカードを何枚でも追加可能"}
             </p>
 
             {/* エクスポート/インポートボタン */}
             {!is2PickPage && !isMainPage ?(
-            <div className="flex flex-col gap-2">
+            <div className={css({ display: 'flex', flexDirection: 'column', gap: '2' })}>
               <button
-                className="flex w-full items-center justify-center gap-2 rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white transition-transform duration-200 hover:scale-105 hover:bg-blue-700"
+                className={css({
+                  display: 'flex',
+                  w: 'full',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '2',
+                  rounded: 'md',
+                  bg: 'blue.600',
+                  px: '3',
+                  py: '2',
+                  fontSize: 'sm',
+                  fontWeight: 'semibold',
+                  color: 'white',
+                  transitionProperty: 'background-size, background-color',
+                  transitionDuration: '300ms',
+                  backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.2) 0%, transparent 70%)',
+                  backgroundSize: '0% 0%',
+                  backgroundPosition: 'center',
+                  backgroundRepeat: 'no-repeat',
+                  _hover: { backgroundSize: '200% 200%', bg: 'blue.700' },
+                })}
                 onClick={() => window.dispatchEvent(new CustomEvent('exportDeck'))}
               >
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className={css({ w: '5', h: '5' })}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" />
                 </svg>
                 <span>エクスポート</span>
               </button>
               <button
-                className="flex w-full items-center justify-center gap-2 rounded-md bg-emerald-600 px-3 py-2 text-sm font-semibold text-white transition-transform duration-200 hover:scale-105 hover:bg-emerald-700"
+                className={css({
+                  display: 'flex',
+                  w: 'full',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '2',
+                  rounded: 'md',
+                  bg: 'emerald.600',
+                  px: '3',
+                  py: '2',
+                  fontSize: 'sm',
+                  fontWeight: 'semibold',
+                  color: 'white',
+                  transitionProperty: 'background-size, background-color',
+                  transitionDuration: '300ms',
+                  backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.2) 0%, transparent 70%)',
+                  backgroundSize: '0% 0%',
+                  backgroundPosition: 'center',
+                  backgroundRepeat: 'no-repeat',
+                  _hover: { backgroundSize: '200% 200%', bg: 'emerald.700' },
+                })}
                 onClick={() => window.dispatchEvent(new CustomEvent('importDeck'))}
               >
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className={css({ w: '5', h: '5' })}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5m-13.5-9L12 3m0 0 4.5 4.5M12 3v13.5" />
                 </svg>
                 <span>インポート</span>
@@ -121,4 +218,4 @@ export default function SettingsButton() {
       )}
     </div>
   );
-} 
+}

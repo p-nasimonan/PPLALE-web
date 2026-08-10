@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { useScroll, useTransform } from 'framer-motion';
 import { HeroSection, ExplanationSection, Footer } from '@/components/sections';
+import { css } from 'styled-system/css';
 
 export default function Home() {
   const { scrollY } = useScroll();
@@ -25,7 +26,7 @@ export default function Home() {
   }, []);
 
   return (
-    <main className="min-h-screen w-full relative overflow-x-hidden">
+    <main className={css({ minH: 'screen', w: 'full', position: 'relative', overflowX: 'hidden' })}>
       {/* ヒーローセクション */}
       <HeroSection cardsYPosition={cardsYPosition} isMounted={isMounted} />
 

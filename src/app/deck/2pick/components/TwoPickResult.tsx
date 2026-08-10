@@ -15,6 +15,7 @@ import { User } from 'firebase/auth';
 import DeckImagePreview from '@/components/DeckImagePreview';
 import JungaryCopy from '@/svgs/jungary-copy.svg';
 import Link from 'next/link';
+import { css } from 'styled-system/css';
 
 /**
  * 2Pick結果表示コンポーネントのProps
@@ -86,8 +87,8 @@ const TwoPickResult: React.FC<TwoPickResultProps> = ({
   };
 
   return (
-    <div className="text-center relative">
-      <div className="absolute top-0 right-20">
+    <div className={css({ textAlign: 'center', position: 'relative' })}>
+      <div className={css({ position: 'absolute', top: '0', right: '20' })}>
         <ShareButtons
           share_url={window.location.href}
           share_text="2pickでデッキを作成しました！
@@ -98,11 +99,11 @@ const TwoPickResult: React.FC<TwoPickResultProps> = ({
           playableCard={playableCard}
         />
       </div>
-      <h2 className="text-2xl font-bold mb-4">デッキ構築結果</h2>
-      <p className="mb-4">構築したデッキをシェアしよう</p>
+      <h2 className={css({ fontSize: '2xl', fontWeight: 'bold', mb: '4' })}>デッキ構築結果</h2>
+      <p className={css({ mb: '4' })}>構築したデッキをシェアしよう</p>
 
       {/* デッキ画像プレビュー */}
-      <div className="w-1/2 mx-auto mb-4">
+      <div className={css({ w: '1/2', mx: 'auto', mb: '4' })}>
       <DeckImagePreview
         yojoDeck={yojoDeck}
         sweetDeck={sweetDeck}
@@ -113,36 +114,36 @@ const TwoPickResult: React.FC<TwoPickResultProps> = ({
       </div>
       
       {/* エクスポート機能 */}
-      <div className="flex items-center justify-center gap-10 mb-6">
-        <div className="mb-4">
-          <h4 className="font-bold mb-2">幼女デッキ</h4>
-          <div className="bg-gray-100 p-3 rounded border border-gray-300 overflow-auto max-h-40 mb-2">
-            <pre className="text-sm">{yojoDeck.map(card => extractNumber(card.id)).join(',')}</pre>
+      <div className={css({ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10', mb: '6' })}>
+        <div className={css({ mb: '4' })}>
+          <h4 className={css({ fontWeight: 'bold', mb: '2' })}>幼女デッキ</h4>
+          <div className={css({ bg: 'gray.100', p: '3', rounded: 'sm', borderWidth: '1px', borderColor: 'gray.300', overflow: 'auto', maxH: '40', mb: '2' })}>
+            <pre className={css({ fontSize: 'sm' })}>{yojoDeck.map(card => extractNumber(card.id)).join(',')}</pre>
           </div>
           <button
-            className="btn-primary mb-2"
+            className={`btn-primary ${css({ mb: '2' })}`}
             onClick={handleCopyYojoDeck}
           >
             {yojoCopied ? 'コピーしました！' : '幼女デッキをコピー'}
           </button>
         </div>
-        
-        <div className="mb-4">
-          <h4 className="font-bold mb-2">お菓子デッキ</h4>
-          <div className="bg-gray-100 p-3 rounded border border-gray-300 overflow-auto max-h-40 mb-2">
-            <pre className="text-sm">{sweetDeck.map(card => extractNumber(card.id)).join(',')}</pre>
+
+        <div className={css({ mb: '4' })}>
+          <h4 className={css({ fontWeight: 'bold', mb: '2' })}>お菓子デッキ</h4>
+          <div className={css({ bg: 'gray.100', p: '3', rounded: 'sm', borderWidth: '1px', borderColor: 'gray.300', overflow: 'auto', maxH: '40', mb: '2' })}>
+            <pre className={css({ fontSize: 'sm' })}>{sweetDeck.map(card => extractNumber(card.id)).join(',')}</pre>
           </div>
           <button
-            className="btn-primary mb-2 flex items-center justify-center gap-2"
+            className={`btn-primary ${css({ mb: '2', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '2' })}`}
             onClick={handleCopySweetDeck}
           >
-            <JungaryCopy width={24} height={24} className="inline-block" />
+            <JungaryCopy width={24} height={24} className={css({ display: 'inline-block' })} />
             {sweetCopied ? 'コピーしました！' : 'コピー'}
           </button>
         </div>
       </div>
 
-      <div className="flex flex-col items-center gap-4 mb-4 mt-10">
+      <div className={css({ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4', mb: '4', mt: '10' })}>
         {user ? (
           <button
             className="btn-primary"
@@ -158,7 +159,7 @@ const TwoPickResult: React.FC<TwoPickResultProps> = ({
             ログインしてデッキを保存
           </button>
         )}
-        <div className="flex items-center gap-4">
+        <div className={css({ display: 'flex', alignItems: 'center', gap: '4' })}>
         <button
           className="btn-secondary"
           onClick={onRestart}
