@@ -10,9 +10,9 @@
 
 import React, { useState } from 'react';
 import { CardInfo } from '@/types/card';
-import ShareButtons from '@/components/ShareButtons';
+import ShareButtons from '@/components/ui/ShareButtons';
 import { User } from 'firebase/auth';
-import DeckImagePreview from '@/components/DeckImagePreview';
+import DeckImagePreview from '@/components/deck/DeckImagePreview';
 import JungaryCopy from '@/svgs/jungary-copy.svg';
 import Link from 'next/link';
 import { css } from 'styled-system/css';

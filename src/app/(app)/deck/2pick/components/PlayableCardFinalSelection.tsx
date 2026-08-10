@@ -11,7 +11,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { CardInfo } from '@/types/card';
-import Card from '@/components/Card';
+import Card from '@/components/card/Card';
 import { css } from 'styled-system/css';
 import { button } from 'styled-system/recipes';
 

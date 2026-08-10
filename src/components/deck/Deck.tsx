@@ -7,7 +7,7 @@
 
 import React, { useState, useMemo } from 'react';
 import { CardInfo, CardType } from '@/types/card';
-import Card from './Card';
+import Card from '@/components/card/Card';
 import { css } from 'styled-system/css';
 
 interface DeckProps {

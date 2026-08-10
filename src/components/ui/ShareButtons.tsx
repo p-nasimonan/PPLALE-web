@@ -6,7 +6,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import Image from 'next/image';
 import { CardInfo } from '@/types/card';
-import DeckImagePreview from './DeckImagePreview';
+import DeckImagePreview from '@/components/deck/DeckImagePreview';
 import { css } from 'styled-system/css';
 
 interface ShareButtonsProps {

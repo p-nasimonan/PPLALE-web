@@ -2,8 +2,8 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import SettingsButton from '@/components/SideMenu';
-import FireBaseLogin from '@/components/FireBaseLogin';
+import SettingsButton from '@/components/ui/SideMenu';
+import FireBaseLogin from '@/components/ui/FireBaseLogin';
 import { css } from 'styled-system/css';
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
@@ -35,7 +35,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
           </div>
         </div>
       </header>
-      <main className={css({ pt: '16', px: '4' })}>
+      <main>
         {children}
       </main>
     </>

@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { CardInfo } from '@/types/card';
-import Deck from '@/components/Deck';
+import Deck from '@/components/deck/Deck';
 import { css } from 'styled-system/css';
 
 /**

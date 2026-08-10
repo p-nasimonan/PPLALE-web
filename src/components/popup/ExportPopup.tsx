@@ -9,8 +9,8 @@
 
 import React, { useState } from 'react';
 import { CardInfo } from '@/types/card';
-import Card from './Card';
-import DeckImagePreview from './DeckImagePreview';
+import Card from '@/components/card/Card';
+import DeckImagePreview from '@/components/deck/DeckImagePreview';
 import { css } from 'styled-system/css';
 
 /**

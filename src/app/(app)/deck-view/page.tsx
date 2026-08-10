@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { CardInfo } from '@/types/card';
 import { allYojoCards, allSweetCards, allPlayableCards } from '@/data/cards';
-import { generateDeckImageDataUrl } from '@/components/DeckImagePreview';
+import { generateDeckImageDataUrl } from '@/components/deck/DeckImagePreview';
 import Image from 'next/image';
 import { css } from 'styled-system/css';
 import { button } from 'styled-system/recipes';

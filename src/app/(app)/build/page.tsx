@@ -7,7 +7,7 @@ import { collection, getDocs, query, orderBy, limit, doc, setDoc, deleteDoc } fr
 import { db } from '@/lib/firebase';
 import { useAuth } from '@/lib/auth';
 import Image from 'next/image';
-import { generateDeckImageDataUrl } from '@/components/DeckImagePreview';
+import { generateDeckImageDataUrl } from '@/components/deck/DeckImagePreview';
 import { allYojoCards, allSweetCards, allPlayableCards } from '@/data/cards';
 import { nanoid } from 'nanoid';
 import { css } from 'styled-system/css';
