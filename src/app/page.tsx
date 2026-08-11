@@ -28,7 +28,7 @@ export default function Home() {
   return (
     <main className={css({ minH: 'screen', w: 'full', position: 'relative', overflowX: 'hidden' })}>
       {/* ヒーローセクション */}
-      <HeroSection cardsYPosition={cardsYPosition} />
+      <HeroSection cardsYPosition={cardsYPosition} isMounted={isMounted} />
 
       {/* 解説セクション */}
       {isMounted && (

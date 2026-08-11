@@ -41,7 +41,7 @@ const ShareButtons: React.FC<ShareButtonsProps> = ({
   const getLocalShareUrl = () => {
     if (!isLocal) return share_url;
 
-    const baseUrl = typeof window !== 'undefined' ? window.location.origin : '';
+    const baseUrl = window.location.origin;
     const params = new URLSearchParams();
 
     // 幼女デッキのIDをカンマ区切りで追加
