@@ -26,7 +26,7 @@ const personalTournaments = [
 
 export default function TournamentPage() {
   return (
-    <main className={css({ minH: '100vh', w: 'full', py: '12', px: '4' })}>
+    <main className={css({ minH: '100vh', w: 'full', pb: '12', px: '4' })}>
       <div className="container">
         <div className={css({ textAlign: 'center', mb: '12' })}>
           <h1 className={`${darumadrop.className} ${css({ fontSize: '4xl', md: { fontSize: '5xl' }, mb: '4' })}`}>

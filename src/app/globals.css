@@ -35,8 +35,8 @@ option { background-color: var(--colors-background-color); color: var(--colors-t
 input { background-color: var(--colors-background-color); color: var(--colors-text-color); }
 textarea { background-color: var(--colors-background-color); color: var(--colors-text-color); }
 
-/* ヘッダースタイル */
-header {
+/* ヘッダースタイル（ページ内のバナーヘッダー用。クラスで指定して使用） */
+.page-header {
   background-image: url('/images/baner.webp');
   background-size: cover;
   background-position: center;
@@ -47,7 +47,7 @@ header {
   border-radius: var(--radii-border-radius);
   margin-bottom: 2rem;
 }
-header h1 { font-size: 1.5rem; font-weight: 600; color: white; }
+.page-header h1 { font-size: 1.5rem; font-weight: 600; color: white; }
 
 label { color: var(--colors-text-color); }
 
@@ -59,7 +59,7 @@ pre {
   background-repeat: no-repeat;
 }
 
-header::before {
+.page-header::before {
   content: '';
   position: absolute;
   top: 0; left: 0; right: 0; bottom: 0;
@@ -67,7 +67,7 @@ header::before {
   border-radius: var(--radii-border-radius);
   z-index: 0;
 }
-header > * { position: relative; z-index: 1; }
+.page-header > * { position: relative; z-index: 1; }
 
 /* Button styles are now handled by Panda CSS button/iconButton recipes. */
 

@@ -77,7 +77,7 @@ export default function DeckViewPage() {
   }, [yojoCardIds, sweetCardIds, playableCardId]);
 
   return (
-    <div className={`container ${css({ px: '4', py: '8' })}`}>
+    <div className={`container ${css({ px: '4', pb: '8' })}`}>
 
       <div className={css({ maxW: '4xl', mx: 'auto' })}>
         <div className={`main-background ${css({ p: '6', rounded: 'lg', mb: '8' })}`}>

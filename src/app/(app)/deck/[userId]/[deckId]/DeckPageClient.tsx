@@ -421,11 +421,11 @@ export default function DeckPageClient({
   };
 
   if (isLoading) {
-    return <div className={css({ mx: 'auto', maxW: '1700px', p: '4', color: 'gray.800', _dark: { color: 'gray.100' } })}>読み込み中...</div>;
+    return <div className={css({ mx: 'auto', maxW: '1700px', px: '4', pb: '4', color: 'gray.800', _dark: { color: 'gray.100' } })}>読み込み中...</div>;
   }
 
   if (error) {
-    return <div className={css({ mx: 'auto', maxW: '1700px', p: '4', color: 'red.500' })}>{error}</div>;
+    return <div className={css({ mx: 'auto', maxW: '1700px', px: '4', pb: '4', color: 'red.500' })}>{error}</div>;
   }
 
   const deckViewTabs: TabDefinition[] = [
@@ -459,7 +459,7 @@ export default function DeckPageClient({
   };
 
   return (
-    <div className={css({ mx: 'auto', maxW: '1700px', p: '2', color: 'gray.900', _dark: { color: 'gray.100' } })}>
+    <div className={css({ mx: 'auto', maxW: '1700px', px: '2', pb: '2', color: 'gray.900', _dark: { color: 'gray.100' } })}>
       <div className={css({ display: 'flex', alignItems: 'center', mb: '5' })}>
         {isEditing ? (
           <div className={css({ display: 'flex', alignItems: 'center', gap: '2' })}>

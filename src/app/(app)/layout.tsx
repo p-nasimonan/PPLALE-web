@@ -35,7 +35,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
           </div>
         </div>
       </header>
-      <main>
+      <main className={css({ pt: '16' })}>
         {children}
       </main>
     </>
