@@ -138,7 +138,7 @@ const iconButtonRecipe = defineRecipe({
 });
 
 export default defineConfig({
-  preflight: false,
+  preflight: true,
   include: ['./src/app/**/*.{ts,tsx}', './src/components/**/*.{ts,tsx}'],
   exclude: [],
   hash: { cssVar: false, className: true },
