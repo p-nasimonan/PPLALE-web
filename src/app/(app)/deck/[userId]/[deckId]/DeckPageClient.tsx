@@ -1,26 +1,18 @@
 'use client';
 
-import React, { useState, useEffect, useCallback } from 'react';
-import { useRouter } from 'next/navigation';
+import React, { useState } from 'react';
 import { CardInfo } from '@/types/card';
 import { allYojoCards, allSweetCards, allPlayableCards } from '@/data/cards';
-import { doc, setDoc } from 'firebase/firestore';
-import { db } from '@/lib/firebase';
-import { validateDeckData } from '@/lib/schema';
-import CardList from '@/components/card/CardList';
-import { useAuth } from '@/lib/auth';
 import ExportPopup from '@/components/popup/ExportPopup';
 import ImportPopup from '@/components/popup/ImportPopup';
-import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
-import { auth } from '@/lib/firebase';
 import ShareButtons from '@/components/ui/ShareButtons';
 import { useSettings } from '@/app/SettingsProvider';
 import DeckList from '@/components/deck/DeckList';
-import TabButtons, { TabDefinition } from '@/components/ui/TabButtons';
+import TabButtons from '@/components/ui/TabButtons';
+import CardList from '@/components/card/CardList';
+import CardListPanel, { DECK_VIEW_TABS, DeckCardType } from '@/components/card/CardListPanel';
+import { useDeckPageState } from './useDeckPageState';
 import { css } from 'styled-system/css';
-
-const yojoLimit = 20;
-const sweetLimit = 10;
 
 interface DeckPageClientProps {
   initialDeckName: string | null;
@@ -33,392 +25,40 @@ interface DeckPageClientProps {
   serverDeckId: string; // Passed from server component (params.deckId)
 }
 
-export default function DeckPageClient({ 
-  initialDeckName,
-  initialYojoDeck,
-  initialSweetDeck,
-  initialSelectedPlayableCard,
-  isServerDataAvailable,
-  initialError,
-  serverUserId,
-  serverDeckId,
-}: DeckPageClientProps) {
-  const router = useRouter();
-  const userId = serverUserId;
-  const deckId = serverDeckId;
-
-  const { user } = useAuth();
+export default function DeckPageClient(props: DeckPageClientProps) {
   const { isTwoCardLimit } = useSettings();
-  
-  const [deckName, setDeckName] = useState(initialDeckName || '無名のデッキ');
-  const [isEditing, setIsEditing] = useState(false);
-  const [yojoDeck, setYojoDeck] = useState<CardInfo[]>(initialYojoDeck);
-  const [sweetDeck, setSweetDeck] = useState<CardInfo[]>(initialSweetDeck);
-  const [selectedPlayableCard, setSelectedPlayableCard] = useState<CardInfo | null>(initialSelectedPlayableCard);
-  const [isLoading, setIsLoading] = useState(false); // 初期値はfalseに変更
-  const [error, setError] = useState<string | null>(initialError);
-  const [deckViewActiveTab, setDeckViewActiveTab] = useState<'yojo' | 'sweet' | 'playable'>('yojo');
-  const [showExportPopup, setShowExportPopup] = useState(false);
-  const [showImportPopup, setShowImportPopup] = useState(false);
-  const [isLoaded, setIsLoaded] = useState(isServerDataAvailable); // Firebaseへの自動保存制御用
-  const [isOwner, setIsOwner] = useState(false);
-  const [mobileAddModalType, setMobileAddModalType] = useState<'yojo' | 'sweet' | 'playable' | null>(null);
-  const [currentUrl, setCurrentUrl] = useState('');
 
-  useEffect(() => {
-    setCurrentUrl(window.location.href);
-  }, []);
+  const {
+    userId,
+    deckName,
+    isEditing,
+    setIsEditing,
+    setDeckName,
+    yojoDeck,
+    sweetDeck,
+    selectedPlayableCard,
+    isLoading,
+    error,
+    isOwner,
+    currentUrl,
+    showExportPopup,
+    setShowExportPopup,
+    showImportPopup,
+    setShowImportPopup,
+    handleNameChange,
+    handleLoginAndSave,
+    handleAddCard,
+    handleRemoveFromYojoDeck,
+    handleRemoveFromSweetDeck,
+    handleRemovePlayableCard,
+    handleDragStart,
+    handleDrop,
+    canAddToDeck,
+    handleImportDeck,
+  } = useDeckPageState({ ...props, isTwoCardLimit });
 
-  /**
-   * 現在のデッキ状態でデータ損失が発生しているかチェックする
-   * @returns データ損失の可能性があるかどうか
-   */
-  const checkSignificantDataLoss = useCallback((): boolean => {
-    // 幼女デッキが大幅に削除された場合
-    if (initialYojoDeck.length > 0 && yojoDeck.length < 1) {
-      return true;
-    }
-    
-    // お菓子デッキが大幅に削除された場合
-    if (initialSweetDeck.length > 0 && sweetDeck.length < 1) {
-      return true;
-    }
-    
-    return false;
-  }, [initialYojoDeck, yojoDeck, initialSweetDeck, sweetDeck]);
-
-  useEffect(() => {
-    // サーバーからデータが渡された場合、それを使用
-    setDeckName(initialDeckName || '無名のデッキ');
-    setYojoDeck(initialYojoDeck);
-    setSweetDeck(initialSweetDeck);
-    setSelectedPlayableCard(initialSelectedPlayableCard);
-    setError(initialError);
-    setIsLoaded(isServerDataAvailable);
-    setIsOwner(user ? user.uid === userId || userId === 'local' : userId === 'local');  //ログインしてlocalの共有データを見てもログインしなくても編集可能
-    
-    // userId === 'local' の場合、かつサーバーからのデータロードに失敗した場合のフォールバック
-    if (userId === 'local' && !isServerDataAvailable) {
-      const fetchLocalData = () => {
-        try {
-          setIsLoading(true);
-          setError(null);
-
-          const paramsFromUrl = new URLSearchParams(window.location.search);
-          const yojoIds = paramsFromUrl.get('yojo')?.split(',') || [];
-          const sweetIds = paramsFromUrl.get('sweet')?.split(',') || [];
-          const playableId = paramsFromUrl.get('playable');
-
-          const savedName = localStorage.getItem(`deck_${deckId}_name`);
-          const savedYojo = localStorage.getItem(`deck_${deckId}_yojo`);
-          const savedSweet = localStorage.getItem(`deck_${deckId}_sweet`);
-          const savedPlayable = localStorage.getItem(`deck_${deckId}_playable`);
-
-          if (yojoIds.length > 0 || sweetIds.length > 0 || playableId) {
-            const newYojoDeck: CardInfo[] = yojoIds
-              .map(id => allYojoCards.find(card => card.id === id))
-              .filter((card): card is CardInfo => card !== undefined);
-            const newSweetDeck: CardInfo[] = sweetIds
-              .map(id => allSweetCards.find(card => card.id === id))
-              .filter((card): card is CardInfo => card !== undefined);
-            const newPlayableCard = playableId
-              ? allPlayableCards.find(card => card.id === playableId) || null
-              : null;
-
-            setYojoDeck(newYojoDeck);
-            setSweetDeck(newSweetDeck);
-            setSelectedPlayableCard(newPlayableCard);
-            setDeckName('共有されたデッキ');
-          } else if(savedName || savedYojo || savedSweet || savedPlayable){
-            setDeckName(savedName || '無名のデッキ');
-            setYojoDeck(savedYojo ? JSON.parse(savedYojo) : []);
-            setSweetDeck(savedSweet ? JSON.parse(savedSweet) : []);
-            setSelectedPlayableCard(savedPlayable ? JSON.parse(savedPlayable) : null);
-          }
-        } catch (e) {
-          console.error("ローカルデータの読み込みに失敗:", e);
-          setError("ローカルデータの読み込みに失敗しました");
-        } finally {
-          setIsLoading(false);
-          setIsLoaded(true); // ローカルデータロード後、isLoadedをtrueに
-        }
-      };
-      fetchLocalData();
-    } else {
-      // サーバーデータが利用可能な場合、またはローカルユーザーでない場合はローディングをfalseにする
-      setIsLoading(false);
-    }
-  }, [initialDeckName, initialYojoDeck, initialSweetDeck, initialSelectedPlayableCard, isServerDataAvailable, initialError, userId, deckId, router, isOwner, user]);
-
-  useEffect(() => {
-    const handleExport = () => setShowExportPopup(true);
-    const handleImport = () => setShowImportPopup(true);
-
-    window.addEventListener('exportDeck', handleExport);
-    window.addEventListener('importDeck', handleImport);
-
-    return () => {
-      window.removeEventListener('exportDeck', handleExport);
-      window.removeEventListener('importDeck', handleImport);
-    };
-  }, []);
-
-  // デッキの変更をローカルストレージに保存 (localユーザーの場合)
-  useEffect(() => {
-    if (userId === 'local') {
-      localStorage.setItem(`deck_${deckId}_yojo`, JSON.stringify(yojoDeck));
-    }
-  }, [yojoDeck, deckId, userId]);
-
-  useEffect(() => {
-    if (userId === 'local') {
-      localStorage.setItem(`deck_${deckId}_sweet`, JSON.stringify(sweetDeck));
-    }
-  }, [sweetDeck, deckId, userId]);
-
-  useEffect(() => {
-    if (userId === 'local') {
-      localStorage.setItem(`deck_${deckId}_playable`, JSON.stringify(selectedPlayableCard));
-    }
-  }, [selectedPlayableCard, deckId, userId]);
-
-  // Firebaseへの保存
-  useEffect(() => {
-    if (!isLoaded) return; // データロードが終わるまで保存しない
-    if (userId === 'local' || !user || user.uid !== userId) return; // ローカルユーザーまたは非オーナーは保存しない
-
-    const saveToFirebase = async () => {
-      try {
-        const deckRef = doc(db, 'users', userId, 'decks', deckId);
-
-        // データ損失の可能性をチェック
-        const hasSignificantDataLoss = checkSignificantDataLoss();
-        if (hasSignificantDataLoss) {
-          const confirmed = showDataLossWarning(
-            `デッキの変更により、多くのカードが削除されます。\n\n` +
-            `この変更を保存しますか？\n\n` +
-            `保存後は元に戻すことができません。`
-          );
-          if (!confirmed) {
-            console.log('ユーザーがデータ損失警告でキャンセルしました');
-            return;
-          }
-        }
-
-        // build doc data and validate before saving
-        const docData = {
-          name: deckName,
-          yojoDeckIds: yojoDeck.map(card => card.id),
-          sweetDeckIds: sweetDeck.map(card => card.id),
-          playableCardId: selectedPlayableCard?.id || null,
-          updatedAt: new Date()
-        };
-        try {
-          validateDeckData(docData);
-        } catch (e) {
-          console.error('Deck validation failed, aborting save:', e);
-          alert('デッキの保存に失敗しました: データが不正です');
-          return;
-        }
-
-        await setDoc(deckRef, docData, { merge: true });
-      } catch (error) {
-        console.error('デッキの更新に失敗しました:', error);
-        if (error instanceof Error) {
-          console.error('エラーの詳細:', {
-            message: error.message,
-            name: error.name,
-            stack: error.stack
-          });
-        }
-        alert(`デッキの更新に失敗しました: ${error instanceof Error ? error.message : '不明なエラー'}`);
-      }
-    };
-
-    saveToFirebase();
-  }, [user, userId, deckId, isLoaded, deckName, yojoDeck, sweetDeck, selectedPlayableCard, checkSignificantDataLoss]);
-
-  /**
-   * ローカルユーザーがログインしてデッキを保存する
-   * ログインしていたら新規作成して保存する
-   */
-  const handleLoginAndSave = async () => {
-    // Firebaseにログイン済みの場合
-    if (user) {
-      const deckRef = doc(db, 'users', user.uid, 'decks', deckId);
-      
-      try {
-        const docData = {
-          name: deckName,
-          yojoDeckIds: yojoDeck.map(card => card.id),
-          sweetDeckIds: sweetDeck.map(card => card.id),
-          playableCardId: selectedPlayableCard?.id || null,
-          updatedAt: new Date()
-        };
-        try {
-          validateDeckData(docData);
-        } catch (e) {
-          console.error('Deck validation failed, aborting save:', e);
-          alert('デッキの保存に失敗しました: データが不正です');
-          return;
-        }
-
-        await setDoc(deckRef, docData);
-
-        console.log('ログイン済みユーザーがデッキを更新しました:', deckId);
-        router.push(`/deck/${user.uid}/${deckId}`);
-      } catch (error) {
-        console.error('デッキの更新に失敗しました:', error);
-        alert('デッキの更新に失敗しました');
-      }
-      return;
-    }
-    
-    // 未ログインの場合、Googleログインを実行
-    const provider = new GoogleAuthProvider();
-    try {
-      const result = await signInWithPopup(auth, provider);
-      if (result.user) {
-        const deckRef = doc(db, 'users', result.user.uid, 'decks', deckId);
-        
-        const docData = {
-          name: deckName,
-          yojoDeckIds: yojoDeck.map(card => card.id),
-          sweetDeckIds: sweetDeck.map(card => card.id),
-          playableCardId: selectedPlayableCard?.id || null,
-          updatedAt: new Date()
-        };
-        try {
-          validateDeckData(docData);
-        } catch (e) {
-          console.error('Deck validation failed, aborting save:', e);
-          alert('デッキの保存に失敗しました: データが不正です');
-          return;
-        }
-
-        await setDoc(deckRef, docData);
-        
-        console.log('ログイン後にデッキを更新しました:', deckId);
-        router.push(`/deck/${result.user.uid}/${deckId}`);
-      }
-    } catch (error) {
-      console.error('ログインエラー:', error);
-      alert('ログインに失敗しました');
-    }
-  };
-
-  const handleNameChange = async (newName: string) => {
-    if (userId === 'local') {
-      setIsEditing(false);
-      setDeckName(newName);
-      localStorage.setItem(`deck_${deckId}_name`, newName);
-      handleLoginAndSave();
-      return;
-    }
-    if (!user || user.uid !== userId) {
-      setIsEditing(false);
-      setDeckName(deckName); // 元のデッキ名に戻すか、何もしない
-      return;
-    }
-    try {
-      const deckRef = doc(db, 'users', userId, 'decks', deckId);
-      await setDoc(deckRef, {
-        name: newName,
-        updatedAt: new Date()
-      }, { merge: true });
-      setDeckName(newName);
-      setIsEditing(false);
-    } catch (error) {
-      console.error('デッキ名の更新に失敗しました:', error);
-      alert('デッキ名の更新に失敗しました');
-    }
-  };
-
-  const handleAddCard = (card: CardInfo) => {
-    if (canAddToDeck(card)){
-      if (card.type === '幼女' && yojoDeck.length < yojoLimit) {
-        setYojoDeck(prev => [...prev, card]);
-      } else if (card.type === 'お菓子' && sweetDeck.length < sweetLimit) {
-        setSweetDeck(prev => [...prev, card]);
-      } else if (card.type === 'プレイアブル' && !selectedPlayableCard) {
-        setSelectedPlayableCard(card);
-      } 
-    }
-  };
-
-  const handleRemoveFromYojoDeck = (card: CardInfo) => {
-    setYojoDeck(prev => prev.filter(c => c.id !== card.id));
-  };
-
-  const handleRemoveFromSweetDeck = (card: CardInfo) => {
-    setSweetDeck(prev => prev.filter(c => c.id !== card.id));
-  };
-
-  const handleRemovePlayableCard = () => {
-    setSelectedPlayableCard(null);
-  };
-
-  const handleDragStart = (e: React.DragEvent, card: CardInfo) => {
-    e.dataTransfer.setData('cardId', card.id);
-    e.dataTransfer.setData('cardType', card.type);
-  };
-
-
-  const handleDrop = (e: React.DragEvent, deckType: string) => {
-    e.preventDefault();
-
-    const cardId = e.dataTransfer.getData('cardId');
-    const cardType = e.dataTransfer.getData('cardType');
-
-    let cardToAdd: CardInfo | undefined;
-    if (cardType === '幼女') cardToAdd = allYojoCards.find(c => c.id === cardId);
-    else if (cardType === 'お菓子') cardToAdd = allSweetCards.find(c => c.id === cardId);
-    else if (cardType === 'プレイアブル') cardToAdd = allPlayableCards.find(c => c.id === cardId);
-
-    if (cardToAdd && canAddToDeck(cardToAdd)) {
-      if (cardType === '幼女' && deckType === 'yojo') {
-        handleAddCard(cardToAdd);
-      } else if (cardType === 'お菓子' && deckType === 'sweet') {
-        handleAddCard(cardToAdd);
-      } else if (cardType === 'プレイアブル' && deckType === 'playable') {
-        handleAddCard(cardToAdd);
-      }
-    }
-  };
-
-  const canAddToDeck = (card: CardInfo) => {
-    if (isTwoCardLimit) {
-      if (card.type === '幼女') {
-        const count = yojoDeck.filter(c => c.id === card.id).length;
-        if (count >= 2) return false;
-      } else if (card.type === 'お菓子') {
-        const count = sweetDeck.filter(c => c.id === card.id).length;
-        if (count >= 2) return false;
-      }
-    }
-    if (card.sweetType == "動物さんソーダ"){
-      const count = sweetDeck.filter(c => c.id == card.id).length;
-      if (count >= 1) return false;
-    }
-
-    if (card.type === '幼女') {
-      return yojoDeck.length < yojoLimit;
-    } else if (card.type === 'お菓子') {
-      return sweetDeck.length < sweetLimit;
-    } else if (card.type === 'プレイアブル') {
-      return !selectedPlayableCard;
-    }
-    return false;
-  };
-
-  /**
-   * データが消される可能性のある操作に対して警告を表示する
-   * @param message 警告メッセージ
-   * @returns ユーザーが確認したかどうか
-   */
-  const showDataLossWarning = (message: string): boolean => {
-    return window.confirm(`⚠️ 警告: ${message}\n\nこの操作により、現在のデッキデータが失われる可能性があります。\n\n本当に続行しますか？`);
-  };
+  const [deckViewActiveTab, setDeckViewActiveTab] = useState<DeckCardType>('yojo');
+  const [mobileAddModalType, setMobileAddModalType] = useState<DeckCardType | null>(null);
 
   if (isLoading) {
     return <div className={css({ mx: 'auto', maxW: '1700px', pt: '4', px: '4', pb: '4', color: 'gray.800', _dark: { color: 'gray.100' } })}>読み込み中...</div>;
@@ -427,36 +67,6 @@ export default function DeckPageClient({
   if (error) {
     return <div className={css({ mx: 'auto', maxW: '1700px', pt: '4', px: '4', pb: '4', color: 'red.500' })}>{error}</div>;
   }
-
-  const deckViewTabs: TabDefinition[] = [
-    { key: 'yojo', label: '幼女' },
-    { key: 'sweet', label: 'お菓子' },
-    { key: 'playable', label: 'プレイアブル' },
-  ];
-
-  const getCardListColor = () => {
-    return css({
-      borderWidth: '1px',
-      borderColor: deckViewActiveTab === 'yojo' ? 'rose.300'
-        : deckViewActiveTab === 'sweet' ? 'cyan.300'
-        : deckViewActiveTab === 'playable' ? 'indigo.300'
-        : 'gray.300',
-      bg: deckViewActiveTab === 'yojo' ? 'rose.100/80'
-        : deckViewActiveTab === 'sweet' ? 'cyan.100/80'
-        : deckViewActiveTab === 'playable' ? 'indigo.100/80'
-        : 'gray.100/80',
-      _dark: {
-        borderColor: deckViewActiveTab === 'yojo' ? 'rose.700'
-          : deckViewActiveTab === 'sweet' ? 'cyan.700'
-          : deckViewActiveTab === 'playable' ? 'indigo.700'
-          : 'gray.700',
-        bg: deckViewActiveTab === 'yojo' ? 'rose.900/40'
-          : deckViewActiveTab === 'sweet' ? 'cyan.900/40'
-          : deckViewActiveTab === 'playable' ? 'indigo.900/40'
-          : 'gray.800/60',
-      },
-    });
-  };
 
   return (
     <div className={css({ mx: 'auto', maxW: '1700px', pt: '2', px: '2', pb: '2', color: 'gray.900', _dark: { color: 'gray.100' } })}>
@@ -498,26 +108,11 @@ export default function DeckPageClient({
                 </span>
               )}
             </h1>
-              {/* ローカルユーザー向けログインボタン */}
-              {userId === 'local' && user &&(
-                    <button
-                      onClick={handleLoginAndSave}
-                      className={css({
-                        rounded: 'md',
-                        bg: 'blue.600',
-                        px: '4',
-                        py: '2',
-                        fontSize: 'sm',
-                        fontWeight: 'semibold',
-                        color: 'white',
-                        transitionProperty: 'color, background-color, border-color, text-decoration-color, fill, stroke',
-                        _hover: { bg: 'blue.700' },
-                      })}
-                    >
-                      アカウントにデッキを保存
-                    </button>
-              )}
-            <ShareButtons 
+            {/* ローカルユーザー向けログインボタン */}
+            {userId === 'local' && (
+              <LoginToSaveButton onClick={handleLoginAndSave} />
+            )}
+            <ShareButtons
               share_url={currentUrl}
               share_text={`#お菓子争奪戦争ぷぷりえーる`}
               isLocal={userId === 'local'}
@@ -525,9 +120,7 @@ export default function DeckPageClient({
               sweetDeck={sweetDeck}
               playableCard={selectedPlayableCard}
             />
-            
           </div>
-          
         )}
       </div>
 
@@ -543,9 +136,9 @@ export default function DeckPageClient({
           {isOwner && (
             <div className={css({ lg: { display: 'none' } })}>
               <TabButtons
-                tabs={deckViewTabs}
+                tabs={DECK_VIEW_TABS}
                 activeTabKey={deckViewActiveTab}
-                onTabClick={(key: string) => setDeckViewActiveTab(key as 'yojo' | 'sweet' | 'playable')}
+                onTabClick={(key) => setDeckViewActiveTab(key as DeckCardType)}
               />
             </div>
           )}
@@ -577,24 +170,17 @@ export default function DeckPageClient({
             boxShadow: 'sm',
             _dark: { borderColor: 'gray.700', bg: 'gray.800' },
           })}>
-            <TabButtons
-              tabs={deckViewTabs}
-              activeTabKey={deckViewActiveTab}
-              onTabClick={(key: string) => setDeckViewActiveTab(key as 'yojo' | 'sweet' | 'playable')}
-              variant="cardList"
-            />
-          <div className={`${getCardListColor()} ${css({ roundedBottom: 'md', p: '2' })}`}>
-            <CardList
+            <CardListPanel
               allYojoCards={allYojoCards}
               allSweetCards={allSweetCards}
               allPlayableCards={allPlayableCards}
-              displayCardType={deckViewActiveTab}
+              activeTabKey={deckViewActiveTab}
+              onTabClick={setDeckViewActiveTab}
               onAddToDeck={handleAddCard}
               canAddToDeck={canAddToDeck}
-              draggable={true}
+              draggable
               onDragStart={handleDragStart}
             />
-          </div>
           </div>
         )}
       </div>
@@ -611,108 +197,138 @@ export default function DeckPageClient({
       {showImportPopup && (
         <ImportPopup
           onClose={() => setShowImportPopup(false)}
-          onImport={(importedDeck) => {
-            if (importedDeck.yojoDeck && importedDeck.yojoDeck.length > 0) {
-              setYojoDeck(importedDeck.yojoDeck);
-              if (userId === 'local') localStorage.setItem(`deck_${deckId}_yojo`, JSON.stringify(importedDeck.yojoDeck));
-            }
-            if (importedDeck.sweetDeck && importedDeck.sweetDeck.length > 0) {
-              setSweetDeck(importedDeck.sweetDeck);
-              if (userId === 'local') localStorage.setItem(`deck_${deckId}_sweet`, JSON.stringify(importedDeck.sweetDeck));
-            }
-            if (importedDeck.playableCard) {
-              setSelectedPlayableCard(importedDeck.playableCard);
-              if (userId === 'local') localStorage.setItem(`deck_${deckId}_playable`, JSON.stringify(importedDeck.playableCard));
-            }
-            // Firebaseへの保存はuseEffectで自動的に行われるため、ここでは重複しない
-            setShowImportPopup(false);
-          }}
+          onImport={handleImportDeck}
         />
       )}
 
       {/* スマホ用カード追加ポップアップ */}
       {mobileAddModalType && (
-        <div className={css({
-          position: 'fixed',
-          inset: '0',
-          zIndex: '50',
-          display: 'flex',
-          flexDirection: 'column',
-          bg: 'black/70',
-          backdropFilter: 'blur(4px)',
-          lg: { display: 'none' },
-          pt: '12',
-          px: '2',
-          pb: '2',
-        })}>
-          {/* ヘッダー */}
-          <div className={css({
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            bg: 'white',
-            _dark: { bg: 'gray.800' },
-            p: '4',
-            roundedTop: 'xl',
-            boxShadow: 'lg',
-            position: 'relative',
-            zIndex: '10',
-          })}>
-            <h3 className={css({ fontSize: 'xl', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '2' })}>
-              <span className={css({ fontSize: '2xl' })}>
-                {mobileAddModalType === 'yojo' ? '🎀' : mobileAddModalType === 'sweet' ? '🍬' : '✨'}
-              </span>
-              {mobileAddModalType === 'yojo' ? '幼女カードを追加' : mobileAddModalType === 'sweet' ? 'お菓子カードを追加' : 'プレイアブルカードを追加'}
-            </h3>
-            <button
-              onClick={() => setMobileAddModalType(null)}
-              className={css({
-                p: '2',
-                bg: 'gray.100',
-                _hover: { bg: 'gray.200' },
-                _dark: { bg: 'gray.700', _hover: { bg: 'gray.600' } },
-                rounded: 'full',
-                transitionProperty: 'color, background-color, border-color, text-decoration-color, fill, stroke',
-              })}
-              aria-label="閉じる"
-            >
-              <svg className={css({ w: '6', h: '6', color: 'gray.600', _dark: { color: 'gray.300' } })} fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24">
-                 <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-              </svg>
-            </button>
-          </div>
-          {/* リスト領域 */}
-          <div
-            className={css({
-              flex: '1 1 0%',
-              overflowY: 'auto',
-              roundedBottom: 'xl',
-              boxShadow: 'xl',
-              p: '3',
-              bg: mobileAddModalType === 'yojo' ? 'rose.100' : mobileAddModalType === 'sweet' ? 'cyan.100' : 'indigo.100',
-              _dark: {
-                bg: mobileAddModalType === 'yojo' ? 'rose.900/40' : mobileAddModalType === 'sweet' ? 'cyan.900/40' : 'indigo.900/40',
-              },
-            })}
-          >
-            <CardList
-              allYojoCards={allYojoCards}
-              allSweetCards={allSweetCards}
-              allPlayableCards={allPlayableCards}
-              displayCardType={mobileAddModalType}
-              onAddToDeck={(card) => {
-                handleAddCard(card);
-                // プレイアブルカードは1枚制限なので、追加したら閉じる
-                if (mobileAddModalType === 'playable') {
-                  setMobileAddModalType(null);
-                }
-              }}
-              canAddToDeck={canAddToDeck}
-              draggable={false}
-            />
-          </div>
-        </div>
+        <MobileAddCardModal
+          modalType={mobileAddModalType}
+          onClose={() => setMobileAddModalType(null)}
+          onAddToDeck={(card) => {
+            handleAddCard(card);
+            if (mobileAddModalType === 'playable') {
+              setMobileAddModalType(null);
+            }
+          }}
+          canAddToDeck={canAddToDeck}
+        />
       )}
     </div>
+  );
+}
+
+function LoginToSaveButton({ onClick }: { onClick: () => void }) {
+  return (
+    <button
+      onClick={onClick}
+      className={css({
+        rounded: 'md',
+        bg: 'blue.600',
+        px: '4',
+        py: '2',
+        fontSize: 'sm',
+        fontWeight: 'semibold',
+        color: 'white',
+        transitionProperty: 'color, background-color, border-color, text-decoration-color, fill, stroke',
+        _hover: { bg: 'blue.700' },
+      })}
+    >
+      アカウントにデッキを保存
+    </button>
+  );
+}
+
+interface MobileAddCardModalProps {
+  modalType: DeckCardType;
+  onClose: () => void;
+  onAddToDeck: (card: CardInfo) => void;
+  canAddToDeck: (card: CardInfo) => boolean;
+}
+
+/** スマホ幅で「デッキに追加」を押したときに開くカード選択モーダル。 */
+function MobileAddCardModal({ modalType, onClose, onAddToDeck, canAddToDeck }: MobileAddCardModalProps) {
+  const modalEmoji = modalType === 'yojo' ? '🎀' : modalType === 'sweet' ? '🍬' : '✨';
+  const modalTitle = modalType === 'yojo' ? '幼女カードを追加' : modalType === 'sweet' ? 'お菓子カードを追加' : 'プレイアブルカードを追加';
+
+  return (
+    <div className={css({
+      position: 'fixed',
+      inset: '0',
+      zIndex: '50',
+      display: 'flex',
+      flexDirection: 'column',
+      bg: 'black/70',
+      backdropFilter: 'blur(4px)',
+      lg: { display: 'none' },
+      pt: '12',
+      px: '2',
+      pb: '2',
+    })}>
+      <div className={css({
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        bg: 'white',
+        _dark: { bg: 'gray.800' },
+        p: '4',
+        roundedTop: 'xl',
+        boxShadow: 'lg',
+        position: 'relative',
+        zIndex: '10',
+      })}>
+        <h3 className={css({ fontSize: 'xl', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '2' })}>
+          <span className={css({ fontSize: '2xl' })}>{modalEmoji}</span>
+          {modalTitle}
+        </h3>
+        <button
+          onClick={onClose}
+          className={css({
+            p: '2',
+            bg: 'gray.100',
+            _hover: { bg: 'gray.200' },
+            _dark: { bg: 'gray.700', _hover: { bg: 'gray.600' } },
+            rounded: 'full',
+            transitionProperty: 'color, background-color, border-color, text-decoration-color, fill, stroke',
+          })}
+          aria-label="閉じる"
+        >
+          <svg className={css({ w: '6', h: '6', color: 'gray.600', _dark: { color: 'gray.300' } })} fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+      <div
+        className={css({
+          flex: '1 1 0%',
+          overflowY: 'auto',
+          roundedBottom: 'xl',
+          boxShadow: 'xl',
+          p: '3',
+          bg: modalType === 'yojo' ? 'rose.100' : modalType === 'sweet' ? 'cyan.100' : 'indigo.100',
+          _dark: {
+            bg: modalType === 'yojo' ? 'rose.900/40' : modalType === 'sweet' ? 'cyan.900/40' : 'indigo.900/40',
+          },
+        })}
+      >
+        <CardListForModal modalType={modalType} onAddToDeck={onAddToDeck} canAddToDeck={canAddToDeck} />
+      </div>
+    </div>
+  );
+}
+
+function CardListForModal({ modalType, onAddToDeck, canAddToDeck }: Omit<MobileAddCardModalProps, 'onClose'>) {
+  // モーダル内はタブ無しで単一種別のカードリストのみを表示する
+  return (
+    <CardList
+      allYojoCards={allYojoCards}
+      allSweetCards={allSweetCards}
+      allPlayableCards={allPlayableCards}
+      displayCardType={modalType}
+      onAddToDeck={onAddToDeck}
+      canAddToDeck={canAddToDeck}
+      draggable={false}
+    />
   );
 }

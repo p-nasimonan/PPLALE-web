@@ -56,10 +56,9 @@ const cardVariants = {
 
 interface HeroSectionProps {
   cardsYPosition: MotionValue<string>;
-  isMounted: boolean;
 }
 
-export default function HeroSection({ cardsYPosition, isMounted }: HeroSectionProps) {
+export default function HeroSection({ cardsYPosition }: HeroSectionProps) {
   const [activeIndex, setActiveIndex] = useState(1);
 
   const handleNext = () => {
