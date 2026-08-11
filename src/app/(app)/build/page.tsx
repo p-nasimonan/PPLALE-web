@@ -12,6 +12,39 @@ import { allYojoCards, allSweetCards, allPlayableCards } from '@/data/cards';
 import { nanoid } from 'nanoid';
 import { css } from 'styled-system/css';
 
+const createDeckOptionButtonClass = css({
+  position: 'relative',
+  overflow: 'hidden',
+  rounded: 'lg',
+  borderWidth: '1px',
+  borderColor: 'gray.200',
+  bg: 'white',
+  p: '6',
+  boxShadow: 'xs',
+  transitionProperty: 'box-shadow',
+  transitionDuration: '150ms',
+  transitionTimingFunction: 'cubic-bezier(0.4, 0, 0.2, 1)',
+  _dark: { borderColor: 'gray.700', bg: 'gray.800' },
+  // エクスポート/インポートボタンと同じ、中心から広がるリップルhover効果
+  _after: {
+    content: '""',
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    width: '100%',
+    paddingBottom: '100%',
+    borderRadius: '50%',
+    transform: 'translate(-50%, -50%) scale(0)',
+    transition: 'transform 0.4s ease',
+    pointerEvents: 'none',
+    bg: 'black/8',
+  },
+  _hover: {
+    boxShadow: 'lg',
+    _after: { transform: 'translate(-50%, -50%) scale(2.5)' },
+  },
+});
+
 interface Deck {
   id: string;
   name: string;
@@ -183,19 +216,7 @@ export default function BuildPage() {
             <button
               onClick={() => handleCreateDeck('normal')}
               disabled={isCreating}
-              className={css({
-                rounded: 'lg',
-                borderWidth: '1px',
-                borderColor: 'gray.200',
-                bg: 'white',
-                p: '6',
-                boxShadow: 'xs',
-                transitionProperty: 'box-shadow',
-                transitionDuration: '150ms',
-                transitionTimingFunction: 'cubic-bezier(0.4, 0, 0.2, 1)',
-                _hover: { boxShadow: 'lg' },
-                _dark: { borderColor: 'gray.700', bg: 'gray.800' },
-              })}
+              className={createDeckOptionButtonClass}
             >
               <div className={css({ display: 'flex', alignItems: 'center', gap: '4' })}>
                 <div className={css({ w: '12', h: '12', bg: 'blue.100', rounded: 'full', display: 'flex', alignItems: 'center', justifyContent: 'center', _dark: { bg: 'blue.200' } })}>
@@ -213,19 +234,7 @@ export default function BuildPage() {
             <button
               onClick={() => handleCreateDeck('2pick')}
               disabled={isCreating}
-              className={css({
-                rounded: 'lg',
-                borderWidth: '1px',
-                borderColor: 'gray.200',
-                bg: 'white',
-                p: '6',
-                boxShadow: 'xs',
-                transitionProperty: 'box-shadow',
-                transitionDuration: '150ms',
-                transitionTimingFunction: 'cubic-bezier(0.4, 0, 0.2, 1)',
-                _hover: { boxShadow: 'lg' },
-                _dark: { borderColor: 'gray.700', bg: 'gray.800' },
-              })}
+              className={createDeckOptionButtonClass}
             >
               <div className={css({ display: 'flex', alignItems: 'center', gap: '4' })}>
                 <div className={css({ w: '12', h: '12', bg: 'green.100', rounded: 'full', display: 'flex', alignItems: 'center', justifyContent: 'center', _dark: { bg: 'green.900' } })}>

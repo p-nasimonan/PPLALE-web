@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useEffect } from 'react';
 import SettingsButton from '@/components/ui/SideMenu';
 import FireBaseLogin from '@/components/ui/FireBaseLogin';
 import { css } from 'styled-system/css';
@@ -9,6 +10,13 @@ import { css } from 'styled-system/css';
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const is2Pick = pathname === '/deck/2pick';
+
+  // ヘッダーを持たないルート(トップページ等)からクライアントサイド遷移してくると、
+  // このヘッダーが初めてマウントされるタイミングとスクロール位置計算がずれて
+  // ページ先頭がヘッダーの高さ分隠れたままになることがあるため、遷移毎に先頭へ戻す。
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
 
   return (
     <>

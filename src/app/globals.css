@@ -70,6 +70,11 @@ pre {
 .page-header > * { position: relative; z-index: 1; }
 
 /* Button styles are now handled by Panda CSS button/iconButton recipes. */
+/* Pandaのpreflightにはボタンのポインターカーソルが含まれていないため明示的に指定 */
+button:not(:disabled),
+[role="button"]:not([aria-disabled="true"]) {
+  cursor: pointer;
+}
 
 @keyframes slideIn {
   from { transform: translateX(100%); opacity: 0; }
