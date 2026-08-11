@@ -14,12 +14,23 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
     <>
       <header className={css({
         position: 'fixed', top: '0', left: '0', right: '0', h: '16', zIndex: '40',
-        bg: { base: 'white/90', _dark: 'gray.900/90' },
+        bg: { base: 'white/95', _dark: 'gray.900/95' },
         backdropBlur: 'md',
         borderBottomWidth: '1px',
         borderColor: { base: 'gray.200', _dark: 'gray.700' },
+        boxShadow: 'sm',
       })}>
-        <div className={css({ maxW: 'breakpoint-2xl', mx: 'auto', px: '4', h: 'full', display: 'flex', alignItems: 'center', justifyContent: 'space-between' })}>
+        {/* バナー背景画像 */}
+        <div className={css({
+          position: 'absolute', inset: '0',
+          backgroundImage: 'url(\'/images/baner.webp\')',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat',
+          opacity: '0.15',
+          _dark: { opacity: '0.08' },
+        })} />
+        <div className={css({ position: 'relative', zIndex: '1', maxW: 'breakpoint-2xl', mx: 'auto', px: '4', h: 'full', display: 'flex', alignItems: 'center', justifyContent: 'space-between' })}>
           <div className={css({ display: 'flex', alignItems: 'center', gap: '4', minW: '0' })}>
             {is2Pick ? (
               <p className={css({ fontSize: '2xl', fontWeight: 'bold' })}>2Pick構築</p>
