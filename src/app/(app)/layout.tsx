@@ -13,7 +13,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
   return (
     <>
       <header className={css({
-        position: 'fixed', top: '0', left: '0', right: '0', h: '16', zIndex: '40',
+        position: 'sticky', top: '0', h: '16', zIndex: '40',
         bg: { base: 'white/95', _dark: 'gray.900/95' },
         backdropBlur: 'md',
         borderBottomWidth: '1px',
@@ -46,7 +46,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
           </div>
         </div>
       </header>
-      <main className={css({ pt: '16' })}>
+      <main>
         {children}
       </main>
     </>

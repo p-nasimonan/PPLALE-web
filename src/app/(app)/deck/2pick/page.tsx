@@ -422,7 +422,7 @@ function TwoPickContent() {
 
 function TwoPickFallback() {
   return (
-    <div className={`container ${css({ position: 'relative', pb: '8', textAlign: 'center', color: 'gray.700', _dark: { color: 'gray.200' } })}`}>
+    <div className={`container ${css({ position: 'relative', pt: '6', pb: '8', textAlign: 'center', color: 'gray.700', _dark: { color: 'gray.200' } })}`}>
       読み込み中...
     </div>
   );

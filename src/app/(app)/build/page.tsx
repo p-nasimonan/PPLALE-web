@@ -173,7 +173,7 @@ export default function BuildPage() {
   };
 
   return (
-    <main className={css({ minH: '100vh', px: '8', pb: '8' })}>
+    <main className={css({ minH: '100vh', px: '8', pt: '6', pb: '8' })}>
       <div className={css({ maxW: '7xl', mx: 'auto' })}>
 
         {/* 新しいデッキ作成セクション */}
