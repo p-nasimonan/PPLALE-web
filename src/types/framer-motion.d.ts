@@ -4,8 +4,7 @@
 // このファイルで motion コンポーネントの型を正しく認識させる。
 // 参考: https://github.com/motiondivision/motion/issues/2831
 
-import type { ComponentPropsWithoutRef, ElementType, ForwardRefExoticComponent, RefAttributes } from 'react';
-import type { HTMLMotionProps, MotionProps, SVGMotionProps } from 'framer-motion';
+import type { HTMLMotionProps, SVGMotionProps } from 'framer-motion';
 
 declare module 'framer-motion' {
   // motion.div などの HTML 要素向け
