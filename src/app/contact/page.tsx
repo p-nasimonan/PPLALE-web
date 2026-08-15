@@ -38,7 +38,7 @@ export default function Contact() {
                 このデッキビルダー（Webアプリ）についてのお問い合わせは、以下の方法でお願いします：
               </p>
               <ul className={css({ listStyleType: 'disc', pl: '6', color: 'gray.700', display: 'flex', flexDirection: 'column', gap: '2' })}>
-                <li>GitHub: <a href="https://github.com/p-nasimonan" className={css({ color: 'blue.500', _hover: { color: 'blue.600' } })} target="_blank" rel="noopener noreferrer">https://github.com/p-nasimonan</a></li>
+                <li>GitHub: <a href="https://github.com/ieyoukan" className={css({ color: 'blue.500', _hover: { color: 'blue.600' } })} target="_blank" rel="noopener noreferrer">https://github.com/ieyoukan</a></li>
               </ul>
             </div>
 
