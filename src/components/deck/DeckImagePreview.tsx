@@ -183,19 +183,24 @@ const DeckImagePreview: React.FC<DeckImagePreviewProps> = ({ yojoDeck, sweetDeck
             alignItems: 'center',
             justifyContent: 'center',
             zIndex: '50',
+            backdropFilter: 'blur(6px)',
+            p: '4',
           })}
         >
           <div
             className={css({
-              bg: 'white',
+              bg: 'var(--colors-card-background)',
+              color: 'var(--colors-text-color)',
               p: '6',
               rounded: 'lg',
               boxShadow: 'lg',
               maxW: '5xl',
+              maxH: 'calc(100dvh - 2rem)',
               w: 'full',
               display: 'flex',
               flexDirection: 'column',
               alignItems: 'center',
+              overflowY: 'auto',
             })}
           >
             <h3 className={css({ fontSize: 'lg', fontWeight: 'bold', mb: '4' })}>デッキ画像プレビュー</h3>

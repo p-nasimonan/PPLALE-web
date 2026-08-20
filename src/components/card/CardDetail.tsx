@@ -1,7 +1,12 @@
-import React from 'react';
+'use client';
+
+import React, { useRef } from 'react';
+import Image from 'next/image';
 import { CardInfo } from '@/types/card';
-import Card from './Card';
 import { css } from 'styled-system/css';
+
+const isGitHubPages = process.env.NEXT_PUBLIC_GITHUB_PAGES === 'true';
+const basePath = isGitHubPages ? '/PPLALE-web_front' : '';
 
 interface CardDetailProps {
   card: CardInfo;
@@ -11,106 +16,132 @@ interface CardDetailProps {
   handleCardRemove?: (card: CardInfo) => void;
   isInDeck: boolean;
 }
-    
-const CardDetail: React.FC<CardDetailProps> = ({ card, onClose, canAddToDeck, onAddToDeck, isInDeck , handleCardRemove}) => {
+
+const CardDetail: React.FC<CardDetailProps> = ({ card, onClose, canAddToDeck, onAddToDeck, isInDeck, handleCardRemove }) => {
+  const cardRef = useRef<HTMLDivElement>(null);
+
+  const handlePointerMove = (event: React.PointerEvent<HTMLDivElement>) => {
+    const element = cardRef.current;
+    if (!element || event.pointerType === 'touch') return;
+    const x = event.clientX / window.innerWidth - 0.5;
+    const y = event.clientY / window.innerHeight - 0.5;
+    element.style.transition = 'transform 80ms ease-out';
+    element.style.transform = `rotateX(${y * -24}deg) rotateY(${x * 36}deg)`;
+    element.style.setProperty('--shine-x', `${(x + 0.5) * 100}%`);
+    element.style.setProperty('--shine-y', `${(y + 0.5) * 100}%`);
+  };
+
+  const canAdd = canAddToDeck?.(card) ?? false;
+
   return (
     <div
       className={css({
-        position: 'fixed',
-        inset: '0',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        w: 'full',
-        h: 'full',
-        zIndex: '50',
-        bg: 'transparent',
+        position: 'fixed', inset: '0', zIndex: '50', display: 'flex', alignItems: 'center', justifyContent: 'center',
+        bg: 'black/35', backdropFilter: 'blur(14px)', p: '4',
       })}
       onClick={onClose}
+      onPointerMove={handlePointerMove}
     >
-      <article
+      <div
         role="dialog"
         aria-modal="true"
         aria-label={`${card.name}の拡大表示`}
-        className={css({
-          position: 'relative',
-          display: 'flex',
-          justifyContent: 'center',
-        })}
-        onClick={(e) => e.stopPropagation()}
+        className={css({ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '5' })}
+        onClick={(event) => event.stopPropagation()}
       >
-        <button
-          className={css({
-            position: 'absolute',
-            top: '-5',
-            right: '-5',
-            zIndex: '1',
-            w: '12',
-            h: '12',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            rounded: 'full',
-            bg: 'black/75',
-            color: 'white',
-            fontSize: '4xl',
-            lineHeight: '1',
-            _hover: { bg: 'black' },
-          })}
-          onClick={onClose}
-          aria-label="拡大表示を閉じる"
+        <div
+          className={css({ position: 'relative' })}
+          style={{
+            width: 'min(500px, calc((100dvh - 150px) * 2 / 3), calc(100vw - 32px))',
+            aspectRatio: '2 / 3',
+            perspective: '1200px',
+          }}
         >
-          ×
-        </button>
-        <div className={css({ display: 'flex', flexDirection: 'column', alignItems: 'center' })}>
-          <Card
-            card={card}
-            sizes={{
-              base: { width: 200, height: 300 },
-              sm: { width: 250, height: 375 },
-              md: { width: 300, height: 450 },
-              lg: { width: 500, height: 750 }
+          <button
+            className={css({
+              position: 'absolute', top: '-4', right: '-4', zIndex: '10', w: '12', h: '12', display: 'flex',
+              alignItems: 'center', justifyContent: 'center', rounded: 'full', bg: 'black/75', color: 'white',
+              fontSize: '4xl', lineHeight: '1', boxShadow: 'lg', transition: 'transform 150ms ease, background-color 150ms ease',
+              _hover: { bg: 'black', transform: 'scale(1.08)' },
+            })}
+            onClick={onClose}
+            aria-label="拡大表示を閉じる"
+          >
+            ×
+          </button>
+
+          <div
+            ref={cardRef}
+            className={css({ position: 'absolute', inset: '0', transformStyle: 'preserve-3d', willChange: 'transform' })}
+            style={{
+              transform: 'rotateX(0deg) rotateY(0deg)',
+              ['--shine-x' as string]: '50%',
+              ['--shine-y' as string]: '50%',
             }}
-            canShowDetail={false}
-            unoptimized
-          />
-          <div className={css({ position: 'absolute', bottom: '2', left: '50%', transform: 'translateX(-50%)' })}>
-            {/* デッキに追加ボタン */}
-            {canAddToDeck && onAddToDeck ? (
-              <button
-                className={css({
-                  mt: '4',
-                  px: '4',
-                  py: '2',
-                  bg: 'blue.500',
-                  color: 'white',
-                  rounded: 'sm',
-                  _hover: { bg: 'blue.600' },
-                })}
-                onClick={() => onAddToDeck(card)}
-                disabled={!canAddToDeck(card)}
-              >
-                {card.type === 'プレイアブル' ? '選択する' : 'デッキに追加'}
-              </button>
-            ) : isInDeck ? (
-              <button
-                className={css({
-                  mt: '4',
-                  px: '4',
-                  py: '2',
-                  bg: 'red.500',
-                  color: 'white',
-                  rounded: 'sm',
-                  _hover: { bg: 'red.600' },
-                })}
-                onClick={() => handleCardRemove?.(card)}
-              >
-                デッキから外す
-              </button>
-            ) : null}
+          >
+            <div
+              className={css({
+                position: 'absolute', inset: '0', overflow: 'hidden', rounded: 'lg', backfaceVisibility: 'hidden', boxShadow: '2xl',
+              })}
+              style={{ transform: 'translateZ(4px)' }}
+            >
+              <Image
+                src={`${basePath}${card.imageUrl}`}
+                alt={card.name}
+                fill
+                sizes="(max-width: 768px) 90vw, 500px"
+                className={css({ objectFit: 'contain' })}
+                unoptimized
+                priority
+              />
+              <div
+                className={css({ position: 'absolute', inset: '0', pointerEvents: 'none', mixBlendMode: 'soft-light' })}
+                style={{ background: 'radial-gradient(circle at var(--shine-x) var(--shine-y), rgba(255,255,255,.5), transparent 38%)' }}
+              />
+            </div>
+
+            <div
+              className={css({
+                position: 'absolute', inset: '0', overflow: 'hidden', rounded: 'lg', backfaceVisibility: 'hidden', boxShadow: '2xl',
+              })}
+              style={{ transform: 'translateZ(-4px) rotateY(180deg)' }}
+            >
+              <Image
+                src={`${basePath}/images/back-card.webp`}
+                alt="カード裏面"
+                fill
+                sizes="(max-width: 768px) 90vw, 500px"
+                className={css({ objectFit: 'contain' })}
+                unoptimized
+                priority
+              />
+            </div>
           </div>
         </div>
-      </article>
+
+        {canAddToDeck && onAddToDeck ? (
+          <button
+            className={css({
+              px: '6', py: '3', bg: 'blue.500', color: 'white', rounded: 'md', fontWeight: 'bold', boxShadow: 'md',
+              _hover: { bg: 'blue.600' }, _disabled: { opacity: '0.5', cursor: 'not-allowed' },
+            })}
+            onClick={() => onAddToDeck(card)}
+            disabled={!canAdd}
+          >
+            {card.type === 'プレイアブル' ? '選択する' : 'デッキに追加'}
+          </button>
+        ) : isInDeck ? (
+          <button
+            className={css({
+              px: '6', py: '3', bg: 'red.500', color: 'white', rounded: 'md', fontWeight: 'bold', boxShadow: 'md',
+              _hover: { bg: 'red.600' },
+            })}
+            onClick={() => handleCardRemove?.(card)}
+          >
+            デッキから外す
+          </button>
+        ) : null}
+      </div>
     </div>
   );
 };
