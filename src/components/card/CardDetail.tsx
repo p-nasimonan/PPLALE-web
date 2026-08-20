@@ -81,7 +81,7 @@ const CardDetail: React.FC<CardDetailProps> = ({ card, onClose, canAddToDeck, on
           >
             <div
               className={css({
-                position: 'absolute', inset: '0', overflow: 'hidden', rounded: 'lg', backfaceVisibility: 'hidden', boxShadow: '2xl',
+                position: 'absolute', inset: '0', overflow: 'hidden', rounded: 'lg', backfaceVisibility: 'hidden',
               })}
               style={{ transform: 'translateZ(4px)' }}
             >
@@ -102,7 +102,7 @@ const CardDetail: React.FC<CardDetailProps> = ({ card, onClose, canAddToDeck, on
 
             <div
               className={css({
-                position: 'absolute', inset: '0', overflow: 'hidden', rounded: 'lg', backfaceVisibility: 'hidden', boxShadow: '2xl',
+                position: 'absolute', inset: '0', overflow: 'hidden', rounded: 'lg', backfaceVisibility: 'hidden',
               })}
               style={{ transform: 'translateZ(-4px) rotateY(180deg)' }}
             >

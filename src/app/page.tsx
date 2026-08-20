@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { useScroll, useTransform } from 'framer-motion';
-import { HeroSection, ExplanationSection, Footer } from '@/components/sections';
+import { HeroSection, ExplanationSection, CardPickupSection, Footer } from '@/components/sections';
 import { css } from 'styled-system/css';
 
 export default function Home() {
@@ -32,10 +32,13 @@ export default function Home() {
 
       {/* 解説セクション */}
       {isMounted && (
-        <ExplanationSection 
-          explanationOpacity={explanationOpacity} 
-          explanationY={explanationY} 
-        />
+        <>
+          <ExplanationSection
+            explanationOpacity={explanationOpacity}
+            explanationY={explanationY}
+          />
+          <CardPickupSection />
+        </>
       )}
 
       {/* フッター */}
