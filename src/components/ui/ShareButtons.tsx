@@ -241,10 +241,11 @@ const ShareButtons: React.FC<ShareButtonsProps> = ({
           sweetDeck={sweetDeck}
           playableCard={playableCard}
           onClose={() => setShowImagePreview(false)}
+          isPopup
         />
       )}
     </div>
   );
 };
 
-export default ShareButtons; 
+export default ShareButtons;

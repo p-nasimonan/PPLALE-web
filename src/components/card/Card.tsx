@@ -64,6 +64,8 @@ interface CardProps {
   isFaceUp?: boolean;
   /** LCP最適化用: 最初の画面に見えるカードに指定すると優先読み込みされる */
   priority?: boolean;
+  /** 最適化APIを介さず原寸画像を使う（拡大表示など、先読み済み画像向け） */
+  unoptimized?: boolean;
 }
 
 const defaultSizes: CardSizes = {
@@ -108,6 +110,7 @@ const Card: React.FC<CardProps> = ({
   canShowDetail = true,
   isFaceUp = true,
   priority = false,
+  unoptimized = false,
 }) => {
   const [showDetail, setShowDetail] = useState(false);
 
@@ -129,6 +132,12 @@ const Card: React.FC<CardProps> = ({
     } else if (onClick) {
       onClick(card);
     }
+  };
+
+  const preloadDetailImage = () => {
+    if (!canShowDetail || !isFaceUp) return;
+    const image = new window.Image();
+    image.src = imagePath;
   };
 
   // ドラッグ開始時の処理
@@ -165,6 +174,8 @@ const Card: React.FC<CardProps> = ({
           perspective: '1000px', 
         }}
         onClick={handleClick}
+        onPointerEnter={preloadDetailImage}
+        onTouchStart={preloadDetailImage}
         draggable={draggable && !showDetail && isFaceUp}
         onDragStart={handleDragStart}
       >
@@ -230,7 +241,7 @@ const Card: React.FC<CardProps> = ({
                      (max-width: 1024px) ${cardSizes.md.width}px, 
                      ${cardSizes.lg.width}px`}
               priority={priority}
-              unoptimized={false}
+              unoptimized={unoptimized}
               placeholder="blur"
               loading={priority ? undefined : 'lazy'}
               blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/4gHYSUNDX1BST0ZJTEUAAQEAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGwAZQAgAEkAbgBjAC4AIAAyADAAMQA2/9sAQwAUDg8SDw0UEhASFxUUTHx+Hh4eGhodJC0lICQoICQoICQoICQoICQoICQoICQoICQoICQoICQoICQoICQoICQoICQoICQoICQoIP/YAERCAAoACgMBIgACEQEDEQH/xAAVAQEBAAAAAAAAAAAAAAAAAAAAAv/EABQQAQAAAAAAAAAAAAAAAAAAAAD/2gAMAwEAAhADEAAAAJ0AGZf/2Q=="

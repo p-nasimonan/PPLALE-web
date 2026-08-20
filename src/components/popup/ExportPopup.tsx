@@ -228,6 +228,7 @@ const ExportPopup: React.FC<ExportPopupProps> = ({ yojoDeck, sweetDeck, playable
             sweetDeck={sweetDeck}
             playableCard={playableCard}
             onClose={() => setShowImagePreview(false)}
+            isPopup
           />
         )}
       </div>

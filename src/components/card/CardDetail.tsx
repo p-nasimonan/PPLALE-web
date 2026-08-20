@@ -24,30 +24,41 @@ const CardDetail: React.FC<CardDetailProps> = ({ card, onClose, canAddToDeck, on
         w: 'full',
         h: 'full',
         zIndex: '50',
-        backdropFilter: 'blur(4px)',
+        bg: 'transparent',
       })}
       onClick={onClose}
     >
       <article
+        role="dialog"
+        aria-modal="true"
+        aria-label={`${card.name}の拡大表示`}
         className={css({
           position: 'relative',
-          rounded: 'lg',
-          boxShadow: 'lg',
-          p: '2',
-          maxW: '2xl',
-          w: 'full',
-          mx: '4',
+          display: 'flex',
+          justifyContent: 'center',
         })}
         onClick={(e) => e.stopPropagation()}
       >
         <button
           className={css({
             position: 'absolute',
-            top: '2',
-            right: '2',
-            _hover: { color: 'gray.700' },
+            top: '-5',
+            right: '-5',
+            zIndex: '1',
+            w: '12',
+            h: '12',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            rounded: 'full',
+            bg: 'black/75',
+            color: 'white',
+            fontSize: '4xl',
+            lineHeight: '1',
+            _hover: { bg: 'black' },
           })}
           onClick={onClose}
+          aria-label="拡大表示を閉じる"
         >
           ×
         </button>
@@ -61,8 +72,9 @@ const CardDetail: React.FC<CardDetailProps> = ({ card, onClose, canAddToDeck, on
               lg: { width: 500, height: 750 }
             }}
             canShowDetail={false}
+            unoptimized
           />
-          <div className={css({ mt: '4' })}>
+          <div className={css({ position: 'absolute', bottom: '2', left: '50%', transform: 'translateX(-50%)' })}>
             {/* デッキに追加ボタン */}
             {canAddToDeck && onAddToDeck ? (
               <button
