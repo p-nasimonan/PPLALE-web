@@ -19,16 +19,22 @@ const dataFiles = [
   { rel: 'src/data/yojo.json', key: 'yojo', dir: 'public/images/yojo' },
   { rel: 'src/data/sweet.json', key: 'sweet', dir: 'public/images/sweet' },
   { rel: 'src/data/playable.json', key: 'playable', dir: 'public/images/playable' },
+  { rel: 'src/data/tokenYojo.json', key: 'tokenYojo', dir: 'public/images/yojo' },
 ];
 
 let errors = 0;
 let warnings = 0;
 
+// dir は yojo.json と tokenYojo.json で共有されるため、警告判定用の参照集合はディレクトリ単位で合算する
+const referencedByDir = new Map();
+
 for (const { rel, key, dir } of dataFiles) {
   const data = JSON.parse(await readFile(path.join(root, rel), 'utf8'));
   const cards = data[key];
 
-  const referenced = new Set();
+  const referenced = referencedByDir.get(dir) ?? new Set();
+  referencedByDir.set(dir, referenced);
+
   for (const card of cards) {
     const url = card.imageUrl;
     if (!url) {
@@ -53,7 +59,9 @@ for (const { rel, key, dir } of dataFiles) {
       errors++;
     }
   }
+}
 
+for (const [dir, referenced] of referencedByDir) {
   const files = await readdir(path.join(root, dir));
   for (const f of files) {
     if (!referenced.has(f)) {

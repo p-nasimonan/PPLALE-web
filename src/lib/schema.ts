@@ -31,6 +31,11 @@ export const playableDataSchema = z.object({
   playable: z.array(cardSchema),
 });
 
+// デッキ構築には含まれず、ゲームプレイ中の効果で生成される幼女カード（例：少女うゆち、美女うゆち）
+export const tokenYojoDataSchema = z.object({
+  tokenYojo: z.array(cardSchema),
+});
+
 /**
  * Firestore に保存する Deck ドキュメントのスキーマ定義
  * - users/{uid}/decks/{deckId}

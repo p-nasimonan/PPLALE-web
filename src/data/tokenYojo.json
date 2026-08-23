@@ -1,0 +1,30 @@
+{
+  "tokenYojo": [
+    {
+      "id": "yt_0",
+      "name": "少女うゆち",
+      "type": "幼女",
+      "fruit": "いちご",
+      "description": "",
+      "imageUrl": "/images/yojo/222イチゴ少女うゆち.webp",
+      "cost": 2,
+      "hp": 2,
+      "attack": 2,
+      "effect": "",
+      "role": ""
+    },
+    {
+      "id": "yt_1",
+      "name": "美女うゆち",
+      "type": "幼女",
+      "fruit": "いちご",
+      "description": "",
+      "imageUrl": "/images/yojo/333イチゴ美女うゆち.webp",
+      "cost": 3,
+      "hp": 3,
+      "attack": 3,
+      "effect": "",
+      "role": ""
+    }
+  ]
+}
