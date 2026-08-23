@@ -43,7 +43,7 @@ export default function CardPickupSection() {
 
   const baseCardWidth = pickupCards.length === 3 ? 102 : 82;
   const baseCardHeight = Math.round(baseCardWidth * 1.5);
-  const smallCardWidth = pickupCards.length === 3 ? 132 : 108;
+  const smallCardWidth = pickupCards.length === 3 ? 150 : 140;
   const smallCardHeight = Math.round(smallCardWidth * 1.5);
 
   return (
@@ -57,7 +57,7 @@ export default function CardPickupSection() {
         alignItems: 'flex-start',
         pt: { base: '10', md: '14' },
         pb: { base: '24', md: '32' },
-        px: '4',
+        px: '2',
       })}
     >
       <div
@@ -75,47 +75,50 @@ export default function CardPickupSection() {
         layout
         className={css({ position: 'relative', zIndex: '1', w: 'full', maxW: '6xl', mx: 'auto' })}
       >
-        <motion.div
-          aria-hidden="true"
-          className={css({
-            color: 'white',
-            fontSize: { base: '5xl', md: '7xl' },
-            fontWeight: 'black',
-            lineHeight: '1',
-            textAlign: 'center',
-            mb: { base: '3', md: '4' },
-            WebkitTextStroke: '2px #ec4899',
-          })}
-          animate={reduceMotion ? undefined : { y: [0, 8] }}
-          transition={{ duration: 0.7, repeat: Infinity, repeatType: 'reverse', ease: 'easeInOut' }}
-        >
-          ↓
-        </motion.div>
-
-        <motion.button
-          type="button"
-          layout
+        <div
           className={css({
             position: 'relative',
             display: 'block',
             w: { base: '40', sm: '48', md: '60' },
             aspectRatio: '2 / 3',
             mx: 'auto',
-            cursor: 'pointer',
             transformStyle: 'preserve-3d',
-            outline: 'none',
-            _focusVisible: { ring: '4px', ringColor: 'pink.300' },
           })}
           style={{ perspective: '900px' }}
-          initial={{ opacity: 0, scale: 0.8, y: 30 }}
-          whileInView={{ opacity: 1, scale: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.5 }}
-          whileHover={reduceMotion ? undefined : { y: -8, rotateY: -4, rotateX: 2 }}
-          whileTap={{ scale: 0.97 }}
-          transition={{ type: 'spring', stiffness: 160, damping: 18 }}
-          onClick={handleDraw}
-          aria-label={isOpened ? '山札からカードをもう一度引く' : '山札からカードをピックアップする'}
         >
+          <motion.span
+            className={css({
+              position: 'absolute',
+              inset: '-5',
+              rounded: '2xl',
+              borderWidth: '3px',
+              borderColor: 'white/65',
+              pointerEvents: 'none',
+            })}
+            animate={reduceMotion ? undefined : { opacity: [0.25, 0.85] }}
+            transition={{ duration: 1.25, repeat: Infinity, repeatType: 'reverse', ease: 'easeInOut' }}
+          />
+          <motion.button
+            type="button"
+            layout
+            className={css({
+              display: 'block',
+              w: { base: '40', sm: '48', md: '60' },
+              aspectRatio: '2 / 3',
+              mx: 'auto',
+              cursor: 'pointer',
+              outline: 'none',
+              _focusVisible: { ring: '4px', ringColor: 'pink.300' },
+            })}
+            initial={{ opacity: 0, scale: 0.8, y: 30 }}
+            whileInView={{ opacity: 1, scale: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.5 }}
+            whileHover={reduceMotion ? undefined : { y: -8, x: -4}}
+            whileTap={{ scale: 0.97 }}
+            transition={{ type: 'spring', stiffness: 160, damping: 18 }}
+            onClick={handleDraw}
+            aria-label={isOpened ? '山札からカードをもう一度引く' : '山札からカードをピックアップする'}
+          >
           <span
             className={css({
               position: 'absolute',
@@ -156,20 +159,8 @@ export default function CardPickupSection() {
               priority={false}
             />
           </span>
-          <motion.span
-            className={css({
-              position: 'absolute',
-              inset: '-5',
-              rounded: '2xl',
-              borderWidth: '3px',
-              borderColor: 'white/65',
-              pointerEvents: 'none',
-            })}
-            animate={reduceMotion ? undefined : { opacity: [0.25, 0.85] }}
-            transition={{ duration: 1.25, repeat: Infinity, repeatType: 'reverse', ease: 'easeInOut' }}
-          />
-        </motion.button>
-
+          </motion.button>
+        </div>
         {isOpened && (
           <div
             className={css({

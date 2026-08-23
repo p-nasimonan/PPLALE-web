@@ -14,13 +14,13 @@ const darumadrop = Darumadrop_One({
 
 // 解説カード情報
 const explanationCards = [
-  { 
-    title: 'ぷぷりえーるとは', 
+  {
+    title: 'ぷぷりえーるとは',
     description: 'ぷぷりえの幼女とお菓子のカードゲーム。20枚の幼女カードと10枚のお菓子カードでデッキを構築し対戦します。ぷぷりえポイント(PP)を使用してカードを使って、先に相手のお菓子(HP)を食べた方が勝ちです。',
-    img: '/images/fruits/いちご.webp' 
+    img: '/images/fruits/いちご.webp'
   },
-  { 
-    title: 'ぷぷりえとは', 
+  {
+    title: 'ぷぷりえとは',
     description: 'ロリっ子喫茶ぷぷりえはロリっ子とロリ好きのための交流がメインの店舗型イベント。可愛い声で接客してくれるよ！VRChatで開催されているイベントです。そしてそして！店員さんを使ってたたかえるカードゲームがぷぷりえーるなの！',
     img: 'https://pple.vr2.info/_assets/GI2XJgG18B_DTXqu.webp',
     link: 'https://pple.vr2.info/'
@@ -29,11 +29,11 @@ const explanationCards = [
 
 // 解説カードアニメーション
 const explanationVariants = {
-  hidden: { 
+  hidden: {
     opacity: 0,
     y: 100
   },
-  visible: { 
+  visible: {
     opacity: 1,
     y: 0,
     transition: {
@@ -89,7 +89,7 @@ export default function ExplanationSection({ explanationOpacity, explanationY }:
           >
             ゲームについて
           </motion.h2>
-          
+
           <div className={css({ display: 'grid', gridTemplateColumns: 'repeat(1, minmax(0, 1fr))', gap: '10', mb: '10', mt: '10', md: { gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: '16' } })}>
             {explanationCards.map((card) => (
               <motion.div
