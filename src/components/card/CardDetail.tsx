@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useRef } from 'react';
+import { createPortal } from 'react-dom';
 import Image from 'next/image';
 import { CardInfo } from '@/types/card';
 import { css } from 'styled-system/css';
@@ -33,7 +34,9 @@ const CardDetail: React.FC<CardDetailProps> = ({ card, onClose, canAddToDeck, on
 
   const canAdd = canAddToDeck?.(card) ?? false;
 
-  return (
+  // position: fixed の祖先が transform を持つ場合（ピックアップ演出のアニメーション用カード等）に
+  // ビューポート基準の中央配置・最前面表示が崩れるため、document.body 直下にポータルで描画する
+  return createPortal(
     <div
       className={css({
         position: 'fixed', inset: '0', zIndex: '50', display: 'flex', alignItems: 'center', justifyContent: 'center',
@@ -142,7 +145,8 @@ const CardDetail: React.FC<CardDetailProps> = ({ card, onClose, canAddToDeck, on
           </button>
         ) : null}
       </div>
-    </div>
+    </div>,
+    document.body
   );
 };
 
