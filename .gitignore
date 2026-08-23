@@ -43,3 +43,6 @@ next-env.d.ts
 ## Panda
 styled-system
 styled-system-studio
+
+# sheet fetch cache (scripts/fetch-sheet-csv.mjs --all の出力先)
+.cache/
