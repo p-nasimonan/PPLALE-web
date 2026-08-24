@@ -48,6 +48,7 @@ export default function CardPickupSection() {
 
   return (
     <section
+      aria-labelledby="card-pickup-heading"
       className={css({
         position: 'relative',
         minH: { base: 'screen', md: '110vh' },
@@ -61,6 +62,7 @@ export default function CardPickupSection() {
       })}
     >
       <div
+        aria-hidden="true"
         className={css({ position: 'absolute', inset: '0' })}
         style={{
           backgroundImage: 'url("/images/check-pattern.png")',
@@ -72,10 +74,25 @@ export default function CardPickupSection() {
       </div>
 
       <motion.div
-        layout
         className={css({ position: 'relative', zIndex: '1', w: 'full', maxW: '6xl', mx: 'auto' })}
       >
-        <div
+        <h2
+          id="card-pickup-heading"
+          className={css({
+            position: 'absolute',
+            w: '1px',
+            h: '1px',
+            p: '0',
+            m: '-1px',
+            overflow: 'hidden',
+            clip: 'rect(0, 0, 0, 0)',
+            whiteSpace: 'nowrap',
+            borderWidth: '0',
+          })}
+        >
+          カードピックアップ
+        </h2>
+        <figure
           className={css({
             position: 'relative',
             display: 'block',
@@ -94,13 +111,15 @@ export default function CardPickupSection() {
               borderWidth: '3px',
               borderColor: 'white/65',
               pointerEvents: 'none',
+              left: '0px',
+              top: '0px',
+              scale: '1.15',
             })}
             animate={reduceMotion ? undefined : { opacity: [0.25, 0.85] }}
             transition={{ duration: 1.25, repeat: Infinity, repeatType: 'reverse', ease: 'easeInOut' }}
           />
           <motion.button
             type="button"
-            layout
             className={css({
               display: 'block',
               w: { base: '40', sm: '48', md: '60' },
@@ -160,18 +179,21 @@ export default function CardPickupSection() {
             />
           </span>
           </motion.button>
-        </div>
+        </figure>
         {isOpened && (
-          <div
+          <ul
+            aria-label="ピックアップしたカード"
             className={css({
               position: 'relative',
               h: { base: '40', sm: '56', md: '72', lg: '88' },
               mt: { base: '14', md: '20' },
               mx: 'auto',
+              listStyleType: 'none',
+              p: '0',
             })}
           >
             {pickupCards.map((card, index) => (
-              <motion.div
+              <motion.li
                 key={`${drawRound}-${card.id}`}
                 className={css({ position: 'absolute', top: '0', cursor: 'pointer' })}
                 initial={{ left: '50%', x: '-50%', y: -180, rotate: -7 + index * 4, opacity: 0, scale: 0.78 }}
@@ -200,9 +222,9 @@ export default function CardPickupSection() {
                   }}
                   isInDeck={false}
                 />
-              </motion.div>
+              </motion.li>
             ))}
-          </div>
+          </ul>
         )}
       </motion.div>
     </section>
