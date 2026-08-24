@@ -132,13 +132,14 @@ export default function DeckPageClient(props: DeckPageClientProps) {
         gap: '2',
       })}>
         {/* デッキ側のカラム（スマホ時はここにタブを表示） */}
-        <div className={css({ display: 'flex', flexDirection: 'column', gap: '2' })}>
+        <div className={css({ display: 'flex', flexDirection: 'column' })}>
           {isOwner && (
             <div className={css({ lg: { display: 'none' } })}>
               <TabButtons
                 tabs={DECK_VIEW_TABS}
                 activeTabKey={deckViewActiveTab}
                 onTabClick={(key) => setDeckViewActiveTab(key as DeckCardType)}
+                variant="deck"
               />
             </div>
           )}
@@ -249,7 +250,6 @@ interface MobileAddCardModalProps {
 
 /** スマホ幅で「デッキに追加」を押したときに開くカード選択モーダル。 */
 function MobileAddCardModal({ modalType, onClose, onAddToDeck, canAddToDeck }: MobileAddCardModalProps) {
-  const modalEmoji = modalType === 'yojo' ? '🎀' : modalType === 'sweet' ? '🍬' : '✨';
   const modalTitle = modalType === 'yojo' ? '幼女カードを追加' : modalType === 'sweet' ? 'お菓子カードを追加' : 'プレイアブルカードを追加';
 
   return (
@@ -279,7 +279,6 @@ function MobileAddCardModal({ modalType, onClose, onAddToDeck, canAddToDeck }: M
         zIndex: '10',
       })}>
         <h3 className={css({ fontSize: 'xl', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '2' })}>
-          <span className={css({ fontSize: '2xl' })}>{modalEmoji}</span>
           {modalTitle}
         </h3>
         <button

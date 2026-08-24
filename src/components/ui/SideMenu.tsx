@@ -43,7 +43,15 @@ export default function SettingsButton() {
         onClick={() => setShowSettings(!showSettings)}
         aria-label="メニュー"
       >
-        {showSettings ? '✕' : '☰'}
+        {showSettings ? (
+          <svg aria-hidden="true" className={css({ w: '6', h: '6' })} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <path strokeLinecap="round" d="M6 6l12 12M18 6L6 18" />
+          </svg>
+        ) : (
+          <svg aria-hidden="true" className={css({ w: '6', h: '6' })} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <path strokeLinecap="round" d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+        )}
       </button>
       {showSettings && (
         <div

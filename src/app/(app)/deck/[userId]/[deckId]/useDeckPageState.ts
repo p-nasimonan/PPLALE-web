@@ -221,7 +221,7 @@ export function useDeckPageState({
   }, [user, userId, deckId, isLoaded, deckName, yojoDeck, sweetDeck, selectedPlayableCard, checkSignificantDataLoss]);
 
   const showDataLossWarning = (message: string): boolean => {
-    return window.confirm(`⚠️ 警告: ${message}\n\nこの操作により、現在のデッキデータが失われる可能性があります。\n\n本当に続行しますか？`);
+    return window.confirm(`警告: ${message}\n\nこの操作により、現在のデッキデータが失われる可能性があります。\n\n本当に続行しますか？`);
   };
 
   /**

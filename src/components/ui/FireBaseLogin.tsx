@@ -152,7 +152,7 @@ const FireBaseLogin: React.FC<FireBaseLoginProps> = () => {
         {user.photoURL ? (
           <Image
             src={user.photoURL}
-            alt={user.displayName ?? "👤"}
+            alt={user.displayName ?? 'ユーザー'}
             width={40}
             height={40}
             className={css({ rounded: 'full' })}

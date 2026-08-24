@@ -20,13 +20,13 @@ export interface TabDefinition {
  * @property {TabDefinition[]} tabs - 表示するタブの定義配列
  * @property {string} activeTabKey - 現在アクティブなタブのキー
  * @property {(tabKey: string) => void} onTabClick - タブがクリックされたときのコールバック関数
- * @property {'default' | 'cardList'} [variant='default'] - タブのスタイルバリアント
+ * @property {'default' | 'cardList' | 'deck'} [variant='default'] - タブのスタイルバリアント
  */
 interface TabButtonsProps {
   tabs: TabDefinition[];
   activeTabKey: string;
   onTabClick: (tabKey: string) => void;
-  variant?: 'default' | 'cardList';
+  variant?: 'default' | 'cardList' | 'deck';
 }
 
 /**
@@ -75,6 +75,43 @@ const TabButtons: React.FC<TabButtonsProps> = ({
 
   const getButtonClassName = (tabKey: string) => {
     const isActive = tabKey === activeTabKey;
+    if (variant === 'deck') {
+      const deckColor = tabKey === 'yojo'
+        ? css({
+            bg: 'rose.100/80',
+            color: 'red.900',
+            borderColor: 'red.200',
+            _dark: { bg: 'rose.900/40', color: 'rose.100', borderColor: 'red.900' },
+          })
+        : tabKey === 'sweet'
+          ? css({
+              bg: 'cyan.100/80',
+              color: 'cyan.900',
+              borderColor: 'cyan.200',
+              _dark: { bg: 'cyan.900/30', color: 'cyan.100', borderColor: 'cyan.900' },
+            })
+          : css({
+              bg: 'indigo.100/80',
+              color: 'indigo.900',
+              borderColor: 'indigo.200',
+              _dark: { bg: 'indigo.900/40', color: 'indigo.100', borderColor: 'indigo.900' },
+            });
+
+      return `${css({
+        flex: '1 1 0%',
+        roundedTop: 'lg',
+        borderWidth: '2px',
+        borderBottomWidth: '0',
+        px: '2',
+        py: '2',
+        fontSize: 'sm',
+        fontWeight: isActive ? 'bold' : 'medium',
+        opacity: isActive ? '1' : '0.65',
+        transitionProperty: 'opacity, color, background-color',
+        _hover: { opacity: '1' },
+      })} ${deckColor}`;
+    }
+
     if (variant === 'cardList') {
       const base = css({
         roundedTop: 'md',
@@ -108,9 +145,12 @@ const TabButtons: React.FC<TabButtonsProps> = ({
 
 
   return (
-    <div className={css({ display: 'flex' })}>
+    <div role="tablist" className={css({ display: 'flex', w: 'full' })}>
       {tabs.map((tab) => (
         <button
+          type="button"
+          role="tab"
+          aria-selected={tab.key === activeTabKey}
           key={tab.key}
           onClick={() => onTabClick(tab.key)}
           className={getButtonClassName(tab.key)}
@@ -122,4 +162,4 @@ const TabButtons: React.FC<TabButtonsProps> = ({
   );
 };
 
-export default TabButtons; 
+export default TabButtons;

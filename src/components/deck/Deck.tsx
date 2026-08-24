@@ -1,6 +1,6 @@
 /**
  * デッキコンポーネント
- * 
+ *
  * デッキの表示と操作を行うコンポーネント
  * カードの追加・削除・並べ替えなどの機能を提供する
  */
@@ -33,6 +33,8 @@ interface DeckProps {
   showDuplicates?: boolean;
   /** スマホでカード追加ボタン（＋）が押されたときのコールバック */
   onAddClick?: (type: string) => void;
+  /** スマホ表示でデッキ上部を切り替えタブへ接続するか */
+  attachedToTabs?: boolean;
 }
 
 /**
@@ -86,6 +88,7 @@ const Deck: React.FC<DeckProps> = ({
   onDropDeck,
   showDuplicates = false,
   onAddClick,
+  attachedToTabs = false,
 }) => {
   // ドラッグ中のカードのインデックス
   const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
@@ -93,9 +96,9 @@ const Deck: React.FC<DeckProps> = ({
   const [isDraggingOver, setIsDraggingOver] = useState(false);
 
   // デッキの最大枚数
-  const maxCards = 
-        type === '幼女' 
-        ? 20 
+  const maxCards =
+        type === '幼女'
+        ? 20
         : type === 'お菓子'
         ? 10
         : type === 'プレイアブル'
@@ -142,17 +145,17 @@ const Deck: React.FC<DeckProps> = ({
   const handleDragOver = (e: React.DragEvent, index: number) => {
     e.preventDefault();
     if (draggedIndex === null || draggedIndex === index) return;
-    
+
     // カードの並べ替え
     const newCards = [...cards];
     const draggedCard = newCards[draggedIndex];
     newCards.splice(draggedIndex, 1);
     newCards.splice(index, 0, draggedCard);
-    
+
     if (onCardsReorder) {
       onCardsReorder(newCards);
     }
-    
+
     setDraggedIndex(index);
   };
 
@@ -170,7 +173,7 @@ const Deck: React.FC<DeckProps> = ({
   // カードが削除されたときの処理
   const handleCardRemove = (card: CardInfo) => {
     if (onCardRemove) {
-      
+
       onCardRemove(card);
     }
   };
@@ -230,6 +233,10 @@ const Deck: React.FC<DeckProps> = ({
       className={`${deckTheme.container} ${css({
         rounded: 'lg',
         borderWidth: isDraggingOver ? '4px' : '2px',
+        roundedTop: attachedToTabs ? { base: 'none', lg: 'lg' } : undefined,
+        borderTopWidth: attachedToTabs
+          ? { base: '0', lg: isDraggingOver ? '4px' : '2px' }
+          : undefined,
         borderStyle: isDraggingOver ? 'dashed' : undefined,
         p: '4',
         transitionProperty: 'all',
@@ -341,7 +348,7 @@ const Deck: React.FC<DeckProps> = ({
               alignItems: 'center',
               justifyContent: 'center',
               w: 'full',
-              aspectRatio: '220/320',
+              aspectRatio: '210/290',
               rounded: 'xl',
               borderWidth: '2px',
               borderStyle: 'dashed',
@@ -362,7 +369,12 @@ const Deck: React.FC<DeckProps> = ({
 
       {/* デッキが空の場合のメッセージ */}
       {cards.length === 0 && (
-        <div className={css({ textAlign: 'center', py: '8', color: 'gray.500' })}>
+        <div className={css({
+          display: { base: 'none', lg: 'block' },
+          textAlign: 'center',
+          py: '8',
+          color: 'gray.500'
+        })}>
           デッキにカードがありません
         </div>
       )}

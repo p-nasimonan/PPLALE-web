@@ -66,6 +66,7 @@ const DeckList: React.FC<DeckListProps> = ({
               onDragLeaveDeck={() => {}}
               onDropDeck={(e) => onDropDeck(e, 'yojo')}
               onAddClick={onAddClick}
+              attachedToTabs
             />
           )}
 
@@ -79,6 +80,7 @@ const DeckList: React.FC<DeckListProps> = ({
               onDragLeaveDeck={() => {}}
               onDropDeck={(e) => onDropDeck(e, 'sweet')}
               onAddClick={onAddClick}
+              attachedToTabs
             />
           )}
 
@@ -92,6 +94,7 @@ const DeckList: React.FC<DeckListProps> = ({
               onDragLeaveDeck={() => {}}
               onDropDeck={(e) => onDropDeck(e, 'playable')}
               onAddClick={onAddClick}
+              attachedToTabs
             />
           )}
         </>
@@ -135,4 +138,4 @@ const DeckList: React.FC<DeckListProps> = ({
   );
 };
 
-export default DeckList; 
+export default DeckList;
