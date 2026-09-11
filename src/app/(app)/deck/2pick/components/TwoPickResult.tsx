@@ -13,7 +13,7 @@ import { CardInfo } from '@/types/card';
 import ShareButtons from '@/components/ui/ShareButtons';
 import { User } from 'firebase/auth';
 import DeckImagePreview from '@/components/deck/DeckImagePreview';
-import JungaryCopy from '@/svgs/jungary-copy.svg';
+import JungaryCopy from '@/components/icons/JungaryCopy';
 import Link from 'next/link';
 import { css } from 'styled-system/css';
 import { button } from 'styled-system/recipes';

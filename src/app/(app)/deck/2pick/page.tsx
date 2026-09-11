@@ -82,7 +82,7 @@ function TwoPickContent() {
   const [playableChoices, setPlayableChoices] = useState<CardInfo[]>([]);
 
   // 選択肢を更新する関数
-  const updateChoices = useCallback(() => {
+const updateChoices = useCallback(() => {
     const availableCards =
       currentPhase === '幼女'
         ? yojoCards.filter(card => selectedFruits.includes(card.fruit))
@@ -102,11 +102,9 @@ function TwoPickContent() {
     const filteredSweetCards = currentPhase === 'お菓子'
       ? filteredCards.filter(card => {
           if (card.sweetType === '動物さんソーダ') {
-            // 既にデッキに含まれている動物さんソーダの種類を取得
             const existingAnimalSodas = new Set(sweetDeck
               .filter(c => c.sweetType === '動物さんソーダ')
               .map(c => c.id));
-            // 現在のカードが既にデッキに含まれている場合は除外
             return !existingAnimalSodas.has(card.id);
           }
           return true;
@@ -123,7 +121,7 @@ function TwoPickContent() {
       card.version && selectedPlayableVersions.includes(card.version)
     );
     const shuffled = [...filteredPlayableCards].sort(() => Math.random() - 0.5);
-    setPlayableChoices(shuffled.slice(0, 3)); // ランダムに3枚選択
+    setPlayableChoices(shuffled.slice(0, 3));
   }, [playableCards, selectedPlayableVersions]);
 
   // ラウンドが変わったときに選択肢を更新
@@ -145,61 +143,58 @@ function TwoPickContent() {
     restart();
   }, []);
 
-  // デッキが更新されたときに localStorage に保存
   useEffect(() => {
     localStorage.setItem('yojoDeck', JSON.stringify(yojoDeck));
-  }, [yojoDeck]);
-
-  useEffect(() => {
     localStorage.setItem('sweetDeck', JSON.stringify(sweetDeck));
-  }, [sweetDeck]);
-
-  useEffect(() => {
     localStorage.setItem('selectedPlayableCard', JSON.stringify(selectedPlayableCard));
-  }, [selectedPlayableCard]);
+  }, [yojoDeck, sweetDeck, selectedPlayableCard]);
 
   // カードが選択されたときの処理
-  const handleCardSelect = (card1: CardInfo, card2: CardInfo) => {
-    if (yojoDeck.length >= 20 && sweetDeck.length >= 10) {
-      setSelectionPhase('playableSelection'); // プレイアブルカード選択画面に移行
+  const handleCardSelect = useCallback((card1: CardInfo, card2: CardInfo) => {
+    if (currentPhase === '幼女') {
+      setYojoDeck(prevYojoDeck => {
+        if (prevYojoDeck.length >= 20) return prevYojoDeck;
+        const newDeck = [...prevYojoDeck, card1, card2].sort((a, b) => parseInt(a.id) - parseInt(b.id));
+        localStorage.setItem('yojoDeck', JSON.stringify(newDeck));
+        return newDeck;
+      });
+    } else {
+      setSweetDeck(prevSweetDeck => {
+        if (prevSweetDeck.length >= 10) return prevSweetDeck;
+        const newDeck = [...prevSweetDeck, card1, card2].sort((a, b) => parseInt(a.id) - parseInt(b.id));
+        localStorage.setItem('sweetDeck', JSON.stringify(newDeck));
+        return newDeck;
+      });
     }
 
-    if (currentPhase === '幼女' && yojoDeck.length < 20) {
-      const newDeck = [...yojoDeck, card1, card2].sort((a, b) => parseInt(a.id) - parseInt(b.id));
-      setYojoDeck(newDeck);
-      localStorage.setItem('yojoDeck', JSON.stringify(newDeck));
-    } else if (currentPhase === 'お菓子' && sweetDeck.length < 10) {
-      const newDeck = [...sweetDeck, card1, card2].sort((a, b) => parseInt(a.id) - parseInt(b.id));
-      setSweetDeck(newDeck);
-      localStorage.setItem('sweetDeck', JSON.stringify(newDeck));
-    } 
+    setRound(prevRound => {
+      const nextRound = prevRound + 1;
+      updateChoices();
 
-    setRound(round + 1);
-    updateChoices();
+      if (currentPhase === '幼女' && nextRound > 10) {
+        setCurrentPhase('お菓子');
+        setRound(1);
+      } else if (currentPhase === 'お菓子' && nextRound > 5) {
+        setSelectionPhase('playableSelection');
+      }
+      return nextRound;
+    });
+  }, [currentPhase, updateChoices]);
 
-    // 20枚選択したらお菓子を選択
-    if (currentPhase === '幼女' && round >= 10) {
-      setCurrentPhase('お菓子');
-      setRound(1);
-    } else if (currentPhase === 'お菓子' && round >= 5) {
-      setSelectionPhase('playableSelection'); // プレイアブルカード選択画面に移行
-    }
-  };
-
-  const restart = () => {
+  const restart = useCallback(() => {
     setYojoDeck([]);
     setSweetDeck([]);
-    setSelectionPhase('fruitSelection'); // フルーツ選択画面に戻す
-    setSelectedPlayableCard(null); // 拡大表示を解除
-    setRound(1); // ラウンドをリセット
-    setIsShowDeck(false); // デッキ確認ポップアップを非表示
-  }
+    setSelectionPhase('fruitSelection');
+    setSelectedPlayableCard(null);
+    setRound(1);
+    setIsShowDeck(false);
+  }, []);
 
-  const handleRestart = () => {
+  const handleRestart = useCallback(() => {
     if (window.confirm('もう一度作りますか？')) {
       restart();
     }
-  };
+  }, [restart]);
 
   // プレイアブルカード選択完了処理
   const handlePlayableCardConfirm = () => {
@@ -320,31 +315,17 @@ function TwoPickContent() {
     }
   };
 
-  // ページを離れる前の警告を設定
+  // ページ離脱時の警告（beforeunloadのみ）
   useEffect(() => {
-    // 2. 戻るボタンを押した時の警告
-    const handlePopState = (e: PopStateEvent) => {
-      if (window.confirm('ページを離れると、選択したカードが失われます。本当に離れますか？')) {
-        // OKが押された場合
-        window.history.back();
-        return;
+    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+      if (selectionPhase !== 'fruitSelection' && selectionPhase !== 'end') {
+        e.preventDefault();
+        e.returnValue = 'ページを離れると、選択したカードが失われます。';
       }
-      // キャンセルされた場合のみ戻る動作をキャンセル
-      e.preventDefault();
-      const fullUrl = `${pathname}${searchParams.toString() ? `?${searchParams.toString()}` : ''}`;
-      window.history.replaceState(null, '', fullUrl);
     };
-    window.addEventListener('popstate', handlePopState);
-
-    // 3. 初期状態の設定
-    const fullUrl = `${pathname}${searchParams.toString() ? `?${searchParams.toString()}` : ''}`;
-    window.history.pushState(null, '', fullUrl);
-
-    // 4. クリーンアップ（後片付け）
-    return () => {
-      window.removeEventListener('popstate', handlePopState);
-    };
-  }, [pathname, searchParams]);
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    return () => window.removeEventListener('beforeunload', handleBeforeUnload);
+  }, [selectionPhase]);
 
   return (
   <div>
