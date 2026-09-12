@@ -8,7 +8,7 @@
 
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { CardInfo } from '@/types/card';
 import ShareButtons from '@/components/ui/ShareButtons';
 import { User } from 'firebase/auth';
@@ -49,6 +49,51 @@ interface TwoPickResultProps {
  * @param {TwoPickResultProps} props - コンポーネントのプロパティ
  * @returns {JSX.Element} 2Pick結果表示画面
  */
+function DeckExportBlock({
+  title,
+  deck,
+  copied,
+  onCopy,
+}: {
+  title: string;
+  deck: CardInfo[];
+  copied: boolean;
+  onCopy: () => void;
+}) {
+  const text = deck.map((card) => card.id.replace(/\D/g, '')).join(',');
+  return (
+    <section aria-label={title} className={css({ mb: '4' })}>
+      <h3 className={css({ fontWeight: 'bold', mb: '2' })}>{title}</h3>
+      <div
+        className={css({
+          bg: 'gray.100',
+          color: 'gray.800',
+          p: '3',
+          rounded: 'sm',
+          borderWidth: '1px',
+          borderColor: 'gray.300',
+          overflow: 'auto',
+          maxH: '40',
+          mb: '2',
+          _dark: { bg: 'gray.800', color: 'gray.100', borderColor: 'gray.600' },
+        })}
+      >
+        <pre aria-label={`${title}のID一覧`} className={css({ fontSize: 'sm' })}>
+          {text}
+        </pre>
+      </div>
+      <button
+        type="button"
+        className={`${button({ variant: 'primary', size: 'md' })} ${css({ mb: '2', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '2' })}`}
+        onClick={onCopy}
+      >
+        <JungaryCopy aria-hidden="true" width={24} height={24} className={css({ display: 'inline-block' })} />
+        {copied ? 'コピーしました！' : `${title}をコピー`}
+      </button>
+    </section>
+  );
+}
+
 const TwoPickResult: React.FC<TwoPickResultProps> = ({
   yojoDeck,
   sweetDeck,
@@ -57,41 +102,25 @@ const TwoPickResult: React.FC<TwoPickResultProps> = ({
   onSave,
   onRestart,
 }) => {
-  // 幼女デッキのコピー状態
   const [yojoCopied, setYojoCopied] = useState(false);
-  // お菓子デッキのコピー状態
   const [sweetCopied, setSweetCopied] = useState(false);
+  const [shareUrl, setShareUrl] = useState('');
 
-  /**
-   * IDから数字のみを抽出する関数
-   */
-  const extractNumber = (id: string) => {
-    return id.replace(/\D/g, '');
-  };
+  useEffect(() => {
+    setShareUrl(window.location.href);
+  }, []);
 
-  /**
-   * 幼女デッキをクリップボードにコピーする
-   */
-  const handleCopyYojoDeck = () => {
-    navigator.clipboard.writeText(yojoDeck.map(card => extractNumber(card.id)).join(','));
-    setYojoCopied(true);
-    setTimeout(() => setYojoCopied(false), 2000);
-  };
-
-  /**
-   * お菓子デッキをクリップボードにコピーする
-   */
-  const handleCopySweetDeck = () => {
-    navigator.clipboard.writeText(sweetDeck.map(card => extractNumber(card.id)).join(','));
-    setSweetCopied(true);
-    setTimeout(() => setSweetCopied(false), 2000);
+  const copyDeck = async (deck: CardInfo[], done: (v: boolean) => void) => {
+    await navigator.clipboard.writeText(deck.map((card) => card.id.replace(/\D/g, '')).join(','));
+    done(true);
+    setTimeout(() => done(false), 2000);
   };
 
   return (
     <div className={css({ textAlign: 'center', position: 'relative' })}>
       <div className={css({ position: 'absolute', top: '0', right: '20' })}>
         <ShareButtons
-          share_url={window.location.href}
+          share_url={shareUrl}
           share_text="2pickでデッキを作成しました！
           #お菓子争奪戦争ぷぷりえーる"
           isLocal={true}
@@ -100,48 +129,34 @@ const TwoPickResult: React.FC<TwoPickResultProps> = ({
           playableCard={playableCard}
         />
       </div>
-      <h2 className={css({ fontSize: '2xl', fontWeight: 'bold', mb: '4' })}>デッキ構築結果</h2>
-      <p className={css({ mb: '4' })}>構築したデッキをシェアしよう</p>
+      <header>
+        <h2 className={css({ fontSize: '2xl', fontWeight: 'bold', mb: '4' })}>デッキ構築結果</h2>
+        <p className={css({ mb: '4' })}>構築したデッキをシェアしよう</p>
+      </header>
 
-      {/* デッキ画像プレビュー */}
-      <div className={css({ w: '1/2', mx: 'auto', mb: '4' })}>
-      <DeckImagePreview
-        yojoDeck={yojoDeck}
-        sweetDeck={sweetDeck}
-        playableCard={playableCard}
-        onClose={() => {}}
-        isPopup={false}
-      />
-      </div>
-      
-      {/* エクスポート機能 */}
+      <section aria-label="デッキ画像プレビュー" className={css({ w: '1/2', mx: 'auto', mb: '4' })}>
+        <DeckImagePreview
+          yojoDeck={yojoDeck}
+          sweetDeck={sweetDeck}
+          playableCard={playableCard}
+          onClose={() => {}}
+          isPopup={false}
+        />
+      </section>
+
       <div className={css({ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10', mb: '6' })}>
-        <div className={css({ mb: '4' })}>
-          <h4 className={css({ fontWeight: 'bold', mb: '2' })}>幼女デッキ</h4>
-          <div className={css({ bg: 'gray.100', p: '3', rounded: 'sm', borderWidth: '1px', borderColor: 'gray.300', overflow: 'auto', maxH: '40', mb: '2' })}>
-            <pre className={css({ fontSize: 'sm' })}>{yojoDeck.map(card => extractNumber(card.id)).join(',')}</pre>
-          </div>
-          <button
-            className={`${button({ variant: 'primary', size: 'md' })} ${css({ mb: '2' })}`}
-            onClick={handleCopyYojoDeck}
-          >
-            {yojoCopied ? 'コピーしました！' : '幼女デッキをコピー'}
-          </button>
-        </div>
-
-        <div className={css({ mb: '4' })}>
-          <h4 className={css({ fontWeight: 'bold', mb: '2' })}>お菓子デッキ</h4>
-          <div className={css({ bg: 'gray.100', p: '3', rounded: 'sm', borderWidth: '1px', borderColor: 'gray.300', overflow: 'auto', maxH: '40', mb: '2' })}>
-            <pre className={css({ fontSize: 'sm' })}>{sweetDeck.map(card => extractNumber(card.id)).join(',')}</pre>
-          </div>
-          <button
-            className={`${button({ variant: 'primary', size: 'md' })} ${css({ mb: '2', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '2' })}`}
-            onClick={handleCopySweetDeck}
-          >
-            <JungaryCopy width={24} height={24} className={css({ display: 'inline-block' })} />
-            {sweetCopied ? 'コピーしました！' : 'コピー'}
-          </button>
-        </div>
+        <DeckExportBlock
+          title="幼女デッキ"
+          deck={yojoDeck}
+          copied={yojoCopied}
+          onCopy={() => copyDeck(yojoDeck, setYojoCopied)}
+        />
+        <DeckExportBlock
+          title="お菓子デッキ"
+          deck={sweetDeck}
+          copied={sweetCopied}
+          onCopy={() => copyDeck(sweetDeck, setSweetCopied)}
+        />
       </div>
 
       <div className={css({ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4', mb: '4', mt: '10' })}>
