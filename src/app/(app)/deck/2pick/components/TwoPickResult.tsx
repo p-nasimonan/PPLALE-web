@@ -65,7 +65,21 @@ function DeckExportBlock({
     <section aria-label={title} className={css({ mb: '4' })}>
       <h3 className={css({ fontWeight: 'bold', mb: '2' })}>{title}</h3>
       <div
+        role="button"
+        tabIndex={0}
+        title={copied ? 'コピーしました！' : 'クリックでコピー'}
+        aria-label={`${title}をコピー`}
+        onClick={onCopy}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            onCopy();
+          }
+        }}
         className={css({
+          display: 'flex',
+          alignItems: 'center',
+          gap: '2',
           bg: 'gray.100',
           color: 'gray.800',
           p: '3',
@@ -75,21 +89,16 @@ function DeckExportBlock({
           overflow: 'auto',
           maxH: '40',
           mb: '2',
+          cursor: 'pointer',
           _dark: { bg: 'gray.800', color: 'gray.100', borderColor: 'gray.600' },
         })}
       >
-        <pre aria-label={`${title}のID一覧`} className={css({ fontSize: 'sm' })}>
-          {text}
-        </pre>
+        <pre className={css({ fontSize: 'sm', flex: '1', textAlign: 'left' })}>{text}</pre>
+        <JungaryCopy aria-hidden="true" width={20} height={20} className={css({ display: 'inline-block', flexShrink: '0' })} />
       </div>
-      <button
-        type="button"
-        className={`${button({ variant: 'primary', size: 'md' })} ${css({ mb: '2', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '2' })}`}
-        onClick={onCopy}
-      >
-        <JungaryCopy aria-hidden="true" width={24} height={24} className={css({ display: 'inline-block' })} />
-        {copied ? 'コピーしました！' : `${title}をコピー`}
-      </button>
+      <p aria-live="polite" className={css({ fontSize: 'sm', minH: '5', color: copied ? 'green.600' : 'gray.500', _dark: { color: copied ? 'green.300' : 'gray.400' } })}>
+        {copied ? 'コピーしました！' : 'クリックでコピー'}
+      </p>
     </section>
   );
 }
